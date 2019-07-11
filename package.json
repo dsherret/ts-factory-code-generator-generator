@@ -1,0 +1,47 @@
+{
+  "name": "ts-factory-code-generator-generator",
+  "version": "0.1.0",
+  "description": "Generates code that generates TypeScript Compiler API factory code from an AST.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "cross-env TS_NODE_COMPILER=\"ttypescript\" TS_NODE_TRANSPILE_ONLY=\"true\" mocha --opts mocha.opts",
+    "test:debug": "cross-env TS_NODE_COMPILER=\"ttypescript\" TS_NODE_TRANSPILE_ONLY=\"true\" mocha --opts mocha.opts --inspect-brk"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dsherret/ts-factory-code-generator-generator.git"
+  },
+  "keywords": [
+    "typescript",
+    "compiler",
+    "API",
+    "factory",
+    "code",
+    "generator"
+  ],
+  "author": "David Sherret",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dsherret/ts-factory-code-generator-generator/issues"
+  },
+  "homepage": "https://github.com/dsherret/ts-factory-code-generator-generator#readme",
+  "dependencies": {
+    "string-similarity": "^3.0.0",
+    "ts-morph": "^3.1.0",
+    "typescript": "^3.5.3",
+    "typescript-3.5.3": "npm:typescript@3.5.3"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.6.2",
+    "@types/string-similarity": "^3.0.0",
+    "@types/ts-nameof": "^3.2.0",
+    "chai": "^4.2.0",
+    "cross-env": "^5.2.0",
+    "mocha": "^6.1.4",
+    "ts-nameof": "^3.2.0",
+    "ts-node": "^8.3.0",
+    "ttypescript": "^1.5.7"
+  }
+}

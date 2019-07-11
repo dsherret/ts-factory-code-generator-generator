@@ -1,0 +1,1 @@
+export { generateCode } from "./generateCode";

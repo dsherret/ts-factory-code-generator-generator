@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "plugins": [{ "transform": "ts-nameof", "type": "raw" }]
+  }
+}
