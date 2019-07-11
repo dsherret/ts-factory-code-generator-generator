@@ -22,5 +22,5 @@ Then get the code for each compiler api version:
 
 ```ts
 const code = generateCode("typescript");
-const codeFor3_5_2 = generateCode("typescript-3.5.2");
+const codeFor3_5_3 = generateCode("typescript-3.5.3");
 ```
