@@ -1,4 +1,4 @@
-import { Type, Symbol, InterfaceDeclaration, TypeGuards } from "ts-morph";
+import { Type, Symbol, InterfaceDeclaration, TypeGuards, ts } from "ts-morph";
 import { compareTwoStrings } from "string-similarity";
 import { Factory } from "./Factory";
 import { Parameter } from "./Parameter";
@@ -35,10 +35,20 @@ export class Node {
         return this.factory.getNodeProperty(foundProp!);
     }
 
-    getKindName() {
+    getKindNames() {
+        if (this.getName() === nameof<ts.JsxAttributes>())
+            return ["JsxAttributes"];
+
         const symbol = this.type.getSymbolOrThrow();
         const dec = symbol.getDeclarations()[0];
         const kindType = this.type.getProperty("kind")!.getTypeAtLocation(dec);
-        return kindType.getText(dec).replace(/SyntaxKind\./g, "");
+        if (kindType.isUnion()) {
+            return kindType.getUnionTypes().map(t => sanitizeName(t.getText(dec)));
+        }
+        return [sanitizeName(kindType.getText(dec))];
+
+        function sanitizeName(name: string) {
+            return name.replace(/SyntaxKind\./g, "");
+        }
     }
 }
