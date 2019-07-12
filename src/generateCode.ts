@@ -36,16 +36,17 @@ export function generateCode(typeScriptModuleName = "typescript") {
 
     return newSourceFile.getFullText();
 
-    function getFactoryFunctions() {
+    function* getFactoryFunctions(): IterableIterator<FactoryFunction> {
         const map = new Map<string, FactoryFunction>();
+
         for (const func of getInternal()) {
-            for (const name of func.getNode().getKindNames()) {
+            for (const name of func.getKindNames()) {
                 if (map.has(name))
                     throw new Error(`Found duplicate name: ${name} (existing: ${map.get(name)!.getName()}, new: ${func.getName()})`);
                 map.set(name, func);
             }
+            yield func;
         }
-        return map.values();
 
         function* getInternal(): IterableIterator<FactoryFunction> {
             for (const symbol of tsSymbol.getExports()) {
@@ -73,7 +74,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
             statements: writer => {
                 writer.write("switch (node.kind)").block(() => {
                     for (const factoryFunc of factoryFunctions) {
-                        for (const kindName of factoryFunc.getNode().getKindNames())
+                        for (const kindName of factoryFunc.getKindNames())
                             writer.writeLine(`case ts.SyntaxKind.${kindName}:`);
                         writer.indent().write(`return get${factoryFunc.getNode().getName()}(node);`).newLine();
                     }
@@ -222,20 +223,16 @@ function getCustomParamText(func: FactoryFunction, param: Parameter) {
 }
 
 function isAllowedFactoryFunction(func: FactoryFunction) {
+    // some of these could probably be figured out by inspecting
+    // the code, but this is the lazy way to do it... I'll just
+    // manually maintain this list.
     switch (func.getName()) {
-        case nameof(ts.createNode):
-        case nameof(ts.createSourceFile):
-        case nameof(ts.createLanguageServiceSourceFile):
+        // handled by createTrue, createFalse, createBigIntLiteral, createNumericLiteral
         case nameof(ts.createLiteral):
-        case nameof(ts.createTempVariable):
-        case nameof(ts.createLoopVariable):
-        case nameof(ts.createUniqueName):
-        case nameof(ts.createOptimisticUniqueName):
-        case nameof(ts.createFileLevelUniqueName):
-        case nameof(ts.createToken):
-        case nameof(ts.createModifier):
-        case nameof(ts.createModifiersFromModifierFlags):
+        // handled by createVoid
         case nameof(ts.createVoidZero):
+        // handled by createBinary
+        case nameof(ts.createAssignment):
         case nameof(ts.createLogicalAnd):
         case nameof(ts.createLogicalOr):
         case nameof(ts.createLogicalNot):
@@ -245,15 +242,35 @@ function isAllowedFactoryFunction(func: FactoryFunction) {
         case nameof(ts.createStrictInequality):
         case nameof(ts.createLessThan):
         case nameof(ts.createComma):
+        // handled by createCall
         case nameof(ts.createImmediatelyInvokedFunctionExpression):
         case nameof(ts.createImmediatelyInvokedArrowFunction):
+        // handled by createUnionTypeNode and createIntersectionTypeNode
+        case nameof(ts.createUnionOrIntersectionTypeNode):
+        // handled by createPostfix
+        case nameof(ts.createPostfixIncrement):
+        // handled by createExportDeclaration
+        case nameof(ts.createExternalModuleExport):
+        // handled by createExportAssignment
+        case nameof(ts.createExportDefault):
+        // not used
+        case nameof(ts.createNode):
+        case nameof(ts.createSourceFile):
+        case nameof(ts.createLanguageServiceSourceFile):
+        case nameof(ts.createTempVariable):
+        case nameof(ts.createLoopVariable):
+        case nameof(ts.createUniqueName):
+        case nameof(ts.createOptimisticUniqueName):
+        case nameof(ts.createFileLevelUniqueName):
+        case nameof(ts.createModifiersFromModifierFlags):
         case nameof(ts.createInputFiles):
         case nameof(ts.createBundle):
         case nameof(ts.createUnparsedSourceFile):
-        case nameof(ts.createPostfixIncrement):
-        case nameof(ts.createExternalModuleExport):
+        // custom handled
+        case nameof(ts.createToken):
+        case nameof(ts.createModifier):
             return false;
     }
 
-    return func.isNodeValid();
+    return true;
 }

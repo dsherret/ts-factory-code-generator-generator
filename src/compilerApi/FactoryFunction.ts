@@ -1,5 +1,5 @@
 import { Factory } from "./Factory";
-import { FunctionDeclaration } from "ts-morph";
+import { FunctionDeclaration, ts, SyntaxKind } from "ts-morph";
 import { Parameter } from "./Parameter";
 
 export class FactoryFunction {
@@ -19,8 +19,21 @@ export class FactoryFunction {
         return this.factory.getNode(this.declaration.getReturnType());
     }
 
-    isNodeValid() {
-        const returnType = this.declaration.getReturnType();
-        return returnType.getSymbol() != null;
+    getKindNames() {
+        const kindNames = this.getNode().getKindNames();
+
+        if (this.getName() === nameof(ts.createKeywordTypeNode)) {
+            return kindNames.filter(kindName => {
+                switch (kindName) {
+                    case nameof(SyntaxKind.NullKeyword): // use createNull
+                    case nameof(SyntaxKind.ThisKeyword): // use createThis
+                        return false;
+                    default:
+                        return true;
+                }
+            });
+        }
+
+        return kindNames;
     }
 }

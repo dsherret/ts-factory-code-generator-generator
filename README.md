@@ -6,7 +6,7 @@ This will serve the purpose of generating code that generates compiler API facto
 
 ## Benefits
 
-1. Automatic maintenance of future factory code functionality (`typescript@next` support).
+1. Automatic (minimal) maintenance of future factory code functionality (`typescript@next` support).
 2. Support all compiler API versions.
 3. Current solution requires reparsing an AST from the text because it's pegged at a specific version. This could reuse the AST used by the rest of the site.
 
