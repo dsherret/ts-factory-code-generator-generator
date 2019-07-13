@@ -21,9 +21,11 @@ export class Parameter {
     }
 
     getArrayElementType() {
-        if (!this.type.getText().endsWith("[]"))
+        const type = this.type.getNonNullableType();
+        const typeText = type.getText();
+        if (!typeText.endsWith("[]"))
             return undefined;
-        return this.type.getTypeArguments()[0];
+        return type.getTypeArguments()[0];
     }
 
     isArray() {

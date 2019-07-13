@@ -3,8 +3,6 @@ import { Project, Symbol, Type, TypeGuards, FunctionDeclarationStructure,
 import { Factory, FactoryFunction, Parameter, Node, NodeProperty } from "./compilerApi";
 
 export function generateCode(typeScriptModuleName = "typescript") {
-    const indentText = "  ";
-    const newlineText = "\\n";
     const factory = new Factory();
     const project = new Project({ compilerOptions: { strictNullChecks: true } });
     const newSourceFile = project.createSourceFile("____temp___.ts");
@@ -15,17 +13,39 @@ export function generateCode(typeScriptModuleName = "typescript") {
 
     newSourceFile.addStatements([{
         kind: StructureKind.ImportDeclaration,
-        namespaceImport: "tsCompiler",
-        moduleSpecifier: "typescript"
+        defaultImport: "CodeBlockWriter",
+        moduleSpecifier: "code-block-writer"
     }, {
         kind: StructureKind.Function,
-        name: "generate",
-        parameters: [{ name: "ts", type: `typeof import("${typeScriptModuleName}")` }, { name: "sourceFile", type: getTsTypeText("SourceFile") }],
-        statements: [writer => {
+        isExported: true,
+        name: "generateFactoryCode",
+        parameters: [{ name: "ts", type: `typeof import("${typeScriptModuleName}")` }, { name: "initialNode", type: getTsTypeText("Node") }],
+        statements: [
+            writer => {
+                writer.writeLine(`const writer = new CodeBlockWriter({ newLine: "\\n", indentNumberOfSpaces: 2 });`)
                 writer.writeLine("const syntaxKindToName = createSyntaxKindToNameMap();");
-                writer.writeLine("return getNodeText(sourceFile);");
+                writer.blankLine();
+                writer.write("if (ts.isSourceFile(initialNode))").block(() => {
+                    writer.writeLine(`writer.write("[");`);
+                    writer.write("if (initialNode.statements.length > 0)").block(() => {
+                        writer.write("writer.indentBlock(() => ").inlineBlock(() => {
+                            writer.write("for (let i = 0; i < initialNode.statements.length; i++)").block(() => {
+                                writer.writeLine("const statement = initialNode.statements[i];")
+                                writer.writeLine("if (i > 0)");
+                                writer.indent().write(`writer.write(",");`).newLine();
+                                writer.writeLine("writer.newLine();");
+                                writer.writeLine(`writeNodeText(statement);`);
+                            });
+                        }).write(").newLine();");
+                    });
+                    writer.writeLine(`writer.write("];");`);
+                });
+                writer.write("else").block(() => {
+                    writer.writeLine("writeNodeText(initialNode);");
+                });
+                writer.blankLine().writeLine("return writer.toString();");
             },
-            getNodeTextFunction(),
+            writeNodeTextFunction(),
             ...factoryFunctions.map(getFunctionStructure),
             getSyntaxKindToNameFunction(),
             getFlagValuesFunction()
@@ -64,21 +84,20 @@ export function generateCode(typeScriptModuleName = "typescript") {
         }
     }
 
-    function getNodeTextFunction(): FunctionDeclarationStructure {
+    function writeNodeTextFunction(): FunctionDeclarationStructure {
         return {
             kind: StructureKind.Function,
-            name: "getNodeText",
+            name: "writeNodeText",
             parameters: [{ name: "node", type: getTsTypeText("Node") }],
-            returnType: "string",
             statements: writer => {
                 writer.write("switch (node.kind)").block(() => {
                     for (const factoryFunc of factoryFunctions) {
                         for (const kindName of factoryFunc.getKindNames())
                             writer.writeLine(`case ts.SyntaxKind.${kindName}:`);
-                        writer.indent().write(`return ${factoryFunc.getName()}(node as ${getTsTypeText(factoryFunc.getNode().getName())});`).newLine();
+                        writer.indent().write(`${factoryFunc.getName()}(node as ${getTsTypeText(factoryFunc.getNode().getName())});`).newLine();
                     }
                     writer.writeLine(`default:`);
-                    writer.indent().write("throw new Error(").quote("Unhandled node kind: ").write(" + node.kind);").newLine();
+                    writer.indent().write("throw new Error(").quote("Unhandled node kind: ").write(" + syntaxKindToName[node.kind]);").newLine();
                 });
             }
         };
@@ -94,70 +113,53 @@ export function generateCode(typeScriptModuleName = "typescript") {
 
         function printBody(writer: CodeBlockWriter) {
             const params = func.getParameters();
-            writer.write(`return "ts.${func.getName()}("`)
-            if (params.length > 0)
-                writer.write(` + "${newlineText}"`);
-            writer.newLine();
-            writer.indentBlock(() => {
-                for (let i = 0; i < params.length; i++) {
-                    const param = params[i];
-                    if (i > 0)
-                        writer.write(` + ",${newlineText}\"`).newLine();
-                    writer.write(`+ "${indentText}" + `);
-                    printParamText(writer, param);
-                }
-            });
-            if (params.length > 0)
-                writer.write(`+ "${newlineText}" `);
-            writer.write(`+ ");";`);
+            writer.writeLine(`writer.write("ts.${func.getName()}(");`);
+            if (params.length > 0) {
+                writer.writeLine(`writer.newLine();`);
+                writer.write("writer.indentBlock(() => ").inlineBlock(() => {
+                    for (let i = 0; i < params.length; i++) {
+                        const param = params[i];
+                        if (i > 0)
+                            writer.writeLine(`writer.write(",").newLine();`);
+                        printParamText(writer, param);
+                    }
+                }).write(");").newLine();
+            }
+            writer.write(`writer.write(")");`);
         }
 
         function printParamText(writer: CodeBlockWriter, param: Parameter) {
-            const customParamText = getCustomParamText(func, param);
-            if (customParamText) {
-                writer.write(customParamText);
+            if (getCustomParamText(writer, func, param))
                 return;
-            }
+
             const prop = func.getNode().getPropertyForParam(param);
             const propAccess = `node.${prop.getName()}`;
 
-            if (prop.getType().isNullable())
-                writer.write(`(${propAccess} == null ? undefined : `);
-
-            writeTypeText();
-
-            if (prop.getType().isNullable())
-                writer.write(")");
-
-            if (param.getType().isNullable() && !prop.getType().isNullable()) {
-                if (param.isArray())
-                    writer.write("[]");
-            }
+            writeNullableIfNecessary(writer, prop.getType(), propAccess, () => writeTypeText());
 
             function writeTypeText() {
                 if (param.isArray()) {
                     const arrayElementType = param.getArrayElementType()!;
-                    writer.write(`"[${newlineText}"`);
-                    writer.write(` + "${newlineText}${indentText}" + ${propAccess}.map(item => ${getTextForType("item", arrayElementType)}).join(",${newlineText}${indentText}")`)
-                    writer.write(` + "${newlineText}]"`);
+                    writeArrayText(writer, propAccess, () => writeTextForType("item", arrayElementType));
                 }
                 else {
-                    writer.write(getTextForType(propAccess, param.getType()));
+                    writeTextForType(propAccess, param.getType().getNonNullableType());
                 }
             }
 
             // todo: rename
-            function getTextForType(text: string, type: Type) {
+            function writeTextForType(text: string, type: Type) {
                 if (isNodeType())
-                    return `getNodeText(${text})`
+                    writer.write(`writeNodeText(${text})`);
                 else if (isSyntaxKindType())
-                    return `syntaxKindToName[${text}]`;
+                    writer.write(`writer.write(syntaxKindToName[${text}])`);
                 else if (type.isString() || type.isStringLiteral() || type.isBoolean() || type.isBooleanLiteral())
-                    return text;
+                    writer.write(`writer.quote(${text}.toString())`);
                 else if (type.getText().endsWith(".NodeFlags"))
-                    return `getFlagValues(NodeFlags, "NodeFlags", ${text} || 0)`;
+                    writer.write(`writer.write(getFlagValues(ts.NodeFlags, "NodeFlags", ${text} || 0).toString());`);
                 else {
-                    return text;
+                    console.error(`Could not find text for param ${func.getName()}::${param.getName()}`);
+                    writer.write(`writer.write("/* unknown */")`);
                 }
 
                 function isSyntaxKindType() {
@@ -220,24 +222,58 @@ export function generateCode(typeScriptModuleName = "typescript") {
     function getTsTypeText(typeText: string) {
         return `import("${typeScriptModuleName}").${typeText}`;
     }
-}
 
-function getCustomParamText(func: FactoryFunction, param: Parameter) {
-    const funcName = func.getName();
-    const paramName = param.getName();
+    function getCustomParamText(writer: CodeBlockWriter, func: FactoryFunction, param: Parameter) {
+        const funcName = func.getName();
+        const paramName = param.getName();
+        const initialLength = writer.getLength();
 
-    if (funcName === nameof(ts.createNumericLiteral) && paramName === "numericLiteralFlags")
-        return `getFlagValues(ts.TokenFlags, "TokenFlags", (node as any).numericLiteralFlags || 0)`;
-    if (funcName === nameof(ts.createProperty) && paramName === "questionOrExclamationToken")
-        return "node.questionToken || node.exclamationToken";
-    if (funcName === nameof(ts.createArrayLiteral) && paramName === "multiLine")
-        return "(node as any).multiLine";
-    if (funcName === nameof(ts.createObjectLiteral) && paramName === "multiLine")
-        return "(node as any).multiLine";
-    if (funcName === nameof(ts.createBlock) && paramName === "multiLine")
-        return "(node as any).multiLine";
+        if (funcName === nameof(ts.createNumericLiteral) && paramName === "numericLiteralFlags")
+            writer.write(`getFlagValues(ts.TokenFlags, "TokenFlags", (node as any).numericLiteralFlags || 0)`);
+        if (funcName === nameof(ts.createProperty) && paramName === "questionOrExclamationToken")
+            writer.write("node.questionToken || node.exclamationToken");
+        if (funcName === nameof(ts.createArrayLiteral) && paramName === "multiLine")
+            writer.write("(node as any).multiLine");
+        if (funcName === nameof(ts.createObjectLiteral) && paramName === "multiLine")
+            writer.write("(node as any).multiLine");
+        if (funcName === nameof(ts.createBlock) && paramName === "multiLine")
+            writer.write("(node as any).multiLine");
+        if (paramName === "modifiers") {
+            writeNullableIfNecessary(writer, param.getType(), "node.modifiers", () => {
+                writeArrayText(writer, "node.modifiers", () => writer.writeLine(`writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");`))
+            });
+        }
 
-    return undefined;
+        return writer.getLength() !== initialLength;
+    }
+
+    function writeArrayText(writer: CodeBlockWriter, propAccess: string, writeItemText: () => void) {
+        writer.writeLine(`writer.write("[");`);
+        writer.write(`if (${propAccess}.length > 0)`).block(() => {
+            writer.write("writer.indentBlock(() => ").inlineBlock(() => {
+                writer.write(`for (let i = 0; i < ${propAccess}!.length; i++)`).block(() => {
+                    writer.write(`const item = ${propAccess}![i];`)
+                    writer.writeLine("if (i > 0)");
+                    writer.indent().write(`writer.write(",");`).newLine();
+                    writeItemText();
+                });
+            }).write(");").newLine();
+        });
+        writer.writeLine(`writer.write("]");`);
+    }
+
+    function writeNullableIfNecessary(writer: CodeBlockWriter, type: Type, propAccess: string, writeTypeText: () => void) {
+        if (type.isNullable()) {
+            writer.writeLine(`if (${propAccess} == null)`)
+            writer.indent().write(`writer.write("undefined");`).newLine();
+            writer.write("else").block(() => {
+                writeTypeText();
+            });
+        }
+        else {
+            writeTypeText();
+        }
+    }
 }
 
 function isAllowedFactoryFunction(func: FactoryFunction) {

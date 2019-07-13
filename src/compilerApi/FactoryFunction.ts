@@ -11,8 +11,7 @@ export class FactoryFunction {
     }
 
     getParameters() {
-        const params = this.declaration.getParameters();
-        return params.map(p => new Parameter(this.factory, this, p));
+        return this.declaration.getParameters().map(p => new Parameter(this.factory, this, p));
     }
 
     getNode() {
