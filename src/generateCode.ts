@@ -240,8 +240,6 @@ export function generateCode(typeScriptModuleName = "typescript") {
         const paramName = param.getName();
         const initialLength = writer.getLength();
 
-        if (funcName === nameof(ts.createNumericLiteral) && paramName === "numericLiteralFlags")
-            writer.write(`writer.write(getFlagValues(ts.TokenFlags, "ts.TokenFlags", (node as any).numericLiteralFlags || 0, "None"));`);
         if (funcName === nameof(ts.createProperty) && paramName === "questionOrExclamationToken") {
             writer.writeLine("if (node.questionToken != null)");
             writer.indent().write(`writer.write("ts.createToken(ts.SyntaxKind.QuestionToken)");`).newLine();

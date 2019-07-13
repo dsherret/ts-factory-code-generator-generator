@@ -11,7 +11,10 @@ export class FactoryFunction {
     }
 
     getParameters() {
-        return this.declaration.getParameters().map(p => new Parameter(this.factory, this, p));
+        const params = this.declaration.getParameters().map(p => new Parameter(this.factory, this, p));
+        if (this.getName() === nameof(ts.createNumericLiteral))
+            return params.filter(p => p.getName() !== "numericLiteralFlags");
+        return params;
     }
 
     getNode() {

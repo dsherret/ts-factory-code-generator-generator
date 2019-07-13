@@ -117,10 +117,7 @@ import * as ts from "typescript-3.5.3";
         [],
         undefined,
         ts.createBlock(
-          [ts.createReturn(ts.createNumericLiteral(
-            "5",
-            ts.TokenFlags.None
-          ))],
+          [ts.createReturn(ts.createNumericLiteral("5"))],
           true
         )
       )
@@ -168,10 +165,7 @@ import * as ts from "typescript-3.5.3";
       [ts.createVariableDeclaration(
         ts.createIdentifier("myVar"),
         undefined,
-        ts.createNumericLiteral(
-          "6",
-          ts.TokenFlags.None
-        )
+        ts.createNumericLiteral("6")
       )],
       ts.NodeFlags.Const | ts.NodeFlags.BlockScoped
     )
@@ -183,10 +177,7 @@ import * as ts from "typescript-3.5.3";
         ts.createVariableDeclaration(
           ts.createIdentifier("myVar2"),
           undefined,
-          ts.createNumericLiteral(
-            "6",
-            ts.TokenFlags.None
-          )
+          ts.createNumericLiteral("6")
         ),
         ts.createVariableDeclaration(
           ts.createIdentifier("myVar3"),
@@ -207,21 +198,12 @@ import * as ts from "typescript-3.5.3";
         ts.createIdentifier("otherVar"),
         undefined,
         ts.createBinary(
-          ts.createNumericLiteral(
-            "4",
-            ts.TokenFlags.None
-          ),
+          ts.createNumericLiteral("4"),
           ts.createToken(ts.SyntaxKind.PlusToken),
           ts.createBinary(
-            ts.createNumericLiteral(
-              "5",
-              ts.TokenFlags.None
-            ),
+            ts.createNumericLiteral("5"),
             ts.createToken(ts.SyntaxKind.AsteriskToken),
-            ts.createNumericLiteral(
-              "12",
-              ts.TokenFlags.None
-            )
+            ts.createNumericLiteral("12")
           )
         )
       )],
@@ -245,10 +227,7 @@ import * as ts from "typescript-3.5.3";
     )],
     ts.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
     ts.createBlock(
-      [ts.createReturn(ts.createNumericLiteral(
-        "5",
-        ts.TokenFlags.None
-      ))],
+      [ts.createReturn(ts.createNumericLiteral("5"))],
       true
     )
   ),

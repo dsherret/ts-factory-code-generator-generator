@@ -485,12 +485,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createNumericLiteral(node: import("typescript-3.5.3").NumericLiteral) {
         writer.write("ts.createNumericLiteral(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.quote(node.text.toString())
-            writer.write(",").newLine();
-            writer.write(getFlagValues(ts.TokenFlags, "ts.TokenFlags", (node as any).numericLiteralFlags || 0, "None"));
-        });
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
