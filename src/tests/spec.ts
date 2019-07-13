@@ -7,7 +7,7 @@ import { generateCode } from "../generateCode";
 import { generateFactoryCode } from "./specs/code-generation.spec";
 
 describe(nameof(generateCode), () => {
-    it.only("should equal the spec", () => {
+    it("should equal the spec", () => {
         // get generated code
         const result = generateCode("typescript-3.5.3");
 
@@ -28,7 +28,7 @@ describe(nameof(generateFactoryCode), () => {
         const languageFeaturesFileName = path.join(__dirname, "specs/language-features.ts");
         const languageFeaturesText = fs.readFileSync(languageFeaturesFileName, { encoding: "utf8" });
         const languageFeaturesSourceFile = ts.createSourceFile("languageFeatures.ts", languageFeaturesText, ts.ScriptTarget.Latest, false);
-        const result = generateFactoryCode(ts, languageFeaturesSourceFile);
+        const result = `import * as ts from "typescript-3.5.3";\n\n` + generateFactoryCode(ts, languageFeaturesSourceFile);
 
         // ensure no diagnostics
         //ensureNoDiagnostics(result);

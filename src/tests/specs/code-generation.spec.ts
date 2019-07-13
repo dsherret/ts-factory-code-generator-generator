@@ -11,8 +11,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 for (let i = 0; i < initialNode.statements.length; i++) {
                     const statement = initialNode.statements[i];
                     if (i > 0)
-                        writer.write(",");
-                    writer.newLine();
+                        writer.write(",").newLine();
                     writeNodeText(statement);
                 }
             }).newLine();
@@ -29,54 +28,79 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
         switch (node.kind) {
             case ts.SyntaxKind.NumericLiteral:
                 createNumericLiteral(node as import("typescript-3.5.3").NumericLiteral);
+                return;
             case ts.SyntaxKind.BigIntLiteral:
                 createBigIntLiteral(node as import("typescript-3.5.3").BigIntLiteral);
+                return;
             case ts.SyntaxKind.StringLiteral:
                 createStringLiteral(node as import("typescript-3.5.3").StringLiteral);
+                return;
             case ts.SyntaxKind.RegularExpressionLiteral:
                 createRegularExpressionLiteral(node as import("typescript-3.5.3").RegularExpressionLiteral);
+                return;
             case ts.SyntaxKind.Identifier:
                 createIdentifier(node as import("typescript-3.5.3").Identifier);
+                return;
             case ts.SyntaxKind.SuperKeyword:
                 createSuper(node as import("typescript-3.5.3").SuperExpression);
+                return;
             case ts.SyntaxKind.ThisKeyword:
                 createThis(node as import("typescript-3.5.3").ThisExpression);
+                return;
             case ts.SyntaxKind.NullKeyword:
                 createNull(node as import("typescript-3.5.3").NullLiteral);
+                return;
             case ts.SyntaxKind.TrueKeyword:
                 createTrue(node as import("typescript-3.5.3").BooleanLiteral);
+                return;
             case ts.SyntaxKind.FalseKeyword:
                 createFalse(node as import("typescript-3.5.3").BooleanLiteral);
+                return;
             case ts.SyntaxKind.QualifiedName:
                 createQualifiedName(node as import("typescript-3.5.3").QualifiedName);
+                return;
             case ts.SyntaxKind.ComputedPropertyName:
                 createComputedPropertyName(node as import("typescript-3.5.3").ComputedPropertyName);
+                return;
             case ts.SyntaxKind.TypeParameter:
                 createTypeParameterDeclaration(node as import("typescript-3.5.3").TypeParameterDeclaration);
+                return;
             case ts.SyntaxKind.Parameter:
                 createParameter(node as import("typescript-3.5.3").ParameterDeclaration);
+                return;
             case ts.SyntaxKind.Decorator:
                 createDecorator(node as import("typescript-3.5.3").Decorator);
+                return;
             case ts.SyntaxKind.PropertySignature:
                 createPropertySignature(node as import("typescript-3.5.3").PropertySignature);
+                return;
             case ts.SyntaxKind.PropertyDeclaration:
                 createProperty(node as import("typescript-3.5.3").PropertyDeclaration);
+                return;
             case ts.SyntaxKind.MethodSignature:
                 createMethodSignature(node as import("typescript-3.5.3").MethodSignature);
+                return;
             case ts.SyntaxKind.MethodDeclaration:
                 createMethod(node as import("typescript-3.5.3").MethodDeclaration);
+                return;
             case ts.SyntaxKind.Constructor:
                 createConstructor(node as import("typescript-3.5.3").ConstructorDeclaration);
+                return;
             case ts.SyntaxKind.GetAccessor:
                 createGetAccessor(node as import("typescript-3.5.3").GetAccessorDeclaration);
+                return;
             case ts.SyntaxKind.SetAccessor:
                 createSetAccessor(node as import("typescript-3.5.3").SetAccessorDeclaration);
+                return;
             case ts.SyntaxKind.CallSignature:
                 createCallSignature(node as import("typescript-3.5.3").CallSignatureDeclaration);
+                return;
             case ts.SyntaxKind.ConstructSignature:
                 createConstructSignature(node as import("typescript-3.5.3").ConstructSignatureDeclaration);
+                return;
             case ts.SyntaxKind.IndexSignature:
                 createIndexSignature(node as import("typescript-3.5.3").IndexSignatureDeclaration);
+                return;
             case ts.SyntaxKind.VoidKeyword:
             case ts.SyntaxKind.AnyKeyword:
             case ts.SyntaxKind.BooleanKeyword:
@@ -89,246 +113,367 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             case ts.SyntaxKind.UnknownKeyword:
             case ts.SyntaxKind.BigIntKeyword:
                 createKeywordTypeNode(node as import("typescript-3.5.3").KeywordTypeNode);
+                return;
             case ts.SyntaxKind.TypePredicate:
                 createTypePredicateNode(node as import("typescript-3.5.3").TypePredicateNode);
+                return;
             case ts.SyntaxKind.TypeReference:
                 createTypeReferenceNode(node as import("typescript-3.5.3").TypeReferenceNode);
+                return;
             case ts.SyntaxKind.FunctionType:
                 createFunctionTypeNode(node as import("typescript-3.5.3").FunctionTypeNode);
+                return;
             case ts.SyntaxKind.ConstructorType:
                 createConstructorTypeNode(node as import("typescript-3.5.3").ConstructorTypeNode);
+                return;
             case ts.SyntaxKind.TypeQuery:
                 createTypeQueryNode(node as import("typescript-3.5.3").TypeQueryNode);
+                return;
             case ts.SyntaxKind.TypeLiteral:
                 createTypeLiteralNode(node as import("typescript-3.5.3").TypeLiteralNode);
+                return;
             case ts.SyntaxKind.ArrayType:
                 createArrayTypeNode(node as import("typescript-3.5.3").ArrayTypeNode);
+                return;
             case ts.SyntaxKind.TupleType:
                 createTupleTypeNode(node as import("typescript-3.5.3").TupleTypeNode);
+                return;
             case ts.SyntaxKind.OptionalType:
                 createOptionalTypeNode(node as import("typescript-3.5.3").OptionalTypeNode);
+                return;
             case ts.SyntaxKind.RestType:
                 createRestTypeNode(node as import("typescript-3.5.3").RestTypeNode);
+                return;
             case ts.SyntaxKind.UnionType:
                 createUnionTypeNode(node as import("typescript-3.5.3").UnionTypeNode);
+                return;
             case ts.SyntaxKind.IntersectionType:
                 createIntersectionTypeNode(node as import("typescript-3.5.3").IntersectionTypeNode);
+                return;
             case ts.SyntaxKind.ConditionalType:
                 createConditionalTypeNode(node as import("typescript-3.5.3").ConditionalTypeNode);
+                return;
             case ts.SyntaxKind.InferType:
                 createInferTypeNode(node as import("typescript-3.5.3").InferTypeNode);
+                return;
             case ts.SyntaxKind.ImportType:
                 createImportTypeNode(node as import("typescript-3.5.3").ImportTypeNode);
+                return;
             case ts.SyntaxKind.ParenthesizedType:
                 createParenthesizedType(node as import("typescript-3.5.3").ParenthesizedTypeNode);
+                return;
             case ts.SyntaxKind.ThisType:
                 createThisTypeNode(node as import("typescript-3.5.3").ThisTypeNode);
+                return;
             case ts.SyntaxKind.TypeOperator:
                 createTypeOperatorNode(node as import("typescript-3.5.3").TypeOperatorNode);
+                return;
             case ts.SyntaxKind.IndexedAccessType:
                 createIndexedAccessTypeNode(node as import("typescript-3.5.3").IndexedAccessTypeNode);
+                return;
             case ts.SyntaxKind.MappedType:
                 createMappedTypeNode(node as import("typescript-3.5.3").MappedTypeNode);
+                return;
             case ts.SyntaxKind.LiteralType:
                 createLiteralTypeNode(node as import("typescript-3.5.3").LiteralTypeNode);
+                return;
             case ts.SyntaxKind.ObjectBindingPattern:
                 createObjectBindingPattern(node as import("typescript-3.5.3").ObjectBindingPattern);
+                return;
             case ts.SyntaxKind.ArrayBindingPattern:
                 createArrayBindingPattern(node as import("typescript-3.5.3").ArrayBindingPattern);
+                return;
             case ts.SyntaxKind.BindingElement:
                 createBindingElement(node as import("typescript-3.5.3").BindingElement);
+                return;
             case ts.SyntaxKind.ArrayLiteralExpression:
                 createArrayLiteral(node as import("typescript-3.5.3").ArrayLiteralExpression);
+                return;
             case ts.SyntaxKind.ObjectLiteralExpression:
                 createObjectLiteral(node as import("typescript-3.5.3").ObjectLiteralExpression);
+                return;
             case ts.SyntaxKind.PropertyAccessExpression:
                 createPropertyAccess(node as import("typescript-3.5.3").PropertyAccessExpression);
+                return;
             case ts.SyntaxKind.ElementAccessExpression:
                 createElementAccess(node as import("typescript-3.5.3").ElementAccessExpression);
+                return;
             case ts.SyntaxKind.CallExpression:
                 createCall(node as import("typescript-3.5.3").CallExpression);
+                return;
             case ts.SyntaxKind.NewExpression:
                 createNew(node as import("typescript-3.5.3").NewExpression);
+                return;
             case ts.SyntaxKind.TaggedTemplateExpression:
                 createTaggedTemplate(node as import("typescript-3.5.3").TaggedTemplateExpression);
+                return;
             case ts.SyntaxKind.TypeAssertionExpression:
                 createTypeAssertion(node as import("typescript-3.5.3").TypeAssertion);
+                return;
             case ts.SyntaxKind.ParenthesizedExpression:
                 createParen(node as import("typescript-3.5.3").ParenthesizedExpression);
+                return;
             case ts.SyntaxKind.FunctionExpression:
                 createFunctionExpression(node as import("typescript-3.5.3").FunctionExpression);
+                return;
             case ts.SyntaxKind.ArrowFunction:
                 createArrowFunction(node as import("typescript-3.5.3").ArrowFunction);
+                return;
             case ts.SyntaxKind.DeleteExpression:
                 createDelete(node as import("typescript-3.5.3").DeleteExpression);
+                return;
             case ts.SyntaxKind.TypeOfExpression:
                 createTypeOf(node as import("typescript-3.5.3").TypeOfExpression);
+                return;
             case ts.SyntaxKind.VoidExpression:
                 createVoid(node as import("typescript-3.5.3").VoidExpression);
+                return;
             case ts.SyntaxKind.AwaitExpression:
                 createAwait(node as import("typescript-3.5.3").AwaitExpression);
+                return;
             case ts.SyntaxKind.PrefixUnaryExpression:
                 createPrefix(node as import("typescript-3.5.3").PrefixUnaryExpression);
+                return;
             case ts.SyntaxKind.PostfixUnaryExpression:
                 createPostfix(node as import("typescript-3.5.3").PostfixUnaryExpression);
+                return;
             case ts.SyntaxKind.BinaryExpression:
                 createBinary(node as import("typescript-3.5.3").BinaryExpression);
+                return;
             case ts.SyntaxKind.ConditionalExpression:
                 createConditional(node as import("typescript-3.5.3").ConditionalExpression);
+                return;
             case ts.SyntaxKind.TemplateExpression:
                 createTemplateExpression(node as import("typescript-3.5.3").TemplateExpression);
+                return;
             case ts.SyntaxKind.TemplateHead:
                 createTemplateHead(node as import("typescript-3.5.3").TemplateHead);
+                return;
             case ts.SyntaxKind.TemplateMiddle:
                 createTemplateMiddle(node as import("typescript-3.5.3").TemplateMiddle);
+                return;
             case ts.SyntaxKind.TemplateTail:
                 createTemplateTail(node as import("typescript-3.5.3").TemplateTail);
+                return;
             case ts.SyntaxKind.NoSubstitutionTemplateLiteral:
                 createNoSubstitutionTemplateLiteral(node as import("typescript-3.5.3").NoSubstitutionTemplateLiteral);
+                return;
             case ts.SyntaxKind.YieldExpression:
                 createYield(node as import("typescript-3.5.3").YieldExpression);
+                return;
             case ts.SyntaxKind.SpreadElement:
                 createSpread(node as import("typescript-3.5.3").SpreadElement);
+                return;
             case ts.SyntaxKind.ClassExpression:
                 createClassExpression(node as import("typescript-3.5.3").ClassExpression);
+                return;
             case ts.SyntaxKind.OmittedExpression:
                 createOmittedExpression(node as import("typescript-3.5.3").OmittedExpression);
+                return;
             case ts.SyntaxKind.ExpressionWithTypeArguments:
                 createExpressionWithTypeArguments(node as import("typescript-3.5.3").ExpressionWithTypeArguments);
+                return;
             case ts.SyntaxKind.AsExpression:
                 createAsExpression(node as import("typescript-3.5.3").AsExpression);
+                return;
             case ts.SyntaxKind.NonNullExpression:
                 createNonNullExpression(node as import("typescript-3.5.3").NonNullExpression);
+                return;
             case ts.SyntaxKind.MetaProperty:
                 createMetaProperty(node as import("typescript-3.5.3").MetaProperty);
+                return;
             case ts.SyntaxKind.TemplateSpan:
                 createTemplateSpan(node as import("typescript-3.5.3").TemplateSpan);
+                return;
             case ts.SyntaxKind.SemicolonClassElement:
                 createSemicolonClassElement(node as import("typescript-3.5.3").SemicolonClassElement);
+                return;
             case ts.SyntaxKind.Block:
                 createBlock(node as import("typescript-3.5.3").Block);
+                return;
             case ts.SyntaxKind.VariableStatement:
                 createVariableStatement(node as import("typescript-3.5.3").VariableStatement);
+                return;
             case ts.SyntaxKind.EmptyStatement:
                 createEmptyStatement(node as import("typescript-3.5.3").EmptyStatement);
+                return;
             case ts.SyntaxKind.ExpressionStatement:
                 createExpressionStatement(node as import("typescript-3.5.3").ExpressionStatement);
+                return;
             case ts.SyntaxKind.IfStatement:
                 createIf(node as import("typescript-3.5.3").IfStatement);
+                return;
             case ts.SyntaxKind.DoStatement:
                 createDo(node as import("typescript-3.5.3").DoStatement);
+                return;
             case ts.SyntaxKind.WhileStatement:
                 createWhile(node as import("typescript-3.5.3").WhileStatement);
+                return;
             case ts.SyntaxKind.ForStatement:
                 createFor(node as import("typescript-3.5.3").ForStatement);
+                return;
             case ts.SyntaxKind.ForInStatement:
                 createForIn(node as import("typescript-3.5.3").ForInStatement);
+                return;
             case ts.SyntaxKind.ForOfStatement:
                 createForOf(node as import("typescript-3.5.3").ForOfStatement);
+                return;
             case ts.SyntaxKind.ContinueStatement:
                 createContinue(node as import("typescript-3.5.3").ContinueStatement);
+                return;
             case ts.SyntaxKind.BreakStatement:
                 createBreak(node as import("typescript-3.5.3").BreakStatement);
+                return;
             case ts.SyntaxKind.ReturnStatement:
                 createReturn(node as import("typescript-3.5.3").ReturnStatement);
+                return;
             case ts.SyntaxKind.WithStatement:
                 createWith(node as import("typescript-3.5.3").WithStatement);
+                return;
             case ts.SyntaxKind.SwitchStatement:
                 createSwitch(node as import("typescript-3.5.3").SwitchStatement);
+                return;
             case ts.SyntaxKind.LabeledStatement:
                 createLabel(node as import("typescript-3.5.3").LabeledStatement);
+                return;
             case ts.SyntaxKind.ThrowStatement:
                 createThrow(node as import("typescript-3.5.3").ThrowStatement);
+                return;
             case ts.SyntaxKind.TryStatement:
                 createTry(node as import("typescript-3.5.3").TryStatement);
+                return;
             case ts.SyntaxKind.DebuggerStatement:
                 createDebuggerStatement(node as import("typescript-3.5.3").DebuggerStatement);
+                return;
             case ts.SyntaxKind.VariableDeclaration:
                 createVariableDeclaration(node as import("typescript-3.5.3").VariableDeclaration);
+                return;
             case ts.SyntaxKind.VariableDeclarationList:
                 createVariableDeclarationList(node as import("typescript-3.5.3").VariableDeclarationList);
+                return;
             case ts.SyntaxKind.FunctionDeclaration:
                 createFunctionDeclaration(node as import("typescript-3.5.3").FunctionDeclaration);
+                return;
             case ts.SyntaxKind.ClassDeclaration:
                 createClassDeclaration(node as import("typescript-3.5.3").ClassDeclaration);
+                return;
             case ts.SyntaxKind.InterfaceDeclaration:
                 createInterfaceDeclaration(node as import("typescript-3.5.3").InterfaceDeclaration);
+                return;
             case ts.SyntaxKind.TypeAliasDeclaration:
                 createTypeAliasDeclaration(node as import("typescript-3.5.3").TypeAliasDeclaration);
+                return;
             case ts.SyntaxKind.EnumDeclaration:
                 createEnumDeclaration(node as import("typescript-3.5.3").EnumDeclaration);
+                return;
             case ts.SyntaxKind.ModuleDeclaration:
                 createModuleDeclaration(node as import("typescript-3.5.3").ModuleDeclaration);
+                return;
             case ts.SyntaxKind.ModuleBlock:
                 createModuleBlock(node as import("typescript-3.5.3").ModuleBlock);
+                return;
             case ts.SyntaxKind.CaseBlock:
                 createCaseBlock(node as import("typescript-3.5.3").CaseBlock);
+                return;
             case ts.SyntaxKind.NamespaceExportDeclaration:
                 createNamespaceExportDeclaration(node as import("typescript-3.5.3").NamespaceExportDeclaration);
+                return;
             case ts.SyntaxKind.ImportEqualsDeclaration:
                 createImportEqualsDeclaration(node as import("typescript-3.5.3").ImportEqualsDeclaration);
+                return;
             case ts.SyntaxKind.ImportDeclaration:
                 createImportDeclaration(node as import("typescript-3.5.3").ImportDeclaration);
+                return;
             case ts.SyntaxKind.ImportClause:
                 createImportClause(node as import("typescript-3.5.3").ImportClause);
+                return;
             case ts.SyntaxKind.NamespaceImport:
                 createNamespaceImport(node as import("typescript-3.5.3").NamespaceImport);
+                return;
             case ts.SyntaxKind.NamedImports:
                 createNamedImports(node as import("typescript-3.5.3").NamedImports);
+                return;
             case ts.SyntaxKind.ImportSpecifier:
                 createImportSpecifier(node as import("typescript-3.5.3").ImportSpecifier);
+                return;
             case ts.SyntaxKind.ExportAssignment:
                 createExportAssignment(node as import("typescript-3.5.3").ExportAssignment);
+                return;
             case ts.SyntaxKind.ExportDeclaration:
                 createExportDeclaration(node as import("typescript-3.5.3").ExportDeclaration);
+                return;
             case ts.SyntaxKind.NamedExports:
                 createNamedExports(node as import("typescript-3.5.3").NamedExports);
+                return;
             case ts.SyntaxKind.ExportSpecifier:
                 createExportSpecifier(node as import("typescript-3.5.3").ExportSpecifier);
+                return;
             case ts.SyntaxKind.ExternalModuleReference:
                 createExternalModuleReference(node as import("typescript-3.5.3").ExternalModuleReference);
+                return;
             case ts.SyntaxKind.JsxElement:
                 createJsxElement(node as import("typescript-3.5.3").JsxElement);
+                return;
             case ts.SyntaxKind.JsxSelfClosingElement:
                 createJsxSelfClosingElement(node as import("typescript-3.5.3").JsxSelfClosingElement);
+                return;
             case ts.SyntaxKind.JsxOpeningElement:
                 createJsxOpeningElement(node as import("typescript-3.5.3").JsxOpeningElement);
+                return;
             case ts.SyntaxKind.JsxClosingElement:
                 createJsxClosingElement(node as import("typescript-3.5.3").JsxClosingElement);
+                return;
             case ts.SyntaxKind.JsxFragment:
                 createJsxFragment(node as import("typescript-3.5.3").JsxFragment);
+                return;
             case ts.SyntaxKind.JsxText:
                 createJsxText(node as import("typescript-3.5.3").JsxText);
+                return;
             case ts.SyntaxKind.JsxOpeningFragment:
                 createJsxOpeningFragment(node as import("typescript-3.5.3").JsxOpeningFragment);
+                return;
             case ts.SyntaxKind.JsxClosingFragment:
                 createJsxJsxClosingFragment(node as import("typescript-3.5.3").JsxClosingFragment);
+                return;
             case ts.SyntaxKind.JsxAttribute:
                 createJsxAttribute(node as import("typescript-3.5.3").JsxAttribute);
+                return;
             case ts.SyntaxKind.JsxAttributes:
                 createJsxAttributes(node as import("typescript-3.5.3").JsxAttributes);
+                return;
             case ts.SyntaxKind.JsxSpreadAttribute:
                 createJsxSpreadAttribute(node as import("typescript-3.5.3").JsxSpreadAttribute);
+                return;
             case ts.SyntaxKind.JsxExpression:
                 createJsxExpression(node as import("typescript-3.5.3").JsxExpression);
+                return;
             case ts.SyntaxKind.CaseClause:
                 createCaseClause(node as import("typescript-3.5.3").CaseClause);
+                return;
             case ts.SyntaxKind.DefaultClause:
                 createDefaultClause(node as import("typescript-3.5.3").DefaultClause);
+                return;
             case ts.SyntaxKind.HeritageClause:
                 createHeritageClause(node as import("typescript-3.5.3").HeritageClause);
+                return;
             case ts.SyntaxKind.CatchClause:
                 createCatchClause(node as import("typescript-3.5.3").CatchClause);
+                return;
             case ts.SyntaxKind.PropertyAssignment:
                 createPropertyAssignment(node as import("typescript-3.5.3").PropertyAssignment);
+                return;
             case ts.SyntaxKind.ShorthandPropertyAssignment:
                 createShorthandPropertyAssignment(node as import("typescript-3.5.3").ShorthandPropertyAssignment);
+                return;
             case ts.SyntaxKind.SpreadAssignment:
                 createSpreadAssignment(node as import("typescript-3.5.3").SpreadAssignment);
+                return;
             case ts.SyntaxKind.EnumMember:
                 createEnumMember(node as import("typescript-3.5.3").EnumMember);
+                return;
             case ts.SyntaxKind.CommaListExpression:
                 createCommaList(node as import("typescript-3.5.3").CommaListExpression);
+                return;
             default:
                 throw new Error("Unhandled node kind: " + syntaxKindToName[node.kind]);
         }
@@ -340,44 +485,32 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
         writer.indentBlock(() => {
             writer.quote(node.text.toString())
             writer.write(",").newLine();
-            getFlagValues(ts.TokenFlags, "TokenFlags", (node as any).numericLiteralFlags || 0)
+            writer.write(getFlagValues(ts.TokenFlags, "ts.TokenFlags", (node as any).numericLiteralFlags || 0, "None"));
         });
         writer.write(")");
     }
 
     function createBigIntLiteral(node: import("typescript-3.5.3").BigIntLiteral) {
         writer.write("ts.createBigIntLiteral(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.quote(node.text.toString())
-        });
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
     function createStringLiteral(node: import("typescript-3.5.3").StringLiteral) {
         writer.write("ts.createStringLiteral(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.quote(node.text.toString())
-        });
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
     function createRegularExpressionLiteral(node: import("typescript-3.5.3").RegularExpressionLiteral) {
         writer.write("ts.createRegularExpressionLiteral(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.quote(node.text.toString())
-        });
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
     function createIdentifier(node: import("typescript-3.5.3").Identifier) {
         writer.write("ts.createIdentifier(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.quote(node.text.toString())
-        });
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
@@ -419,10 +552,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createComputedPropertyName(node: import("typescript-3.5.3").ComputedPropertyName) {
         writer.write("ts.createComputedPropertyName(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.expression)
-        });
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -455,12 +585,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.decorators.length > 0) {
+                if (node.decorators.length === 1) {
+                    const item = node.decorators![0];
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -472,13 +606,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -516,10 +654,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createDecorator(node: import("typescript-3.5.3").Decorator) {
         writer.write("ts.createDecorator(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.expression)
-        });
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -531,13 +666,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -575,12 +714,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.decorators.length > 0) {
+                if (node.decorators.length === 1) {
+                    const item = node.decorators![0];
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -592,13 +735,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -607,7 +754,12 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             writer.write(",").newLine();
             writeNodeText(node.name)
             writer.write(",").newLine();
-            node.questionToken || node.exclamationToken
+            if (node.questionToken != null)
+                writer.write("ts.createToken(ts.SyntaxKind.QuestionToken)");
+            else if (node.exclamationToken != null)
+                writer.write("ts.createToken(ts.SyntaxKind.ExclamationToken)");
+            else
+                writer.write("undefined");
             writer.write(",").newLine();
             if (node.type == null)
                 writer.write("undefined");
@@ -632,12 +784,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeParameters.length > 0) {
+                if (node.typeParameters.length === 1) {
+                    const item = node.typeParameters![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -646,12 +802,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write(",").newLine();
             writer.write("[");
-            if (node.parameters.length > 0) {
+            if (node.parameters.length === 1) {
+                const item = node.parameters![0];
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -683,12 +843,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.decorators.length > 0) {
+                if (node.decorators.length === 1) {
+                    const item = node.decorators![0];
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -700,13 +864,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -731,12 +899,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeParameters.length > 0) {
+                if (node.typeParameters.length === 1) {
+                    const item = node.typeParameters![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -745,12 +917,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write(",").newLine();
             writer.write("[");
-            if (node.parameters.length > 0) {
+            if (node.parameters.length === 1) {
+                const item = node.parameters![0];
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -780,12 +956,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.decorators.length > 0) {
+                if (node.decorators.length === 1) {
+                    const item = node.decorators![0];
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -797,13 +977,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -811,12 +995,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write(",").newLine();
             writer.write("[");
-            if (node.parameters.length > 0) {
+            if (node.parameters.length === 1) {
+                const item = node.parameters![0];
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -840,12 +1028,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.decorators.length > 0) {
+                if (node.decorators.length === 1) {
+                    const item = node.decorators![0];
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -857,13 +1049,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -873,12 +1069,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             writeNodeText(node.name)
             writer.write(",").newLine();
             writer.write("[");
-            if (node.parameters.length > 0) {
+            if (node.parameters.length === 1) {
+                const item = node.parameters![0];
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -908,12 +1108,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.decorators.length > 0) {
+                if (node.decorators.length === 1) {
+                    const item = node.decorators![0];
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -925,13 +1129,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -941,12 +1149,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             writeNodeText(node.name)
             writer.write(",").newLine();
             writer.write("[");
-            if (node.parameters.length > 0) {
+            if (node.parameters.length === 1) {
+                const item = node.parameters![0];
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -970,12 +1182,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeParameters.length > 0) {
+                if (node.typeParameters.length === 1) {
+                    const item = node.typeParameters![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -984,12 +1200,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write(",").newLine();
             writer.write("[");
-            if (node.parameters.length > 0) {
+            if (node.parameters.length === 1) {
+                const item = node.parameters![0];
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -1013,12 +1233,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeParameters.length > 0) {
+                if (node.typeParameters.length === 1) {
+                    const item = node.typeParameters![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -1027,12 +1251,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write(",").newLine();
             writer.write("[");
-            if (node.parameters.length > 0) {
+            if (node.parameters.length === 1) {
+                const item = node.parameters![0];
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -1056,12 +1284,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.decorators.length > 0) {
+                if (node.decorators.length === 1) {
+                    const item = node.decorators![0];
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -1073,13 +1305,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -1087,12 +1323,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write(",").newLine();
             writer.write("[");
-            if (node.parameters.length > 0) {
+            if (node.parameters.length === 1) {
+                const item = node.parameters![0];
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -1110,10 +1350,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createKeywordTypeNode(node: import("typescript-3.5.3").KeywordTypeNode) {
         writer.write("ts.createKeywordTypeNode(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.write(syntaxKindToName[node.kind])
-        });
+        writer.write("ts.SyntaxKind.").write(syntaxKindToName[node.kind])
         writer.write(")");
     }
 
@@ -1138,12 +1375,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeArguments.length > 0) {
+                if (node.typeArguments.length === 1) {
+                    const item = node.typeArguments![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeArguments.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeArguments!.length; i++) {
                             const item = node.typeArguments![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -1162,12 +1403,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeParameters.length > 0) {
+                if (node.typeParameters.length === 1) {
+                    const item = node.typeParameters![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -1176,12 +1421,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write(",").newLine();
             writer.write("[");
-            if (node.parameters.length > 0) {
+            if (node.parameters.length === 1) {
+                const item = node.parameters![0];
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -1201,12 +1450,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeParameters.length > 0) {
+                if (node.typeParameters.length === 1) {
+                    const item = node.typeParameters![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -1215,12 +1468,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write(",").newLine();
             writer.write("[");
-            if (node.parameters.length > 0) {
+            if (node.parameters.length === 1) {
+                const item = node.parameters![0];
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -1234,117 +1491,109 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createTypeQueryNode(node: import("typescript-3.5.3").TypeQueryNode) {
         writer.write("ts.createTypeQueryNode(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.exprName)
-        });
+        writeNodeText(node.exprName)
         writer.write(")");
     }
 
     function createTypeLiteralNode(node: import("typescript-3.5.3").TypeLiteralNode) {
         writer.write("ts.createTypeLiteralNode(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.write("[");
-            if (node.members.length > 0) {
-                writer.indentBlock(() => {
-                    for (let i = 0; i < node.members!.length; i++) {
-                        const item = node.members![i];
-                        if (i > 0)
-                            writer.write(",");
-                        writeNodeText(item)
-                    }
-                });
-            }
-            writer.write("]");
-        });
+        writer.write("[");
+        if (node.members.length === 1) {
+            const item = node.members![0];
+            writeNodeText(item)
+        }
+        else if (node.members.length > 1) {
+            writer.indentBlock(() => {
+                for (let i = 0; i < node.members!.length; i++) {
+                    const item = node.members![i];
+                    if (i > 0)
+                        writer.write(",").newLine();
+                    writeNodeText(item)
+                }
+            });
+        }
+        writer.write("]");
         writer.write(")");
     }
 
     function createArrayTypeNode(node: import("typescript-3.5.3").ArrayTypeNode) {
         writer.write("ts.createArrayTypeNode(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.elementType)
-        });
+        writeNodeText(node.elementType)
         writer.write(")");
     }
 
     function createTupleTypeNode(node: import("typescript-3.5.3").TupleTypeNode) {
         writer.write("ts.createTupleTypeNode(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.write("[");
-            if (node.elementTypes.length > 0) {
-                writer.indentBlock(() => {
-                    for (let i = 0; i < node.elementTypes!.length; i++) {
-                        const item = node.elementTypes![i];
-                        if (i > 0)
-                            writer.write(",");
-                        writeNodeText(item)
-                    }
-                });
-            }
-            writer.write("]");
-        });
+        writer.write("[");
+        if (node.elementTypes.length === 1) {
+            const item = node.elementTypes![0];
+            writeNodeText(item)
+        }
+        else if (node.elementTypes.length > 1) {
+            writer.indentBlock(() => {
+                for (let i = 0; i < node.elementTypes!.length; i++) {
+                    const item = node.elementTypes![i];
+                    if (i > 0)
+                        writer.write(",").newLine();
+                    writeNodeText(item)
+                }
+            });
+        }
+        writer.write("]");
         writer.write(")");
     }
 
     function createOptionalTypeNode(node: import("typescript-3.5.3").OptionalTypeNode) {
         writer.write("ts.createOptionalTypeNode(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.type)
-        });
+        writeNodeText(node.type)
         writer.write(")");
     }
 
     function createRestTypeNode(node: import("typescript-3.5.3").RestTypeNode) {
         writer.write("ts.createRestTypeNode(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.type)
-        });
+        writeNodeText(node.type)
         writer.write(")");
     }
 
     function createUnionTypeNode(node: import("typescript-3.5.3").UnionTypeNode) {
         writer.write("ts.createUnionTypeNode(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.write("[");
-            if (node.types.length > 0) {
-                writer.indentBlock(() => {
-                    for (let i = 0; i < node.types!.length; i++) {
-                        const item = node.types![i];
-                        if (i > 0)
-                            writer.write(",");
-                        writeNodeText(item)
-                    }
-                });
-            }
-            writer.write("]");
-        });
+        writer.write("[");
+        if (node.types.length === 1) {
+            const item = node.types![0];
+            writeNodeText(item)
+        }
+        else if (node.types.length > 1) {
+            writer.indentBlock(() => {
+                for (let i = 0; i < node.types!.length; i++) {
+                    const item = node.types![i];
+                    if (i > 0)
+                        writer.write(",").newLine();
+                    writeNodeText(item)
+                }
+            });
+        }
+        writer.write("]");
         writer.write(")");
     }
 
     function createIntersectionTypeNode(node: import("typescript-3.5.3").IntersectionTypeNode) {
         writer.write("ts.createIntersectionTypeNode(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.write("[");
-            if (node.types.length > 0) {
-                writer.indentBlock(() => {
-                    for (let i = 0; i < node.types!.length; i++) {
-                        const item = node.types![i];
-                        if (i > 0)
-                            writer.write(",");
-                        writeNodeText(item)
-                    }
-                });
-            }
-            writer.write("]");
-        });
+        writer.write("[");
+        if (node.types.length === 1) {
+            const item = node.types![0];
+            writeNodeText(item)
+        }
+        else if (node.types.length > 1) {
+            writer.indentBlock(() => {
+                for (let i = 0; i < node.types!.length; i++) {
+                    const item = node.types![i];
+                    if (i > 0)
+                        writer.write(",").newLine();
+                    writeNodeText(item)
+                }
+            });
+        }
+        writer.write("]");
         writer.write(")");
     }
 
@@ -1365,10 +1614,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createInferTypeNode(node: import("typescript-3.5.3").InferTypeNode) {
         writer.write("ts.createInferTypeNode(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.typeParameter)
-        });
+        writeNodeText(node.typeParameter)
         writer.write(")");
     }
 
@@ -1388,12 +1634,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeArguments.length > 0) {
+                if (node.typeArguments.length === 1) {
+                    const item = node.typeArguments![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeArguments.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeArguments!.length; i++) {
                             const item = node.typeArguments![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -1412,10 +1662,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createParenthesizedType(node: import("typescript-3.5.3").ParenthesizedTypeNode) {
         writer.write("ts.createParenthesizedType(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.type)
-        });
+        writeNodeText(node.type)
         writer.write(")");
     }
 
@@ -1426,10 +1673,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createTypeOperatorNode(node: import("typescript-3.5.3").TypeOperatorNode) {
         writer.write("ts.createTypeOperatorNode(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.type)
-        });
+        writeNodeText(node.type)
         writer.write(")");
     }
 
@@ -1473,50 +1717,49 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createLiteralTypeNode(node: import("typescript-3.5.3").LiteralTypeNode) {
         writer.write("ts.createLiteralTypeNode(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.literal)
-        });
+        writeNodeText(node.literal)
         writer.write(")");
     }
 
     function createObjectBindingPattern(node: import("typescript-3.5.3").ObjectBindingPattern) {
         writer.write("ts.createObjectBindingPattern(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.write("[");
-            if (node.elements.length > 0) {
-                writer.indentBlock(() => {
-                    for (let i = 0; i < node.elements!.length; i++) {
-                        const item = node.elements![i];
-                        if (i > 0)
-                            writer.write(",");
-                        writeNodeText(item)
-                    }
-                });
-            }
-            writer.write("]");
-        });
+        writer.write("[");
+        if (node.elements.length === 1) {
+            const item = node.elements![0];
+            writeNodeText(item)
+        }
+        else if (node.elements.length > 1) {
+            writer.indentBlock(() => {
+                for (let i = 0; i < node.elements!.length; i++) {
+                    const item = node.elements![i];
+                    if (i > 0)
+                        writer.write(",").newLine();
+                    writeNodeText(item)
+                }
+            });
+        }
+        writer.write("]");
         writer.write(")");
     }
 
     function createArrayBindingPattern(node: import("typescript-3.5.3").ArrayBindingPattern) {
         writer.write("ts.createArrayBindingPattern(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.write("[");
-            if (node.elements.length > 0) {
-                writer.indentBlock(() => {
-                    for (let i = 0; i < node.elements!.length; i++) {
-                        const item = node.elements![i];
-                        if (i > 0)
-                            writer.write(",");
-                        writeNodeText(item)
-                    }
-                });
-            }
-            writer.write("]");
-        });
+        writer.write("[");
+        if (node.elements.length === 1) {
+            const item = node.elements![0];
+            writeNodeText(item)
+        }
+        else if (node.elements.length > 1) {
+            writer.indentBlock(() => {
+                for (let i = 0; i < node.elements!.length; i++) {
+                    const item = node.elements![i];
+                    if (i > 0)
+                        writer.write(",").newLine();
+                    writeNodeText(item)
+                }
+            });
+        }
+        writer.write("]");
         writer.write(")");
     }
 
@@ -1552,19 +1795,23 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
         writer.newLine();
         writer.indentBlock(() => {
             writer.write("[");
-            if (node.elements.length > 0) {
+            if (node.elements.length === 1) {
+                const item = node.elements![0];
+                writeNodeText(item)
+            }
+            else if (node.elements.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.elements!.length; i++) {
                         const item = node.elements![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            (node as any).multiLine
+            writer.write((node as any).multiLine.toString())
         });
         writer.write(")");
     }
@@ -1574,19 +1821,23 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
         writer.newLine();
         writer.indentBlock(() => {
             writer.write("[");
-            if (node.properties.length > 0) {
+            if (node.properties.length === 1) {
+                const item = node.properties![0];
+                writeNodeText(item)
+            }
+            else if (node.properties.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.properties!.length; i++) {
                         const item = node.properties![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            (node as any).multiLine
+            writer.write((node as any).multiLine.toString())
         });
         writer.write(")");
     }
@@ -1623,12 +1874,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeArguments.length > 0) {
+                if (node.typeArguments.length === 1) {
+                    const item = node.typeArguments![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeArguments.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeArguments!.length; i++) {
                             const item = node.typeArguments![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -1637,12 +1892,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write(",").newLine();
             writer.write("[");
-            if (node.arguments.length > 0) {
+            if (node.arguments.length === 1) {
+                const item = node.arguments![0];
+                writeNodeText(item)
+            }
+            else if (node.arguments.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.arguments!.length; i++) {
                         const item = node.arguments![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -1662,12 +1921,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeArguments.length > 0) {
+                if (node.typeArguments.length === 1) {
+                    const item = node.typeArguments![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeArguments.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeArguments!.length; i++) {
                             const item = node.typeArguments![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -1679,12 +1942,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.arguments.length > 0) {
+                if (node.arguments.length === 1) {
+                    const item = node.arguments![0];
+                    writeNodeText(item)
+                }
+                else if (node.arguments.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.arguments!.length; i++) {
                             const item = node.arguments![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -1719,10 +1986,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createParen(node: import("typescript-3.5.3").ParenthesizedExpression) {
         writer.write("ts.createParen(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.expression)
-        });
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -1734,13 +1998,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -1763,12 +2031,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeParameters.length > 0) {
+                if (node.typeParameters.length === 1) {
+                    const item = node.typeParameters![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -1777,12 +2049,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write(",").newLine();
             writer.write("[");
-            if (node.parameters.length > 0) {
+            if (node.parameters.length === 1) {
+                const item = node.parameters![0];
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -1808,13 +2084,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -1825,12 +2105,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeParameters.length > 0) {
+                if (node.typeParameters.length === 1) {
+                    const item = node.typeParameters![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -1839,12 +2123,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write(",").newLine();
             writer.write("[");
-            if (node.parameters.length > 0) {
+            if (node.parameters.length === 1) {
+                const item = node.parameters![0];
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -1866,37 +2154,25 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createDelete(node: import("typescript-3.5.3").DeleteExpression) {
         writer.write("ts.createDelete(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.expression)
-        });
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
     function createTypeOf(node: import("typescript-3.5.3").TypeOfExpression) {
         writer.write("ts.createTypeOf(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.expression)
-        });
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
     function createVoid(node: import("typescript-3.5.3").VoidExpression) {
         writer.write("ts.createVoid(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.expression)
-        });
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
     function createAwait(node: import("typescript-3.5.3").AwaitExpression) {
         writer.write("ts.createAwait(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.expression)
-        });
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -1904,7 +2180,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
         writer.write("ts.createPrefix(");
         writer.newLine();
         writer.indentBlock(() => {
-            writer.write(syntaxKindToName[node.operator])
+            writer.write("ts.SyntaxKind.").write(syntaxKindToName[node.operator])
             writer.write(",").newLine();
             writeNodeText(node.operand)
         });
@@ -1917,7 +2193,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
         writer.indentBlock(() => {
             writeNodeText(node.operand)
             writer.write(",").newLine();
-            writer.write(syntaxKindToName[node.operator])
+            writer.write("ts.SyntaxKind.").write(syntaxKindToName[node.operator])
         });
         writer.write(")");
     }
@@ -1955,12 +2231,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             writeNodeText(node.head)
             writer.write(",").newLine();
             writer.write("[");
-            if (node.templateSpans.length > 0) {
+            if (node.templateSpans.length === 1) {
+                const item = node.templateSpans![0];
+                writeNodeText(item)
+            }
+            else if (node.templateSpans.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.templateSpans!.length; i++) {
                         const item = node.templateSpans![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -1972,59 +2252,41 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createTemplateHead(node: import("typescript-3.5.3").TemplateHead) {
         writer.write("ts.createTemplateHead(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.quote(node.text.toString())
-        });
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
     function createTemplateMiddle(node: import("typescript-3.5.3").TemplateMiddle) {
         writer.write("ts.createTemplateMiddle(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.quote(node.text.toString())
-        });
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
     function createTemplateTail(node: import("typescript-3.5.3").TemplateTail) {
         writer.write("ts.createTemplateTail(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.quote(node.text.toString())
-        });
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
     function createNoSubstitutionTemplateLiteral(node: import("typescript-3.5.3").NoSubstitutionTemplateLiteral) {
         writer.write("ts.createNoSubstitutionTemplateLiteral(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.quote(node.text.toString())
-        });
+        writer.quote(node.text.toString())
         writer.write(")");
     }
 
     function createYield(node: import("typescript-3.5.3").YieldExpression) {
         writer.write("ts.createYield(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            if (node.expression == null)
-                writer.write("undefined");
-            else {
-                writeNodeText(node.expression)
-            }
-        });
+        if (node.expression == null)
+            writer.write("undefined");
+        else {
+            writeNodeText(node.expression)
+        }
         writer.write(")");
     }
 
     function createSpread(node: import("typescript-3.5.3").SpreadElement) {
         writer.write("ts.createSpread(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.expression)
-        });
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -2036,13 +2298,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -2059,12 +2325,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeParameters.length > 0) {
+                if (node.typeParameters.length === 1) {
+                    const item = node.typeParameters![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -2076,12 +2346,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.heritageClauses.length > 0) {
+                if (node.heritageClauses.length === 1) {
+                    const item = node.heritageClauses![0];
+                    writeNodeText(item)
+                }
+                else if (node.heritageClauses.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.heritageClauses!.length; i++) {
                             const item = node.heritageClauses![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -2090,12 +2364,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write(",").newLine();
             writer.write("[");
-            if (node.members.length > 0) {
+            if (node.members.length === 1) {
+                const item = node.members![0];
+                writeNodeText(item)
+            }
+            else if (node.members.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.members!.length; i++) {
                         const item = node.members![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -2118,12 +2396,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeArguments.length > 0) {
+                if (node.typeArguments.length === 1) {
+                    const item = node.typeArguments![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeArguments.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeArguments!.length; i++) {
                             const item = node.typeArguments![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -2149,10 +2431,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createNonNullExpression(node: import("typescript-3.5.3").NonNullExpression) {
         writer.write("ts.createNonNullExpression(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.expression)
-        });
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -2160,7 +2439,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
         writer.write("ts.createMetaProperty(");
         writer.newLine();
         writer.indentBlock(() => {
-            writer.write(syntaxKindToName[node.keywordToken])
+            writer.write("ts.SyntaxKind.").write(syntaxKindToName[node.keywordToken])
             writer.write(",").newLine();
             writeNodeText(node.name)
         });
@@ -2188,19 +2467,23 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
         writer.newLine();
         writer.indentBlock(() => {
             writer.write("[");
-            if (node.statements.length > 0) {
+            if (node.statements.length === 1) {
+                const item = node.statements![0];
+                writeNodeText(item)
+            }
+            else if (node.statements.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.statements!.length; i++) {
                         const item = node.statements![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            (node as any).multiLine
+            writer.write((node as any).multiLine.toString())
         });
         writer.write(")");
     }
@@ -2213,13 +2496,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -2238,10 +2525,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createExpressionStatement(node: import("typescript-3.5.3").ExpressionStatement) {
         writer.write("ts.createExpressionStatement(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.expression)
-        });
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -2345,40 +2629,31 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createContinue(node: import("typescript-3.5.3").ContinueStatement) {
         writer.write("ts.createContinue(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            if (node.label == null)
-                writer.write("undefined");
-            else {
-                writeNodeText(node.label)
-            }
-        });
+        if (node.label == null)
+            writer.write("undefined");
+        else {
+            writeNodeText(node.label)
+        }
         writer.write(")");
     }
 
     function createBreak(node: import("typescript-3.5.3").BreakStatement) {
         writer.write("ts.createBreak(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            if (node.label == null)
-                writer.write("undefined");
-            else {
-                writeNodeText(node.label)
-            }
-        });
+        if (node.label == null)
+            writer.write("undefined");
+        else {
+            writeNodeText(node.label)
+        }
         writer.write(")");
     }
 
     function createReturn(node: import("typescript-3.5.3").ReturnStatement) {
         writer.write("ts.createReturn(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            if (node.expression == null)
-                writer.write("undefined");
-            else {
-                writeNodeText(node.expression)
-            }
-        });
+        if (node.expression == null)
+            writer.write("undefined");
+        else {
+            writeNodeText(node.expression)
+        }
         writer.write(")");
     }
 
@@ -2417,14 +2692,11 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createThrow(node: import("typescript-3.5.3").ThrowStatement) {
         writer.write("ts.createThrow(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            if (node.expression == null)
-                writer.write("undefined");
-            else {
-                writeNodeText(node.expression)
-            }
-        });
+        if (node.expression == null)
+            writer.write("undefined");
+        else {
+            writeNodeText(node.expression)
+        }
         writer.write(")");
     }
 
@@ -2480,19 +2752,23 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
         writer.newLine();
         writer.indentBlock(() => {
             writer.write("[");
-            if (node.declarations.length > 0) {
+            if (node.declarations.length === 1) {
+                const item = node.declarations![0];
+                writeNodeText(item)
+            }
+            else if (node.declarations.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.declarations!.length; i++) {
                         const item = node.declarations![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
             }
             writer.write("]");
             writer.write(",").newLine();
-            writer.write(getFlagValues(ts.NodeFlags, "NodeFlags", node.flags || 0).toString());
+            writer.write(getFlagValues(ts.NodeFlags, "ts.NodeFlags", node.flags || 0, "None"));
         });
         writer.write(")");
     }
@@ -2505,12 +2781,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.decorators.length > 0) {
+                if (node.decorators.length === 1) {
+                    const item = node.decorators![0];
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -2522,13 +2802,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -2551,12 +2835,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeParameters.length > 0) {
+                if (node.typeParameters.length === 1) {
+                    const item = node.typeParameters![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -2565,12 +2853,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write(",").newLine();
             writer.write("[");
-            if (node.parameters.length > 0) {
+            if (node.parameters.length === 1) {
+                const item = node.parameters![0];
+                writeNodeText(item)
+            }
+            else if (node.parameters.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.parameters!.length; i++) {
                         const item = node.parameters![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -2600,12 +2892,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.decorators.length > 0) {
+                if (node.decorators.length === 1) {
+                    const item = node.decorators![0];
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -2617,13 +2913,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -2640,12 +2940,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeParameters.length > 0) {
+                if (node.typeParameters.length === 1) {
+                    const item = node.typeParameters![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -2657,12 +2961,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.heritageClauses.length > 0) {
+                if (node.heritageClauses.length === 1) {
+                    const item = node.heritageClauses![0];
+                    writeNodeText(item)
+                }
+                else if (node.heritageClauses.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.heritageClauses!.length; i++) {
                             const item = node.heritageClauses![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -2671,12 +2979,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write(",").newLine();
             writer.write("[");
-            if (node.members.length > 0) {
+            if (node.members.length === 1) {
+                const item = node.members![0];
+                writeNodeText(item)
+            }
+            else if (node.members.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.members!.length; i++) {
                         const item = node.members![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -2694,12 +3006,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.decorators.length > 0) {
+                if (node.decorators.length === 1) {
+                    const item = node.decorators![0];
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -2711,13 +3027,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -2730,12 +3050,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeParameters.length > 0) {
+                if (node.typeParameters.length === 1) {
+                    const item = node.typeParameters![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -2747,12 +3071,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.heritageClauses.length > 0) {
+                if (node.heritageClauses.length === 1) {
+                    const item = node.heritageClauses![0];
+                    writeNodeText(item)
+                }
+                else if (node.heritageClauses.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.heritageClauses!.length; i++) {
                             const item = node.heritageClauses![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -2761,12 +3089,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write(",").newLine();
             writer.write("[");
-            if (node.members.length > 0) {
+            if (node.members.length === 1) {
+                const item = node.members![0];
+                writeNodeText(item)
+            }
+            else if (node.members.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.members!.length; i++) {
                         const item = node.members![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -2784,12 +3116,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.decorators.length > 0) {
+                if (node.decorators.length === 1) {
+                    const item = node.decorators![0];
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -2801,13 +3137,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -2820,12 +3160,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeParameters.length > 0) {
+                if (node.typeParameters.length === 1) {
+                    const item = node.typeParameters![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeParameters.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeParameters!.length; i++) {
                             const item = node.typeParameters![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -2846,12 +3190,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.decorators.length > 0) {
+                if (node.decorators.length === 1) {
+                    const item = node.decorators![0];
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -2863,13 +3211,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -2879,12 +3231,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             writeNodeText(node.name)
             writer.write(",").newLine();
             writer.write("[");
-            if (node.members.length > 0) {
+            if (node.members.length === 1) {
+                const item = node.members![0];
+                writeNodeText(item)
+            }
+            else if (node.members.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.members!.length; i++) {
                         const item = node.members![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -2902,12 +3258,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.decorators.length > 0) {
+                if (node.decorators.length === 1) {
+                    const item = node.decorators![0];
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -2919,13 +3279,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -2940,57 +3304,56 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writeNodeText(node.body)
             }
             writer.write(",").newLine();
-            writer.write(getFlagValues(ts.NodeFlags, "NodeFlags", node.flags || 0).toString());
+            writer.write(getFlagValues(ts.NodeFlags, "ts.NodeFlags", node.flags || 0, "None"));
         });
         writer.write(")");
     }
 
     function createModuleBlock(node: import("typescript-3.5.3").ModuleBlock) {
         writer.write("ts.createModuleBlock(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.write("[");
-            if (node.statements.length > 0) {
-                writer.indentBlock(() => {
-                    for (let i = 0; i < node.statements!.length; i++) {
-                        const item = node.statements![i];
-                        if (i > 0)
-                            writer.write(",");
-                        writeNodeText(item)
-                    }
-                });
-            }
-            writer.write("]");
-        });
+        writer.write("[");
+        if (node.statements.length === 1) {
+            const item = node.statements![0];
+            writeNodeText(item)
+        }
+        else if (node.statements.length > 1) {
+            writer.indentBlock(() => {
+                for (let i = 0; i < node.statements!.length; i++) {
+                    const item = node.statements![i];
+                    if (i > 0)
+                        writer.write(",").newLine();
+                    writeNodeText(item)
+                }
+            });
+        }
+        writer.write("]");
         writer.write(")");
     }
 
     function createCaseBlock(node: import("typescript-3.5.3").CaseBlock) {
         writer.write("ts.createCaseBlock(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.write("[");
-            if (node.clauses.length > 0) {
-                writer.indentBlock(() => {
-                    for (let i = 0; i < node.clauses!.length; i++) {
-                        const item = node.clauses![i];
-                        if (i > 0)
-                            writer.write(",");
-                        writeNodeText(item)
-                    }
-                });
-            }
-            writer.write("]");
-        });
+        writer.write("[");
+        if (node.clauses.length === 1) {
+            const item = node.clauses![0];
+            writeNodeText(item)
+        }
+        else if (node.clauses.length > 1) {
+            writer.indentBlock(() => {
+                for (let i = 0; i < node.clauses!.length; i++) {
+                    const item = node.clauses![i];
+                    if (i > 0)
+                        writer.write(",").newLine();
+                    writeNodeText(item)
+                }
+            });
+        }
+        writer.write("]");
         writer.write(")");
     }
 
     function createNamespaceExportDeclaration(node: import("typescript-3.5.3").NamespaceExportDeclaration) {
         writer.write("ts.createNamespaceExportDeclaration(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.name)
-        });
+        writeNodeText(node.name)
         writer.write(")");
     }
 
@@ -3002,12 +3365,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.decorators.length > 0) {
+                if (node.decorators.length === 1) {
+                    const item = node.decorators![0];
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -3019,13 +3386,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -3047,12 +3418,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.decorators.length > 0) {
+                if (node.decorators.length === 1) {
+                    const item = node.decorators![0];
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -3064,13 +3439,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -3109,30 +3488,28 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createNamespaceImport(node: import("typescript-3.5.3").NamespaceImport) {
         writer.write("ts.createNamespaceImport(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.name)
-        });
+        writeNodeText(node.name)
         writer.write(")");
     }
 
     function createNamedImports(node: import("typescript-3.5.3").NamedImports) {
         writer.write("ts.createNamedImports(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.write("[");
-            if (node.elements.length > 0) {
-                writer.indentBlock(() => {
-                    for (let i = 0; i < node.elements!.length; i++) {
-                        const item = node.elements![i];
-                        if (i > 0)
-                            writer.write(",");
-                        writeNodeText(item)
-                    }
-                });
-            }
-            writer.write("]");
-        });
+        writer.write("[");
+        if (node.elements.length === 1) {
+            const item = node.elements![0];
+            writeNodeText(item)
+        }
+        else if (node.elements.length > 1) {
+            writer.indentBlock(() => {
+                for (let i = 0; i < node.elements!.length; i++) {
+                    const item = node.elements![i];
+                    if (i > 0)
+                        writer.write(",").newLine();
+                    writeNodeText(item)
+                }
+            });
+        }
+        writer.write("]");
         writer.write(")");
     }
 
@@ -3159,12 +3536,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.decorators.length > 0) {
+                if (node.decorators.length === 1) {
+                    const item = node.decorators![0];
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -3176,13 +3557,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -3208,12 +3593,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.decorators.length > 0) {
+                if (node.decorators.length === 1) {
+                    const item = node.decorators![0];
+                    writeNodeText(item)
+                }
+                else if (node.decorators.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.decorators!.length; i++) {
                             const item = node.decorators![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -3225,13 +3614,17 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.modifiers.length > 0) {
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.modifiers!.length; i++) {
                             const item = node.modifiers![i];
                             if (i > 0)
-                                writer.write(",");
-                            writer.write("ts.createModifier(" + syntaxKindToName[item.kind] + ")");
+                                writer.write(",").newLine();
+                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -3255,21 +3648,22 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createNamedExports(node: import("typescript-3.5.3").NamedExports) {
         writer.write("ts.createNamedExports(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.write("[");
-            if (node.elements.length > 0) {
-                writer.indentBlock(() => {
-                    for (let i = 0; i < node.elements!.length; i++) {
-                        const item = node.elements![i];
-                        if (i > 0)
-                            writer.write(",");
-                        writeNodeText(item)
-                    }
-                });
-            }
-            writer.write("]");
-        });
+        writer.write("[");
+        if (node.elements.length === 1) {
+            const item = node.elements![0];
+            writeNodeText(item)
+        }
+        else if (node.elements.length > 1) {
+            writer.indentBlock(() => {
+                for (let i = 0; i < node.elements!.length; i++) {
+                    const item = node.elements![i];
+                    if (i > 0)
+                        writer.write(",").newLine();
+                    writeNodeText(item)
+                }
+            });
+        }
+        writer.write("]");
         writer.write(")");
     }
 
@@ -3290,10 +3684,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createExternalModuleReference(node: import("typescript-3.5.3").ExternalModuleReference) {
         writer.write("ts.createExternalModuleReference(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.expression)
-        });
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -3304,12 +3695,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             writeNodeText(node.openingElement)
             writer.write(",").newLine();
             writer.write("[");
-            if (node.children.length > 0) {
+            if (node.children.length === 1) {
+                const item = node.children![0];
+                writeNodeText(item)
+            }
+            else if (node.children.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.children!.length; i++) {
                         const item = node.children![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -3331,12 +3726,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeArguments.length > 0) {
+                if (node.typeArguments.length === 1) {
+                    const item = node.typeArguments![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeArguments.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeArguments!.length; i++) {
                             const item = node.typeArguments![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -3359,12 +3758,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 writer.write("undefined");
             else {
                 writer.write("[");
-                if (node.typeArguments.length > 0) {
+                if (node.typeArguments.length === 1) {
+                    const item = node.typeArguments![0];
+                    writeNodeText(item)
+                }
+                else if (node.typeArguments.length > 1) {
                     writer.indentBlock(() => {
                         for (let i = 0; i < node.typeArguments!.length; i++) {
                             const item = node.typeArguments![i];
                             if (i > 0)
-                                writer.write(",");
+                                writer.write(",").newLine();
                             writeNodeText(item)
                         }
                     });
@@ -3379,10 +3782,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createJsxClosingElement(node: import("typescript-3.5.3").JsxClosingElement) {
         writer.write("ts.createJsxClosingElement(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.tagName)
-        });
+        writeNodeText(node.tagName)
         writer.write(")");
     }
 
@@ -3393,12 +3793,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             writeNodeText(node.openingFragment)
             writer.write(",").newLine();
             writer.write("[");
-            if (node.children.length > 0) {
+            if (node.children.length === 1) {
+                const item = node.children![0];
+                writeNodeText(item)
+            }
+            else if (node.children.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.children!.length; i++) {
                         const item = node.children![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -3448,30 +3852,28 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createJsxAttributes(node: import("typescript-3.5.3").JsxAttributes) {
         writer.write("ts.createJsxAttributes(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.write("[");
-            if (node.properties.length > 0) {
-                writer.indentBlock(() => {
-                    for (let i = 0; i < node.properties!.length; i++) {
-                        const item = node.properties![i];
-                        if (i > 0)
-                            writer.write(",");
-                        writeNodeText(item)
-                    }
-                });
-            }
-            writer.write("]");
-        });
+        writer.write("[");
+        if (node.properties.length === 1) {
+            const item = node.properties![0];
+            writeNodeText(item)
+        }
+        else if (node.properties.length > 1) {
+            writer.indentBlock(() => {
+                for (let i = 0; i < node.properties!.length; i++) {
+                    const item = node.properties![i];
+                    if (i > 0)
+                        writer.write(",").newLine();
+                    writeNodeText(item)
+                }
+            });
+        }
+        writer.write("]");
         writer.write(")");
     }
 
     function createJsxSpreadAttribute(node: import("typescript-3.5.3").JsxSpreadAttribute) {
         writer.write("ts.createJsxSpreadAttribute(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.expression)
-        });
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -3501,12 +3903,16 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             writeNodeText(node.expression)
             writer.write(",").newLine();
             writer.write("[");
-            if (node.statements.length > 0) {
+            if (node.statements.length === 1) {
+                const item = node.statements![0];
+                writeNodeText(item)
+            }
+            else if (node.statements.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.statements!.length; i++) {
                         const item = node.statements![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -3518,21 +3924,22 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createDefaultClause(node: import("typescript-3.5.3").DefaultClause) {
         writer.write("ts.createDefaultClause(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.write("[");
-            if (node.statements.length > 0) {
-                writer.indentBlock(() => {
-                    for (let i = 0; i < node.statements!.length; i++) {
-                        const item = node.statements![i];
-                        if (i > 0)
-                            writer.write(",");
-                        writeNodeText(item)
-                    }
-                });
-            }
-            writer.write("]");
-        });
+        writer.write("[");
+        if (node.statements.length === 1) {
+            const item = node.statements![0];
+            writeNodeText(item)
+        }
+        else if (node.statements.length > 1) {
+            writer.indentBlock(() => {
+                for (let i = 0; i < node.statements!.length; i++) {
+                    const item = node.statements![i];
+                    if (i > 0)
+                        writer.write(",").newLine();
+                    writeNodeText(item)
+                }
+            });
+        }
+        writer.write("]");
         writer.write(")");
     }
 
@@ -3540,15 +3947,19 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
         writer.write("ts.createHeritageClause(");
         writer.newLine();
         writer.indentBlock(() => {
-            writer.write(syntaxKindToName[node.token])
+            writer.write("ts.SyntaxKind.").write(syntaxKindToName[node.token])
             writer.write(",").newLine();
             writer.write("[");
-            if (node.types.length > 0) {
+            if (node.types.length === 1) {
+                const item = node.types![0];
+                writeNodeText(item)
+            }
+            else if (node.types.length > 1) {
                 writer.indentBlock(() => {
                     for (let i = 0; i < node.types!.length; i++) {
                         const item = node.types![i];
                         if (i > 0)
-                            writer.write(",");
+                            writer.write(",").newLine();
                         writeNodeText(item)
                     }
                 });
@@ -3601,10 +4012,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createSpreadAssignment(node: import("typescript-3.5.3").SpreadAssignment) {
         writer.write("ts.createSpreadAssignment(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writeNodeText(node.expression)
-        });
+        writeNodeText(node.expression)
         writer.write(")");
     }
 
@@ -3625,21 +4033,22 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
 
     function createCommaList(node: import("typescript-3.5.3").CommaListExpression) {
         writer.write("ts.createCommaList(");
-        writer.newLine();
-        writer.indentBlock(() => {
-            writer.write("[");
-            if (node.elements.length > 0) {
-                writer.indentBlock(() => {
-                    for (let i = 0; i < node.elements!.length; i++) {
-                        const item = node.elements![i];
-                        if (i > 0)
-                            writer.write(",");
-                        writeNodeText(item)
-                    }
-                });
-            }
-            writer.write("]");
-        });
+        writer.write("[");
+        if (node.elements.length === 1) {
+            const item = node.elements![0];
+            writeNodeText(item)
+        }
+        else if (node.elements.length > 1) {
+            writer.indentBlock(() => {
+                for (let i = 0; i < node.elements!.length; i++) {
+                    const item = node.elements![i];
+                    if (i > 0)
+                        writer.write(",").newLine();
+                    writeNodeText(item)
+                }
+            });
+        }
+        writer.write("]");
         writer.write(")");
     }
 
@@ -3653,7 +4062,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
         return map;
     }
 
-    function getFlagValues(enumObj: any, enumName: string, value: number) {
+    function getFlagValues(enumObj: any, enumName: string, value: number, defaultName: string) {
         const members: string[] = [];
         for (const prop in enumObj) {
             if (typeof enumObj[prop] === "string")
@@ -3661,6 +4070,8 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             if ((enumObj[prop] & value) !== 0)
                 members.push(enumName + "." + prop);
         }
-        return members;
+        if (members.length === 0)
+            members.push(enumName + "." + defaultName);
+        return members.join(" | ");
     }
 }
