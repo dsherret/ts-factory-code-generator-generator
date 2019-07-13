@@ -42,6 +42,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                 writer.write("else").block(() => {
                     writer.writeLine("writeNodeText(initialNode);");
                 });
+                writer.writeLine("writer.newLineIfLastNot();");
                 writer.blankLine().writeLine("return writer.toString();");
             },
             writeNodeTextFunction(),

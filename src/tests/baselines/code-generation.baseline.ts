@@ -21,6 +21,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
     else {
         writeNodeText(initialNode);
     }
+    writer.newLineIfLastNot();
 
     return writer.toString();
 
