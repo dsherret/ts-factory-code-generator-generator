@@ -30,3 +30,5 @@ var otherVar = 4 + 5 * 12;
 function Function(p: string): number {
     return 5;
 }
+
+function test() {}

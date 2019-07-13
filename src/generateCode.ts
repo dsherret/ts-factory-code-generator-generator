@@ -250,12 +250,13 @@ export function generateCode(typeScriptModuleName = "typescript") {
             writer.writeLine("else");
             writer.indent().write(`writer.write("undefined");`).newLine();
         }
-        if (funcName === nameof(ts.createArrayLiteral) && paramName === "multiLine")
-            writer.write("writer.write((node as any).multiLine.toString())");
-        if (funcName === nameof(ts.createObjectLiteral) && paramName === "multiLine")
-            writer.write("writer.write((node as any).multiLine.toString())");
-        if (funcName === nameof(ts.createBlock) && paramName === "multiLine")
-            writer.write("writer.write((node as any).multiLine.toString())");
+
+        const isMultiLineFunc = funcName === nameof(ts.createObjectLiteral)
+            || funcName === nameof(ts.createArrayLiteral)
+            || funcName === nameof(ts.createBlock);
+        if (isMultiLineFunc && paramName === "multiLine")
+            writer.write("writer.write(((node as any).multiLine || false).toString())");
+
         if (paramName === "modifiers") {
             writeNullableIfNecessary(writer, param.getType(), "node.modifiers", () => {
                 writeArrayText(writer, "node.modifiers", () => writer.writeLine(`writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");`))

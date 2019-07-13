@@ -251,5 +251,18 @@ import * as ts from "typescript-3.5.3";
       ))],
       true
     )
+  ),
+  ts.createFunctionDeclaration(
+    undefined,
+    undefined,
+    undefined,
+    ts.createIdentifier("test"),
+    undefined,
+    [],
+    undefined,
+    ts.createBlock(
+      [],
+      false
+    )
   )
 ];

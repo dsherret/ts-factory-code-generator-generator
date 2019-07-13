@@ -1815,7 +1815,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write("]");
             writer.write(",").newLine();
-            writer.write((node as any).multiLine.toString())
+            writer.write(((node as any).multiLine || false).toString())
         });
         writer.write(")");
     }
@@ -1841,7 +1841,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write("]");
             writer.write(",").newLine();
-            writer.write((node as any).multiLine.toString())
+            writer.write(((node as any).multiLine || false).toString())
         });
         writer.write(")");
     }
@@ -2487,7 +2487,7 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
             }
             writer.write("]");
             writer.write(",").newLine();
-            writer.write((node as any).multiLine.toString())
+            writer.write(((node as any).multiLine || false).toString())
         });
         writer.write(")");
     }
