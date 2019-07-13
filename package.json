@@ -46,5 +46,8 @@
     "ts-nameof": "^3.2.0",
     "ts-node": "^8.3.0",
     "ttypescript": "^1.5.7"
+  },
+  "standard-version": {
+    "tagPrefix": ""
   }
 }
