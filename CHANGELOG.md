@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.1.4"></a>
+## [0.1.4](https://github.com/dsherret/ts-factory-code-generator-generator/compare/0.1.3...0.1.4) (2019-07-13)
+
+
+### Bug Fixes
+
+* Add newline at the end of the generated file. ([5b2d0ca](https://github.com/dsherret/ts-factory-code-generator-generator/commit/5b2d0ca))
+
+
+
 <a name="0.1.3"></a>
 ## [0.1.3](https://github.com/dsherret/ts-factory-code-generator-generator/compare/0.1.2...0.1.3) (2019-07-13)
 
