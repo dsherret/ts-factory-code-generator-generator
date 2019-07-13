@@ -21,6 +21,8 @@ yarn add typescript-3.5.3@npm:typescript@3.5.3
 Then get the code for each compiler api version:
 
 ```ts
+import { generateCode } from "ts-factory-code-generator-generator";
+
 const code = generateCode("typescript");
 const codeFor3_5_3 = generateCode("typescript-3.5.3");
 ```
