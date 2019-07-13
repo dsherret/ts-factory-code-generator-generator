@@ -97,7 +97,13 @@ export function generateCode(typeScriptModuleName = "typescript") {
                         writer.indent().write("return;").newLine();
                     }
                     writer.writeLine(`default:`);
-                    writer.indent().write("throw new Error(").quote("Unhandled node kind: ").write(" + syntaxKindToName[node.kind]);").newLine();
+                    writer.indentBlock(() => {
+                        writer.write("if (node.kind >= ts.SyntaxKind.FirstToken && node.kind <= ts.SyntaxKind.LastToken)").block(() => {
+                            writer.writeLine(`writer.write("ts.createToken(ts.SyntaxKind.").write(syntaxKindToName[node.kind]).write(")");`)
+                            writer.writeLine("return;")
+                        });
+                        writer.writeLine(`writer.write("/* Unhandled node kind: ").write(syntaxKindToName[node.kind]).write(" */")`);
+                    });
                 });
             }
         };

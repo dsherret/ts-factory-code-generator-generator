@@ -25,7 +25,7 @@ declare class Class2 {
 
 const myVar = 6;
 let myVar2 = 6, myVar3: string | undefined;
-var otherVar = 4;
+var otherVar = 4 + 5 * 12;
 
 function Function(p: string): number {
     return 5;

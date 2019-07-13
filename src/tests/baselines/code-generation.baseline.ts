@@ -475,7 +475,11 @@ export function generateFactoryCode(ts: typeof import("typescript-3.5.3"), initi
                 createCommaList(node as import("typescript-3.5.3").CommaListExpression);
                 return;
             default:
-                throw new Error("Unhandled node kind: " + syntaxKindToName[node.kind]);
+                if (node.kind >= ts.SyntaxKind.FirstToken && node.kind <= ts.SyntaxKind.LastToken) {
+                    writer.write("ts.createToken(ts.SyntaxKind.").write(syntaxKindToName[node.kind]).write(")");
+                    return;
+                }
+                writer.write("/* Unhandled node kind: ").write(syntaxKindToName[node.kind]).write(" */")
         }
     }
 

@@ -206,9 +206,23 @@ import * as ts from "typescript-3.5.3";
       [ts.createVariableDeclaration(
         ts.createIdentifier("otherVar"),
         undefined,
-        ts.createNumericLiteral(
-          "4",
-          ts.TokenFlags.None
+        ts.createBinary(
+          ts.createNumericLiteral(
+            "4",
+            ts.TokenFlags.None
+          ),
+          ts.createToken(ts.SyntaxKind.PlusToken),
+          ts.createBinary(
+            ts.createNumericLiteral(
+              "5",
+              ts.TokenFlags.None
+            ),
+            ts.createToken(ts.SyntaxKind.AsteriskToken),
+            ts.createNumericLiteral(
+              "12",
+              ts.TokenFlags.None
+            )
+          )
         )
       )],
       ts.NodeFlags.None
