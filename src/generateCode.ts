@@ -1,20 +1,18 @@
 import { Project, Symbol, Type, TypeGuards, FunctionDeclarationStructure,
-    CodeBlockWriter, VariableStatementStructure, StructureKind, VariableDeclarationKind, ts, MemberExpression } from "ts-morph";
+    CodeBlockWriter, StructureKind, ts } from "ts-morph";
 import { Factory, FactoryFunction, Parameter, Node, NodeProperty } from "./compilerApi";
 
 export function generateCode(typeScriptModuleName = "typescript") {
     const indentText = "  ";
     const newlineText = "\\n";
     const factory = new Factory();
-    const project = new Project();
+    const project = new Project({ compilerOptions: { strictNullChecks: true } });
     const newSourceFile = project.createSourceFile("____temp___.ts");
     const tsSourceFile = project.addExistingSourceFile(`node_modules/${typeScriptModuleName}/lib/typescript.d.ts`);
     const tsSymbol = tsSourceFile.getNamespaceOrThrow("ts").getSymbolOrThrow();
-    const tsNodeSymbol = tsSymbol.getExportOrThrow("Node");
 
     const factoryFunctions = Array.from(getFactoryFunctions());
 
-    const functionStructures = factoryFunctions.map(getFunctionStructure);
     newSourceFile.addStatements([{
         kind: StructureKind.ImportDeclaration,
         namespaceImport: "tsCompiler",
@@ -22,13 +20,13 @@ export function generateCode(typeScriptModuleName = "typescript") {
     }, {
         kind: StructureKind.Function,
         name: "generate",
-        parameters: [{ name: "ts", type: "typeof tsCompiler" }, { name: "sourceFile", type: `(typeof ts)["SourceFile"]` }],
+        parameters: [{ name: "ts", type: `typeof import("${typeScriptModuleName}")` }, { name: "sourceFile", type: getTsTypeText("SourceFile") }],
         statements: [writer => {
                 writer.writeLine("const syntaxKindToName = createSyntaxKindToNameMap();");
                 writer.writeLine("return getNodeText(sourceFile);");
             },
             getNodeTextFunction(),
-            ...functionStructures,
+            ...factoryFunctions.map(getFunctionStructure),
             getSyntaxKindToNameFunction(),
             getFlagValuesFunction()
         ]
@@ -70,13 +68,14 @@ export function generateCode(typeScriptModuleName = "typescript") {
         return {
             kind: StructureKind.Function,
             name: "getNodeText",
-            parameters: [{ name: "node", type: "ts.Node" }],
+            parameters: [{ name: "node", type: getTsTypeText("Node") }],
+            returnType: "string",
             statements: writer => {
                 writer.write("switch (node.kind)").block(() => {
                     for (const factoryFunc of factoryFunctions) {
                         for (const kindName of factoryFunc.getKindNames())
                             writer.writeLine(`case ts.SyntaxKind.${kindName}:`);
-                        writer.indent().write(`return get${factoryFunc.getNode().getName()}(node);`).newLine();
+                        writer.indent().write(`return ${factoryFunc.getName()}(node as ${getTsTypeText(factoryFunc.getNode().getName())});`).newLine();
                     }
                     writer.writeLine(`default:`);
                     writer.indent().write("throw new Error(").quote("Unhandled node kind: ").write(" + node.kind);").newLine();
@@ -88,14 +87,17 @@ export function generateCode(typeScriptModuleName = "typescript") {
     function getFunctionStructure(func: FactoryFunction): FunctionDeclarationStructure {
         return {
             kind: StructureKind.Function,
-            name: `get${func.getNode().getName()}`,
-            parameters: [{ name: "node", type: `ts.${func.getNode().getName()}` }],
+            name: func.getName(),
+            parameters: [{ name: "node", type: getTsTypeText(func.getNode().getName()) }],
             statements: writer => printBody(writer)
         };
 
         function printBody(writer: CodeBlockWriter) {
             const params = func.getParameters();
-            writer.write(`return "ts.${func.getName()}("${newlineText}`).newLine();
+            writer.write(`return "ts.${func.getName()}("`)
+            if (params.length > 0)
+                writer.write(` + "${newlineText}"`);
+            writer.newLine();
             writer.indentBlock(() => {
                 for (let i = 0; i < params.length; i++) {
                     const param = params[i];
@@ -105,7 +107,9 @@ export function generateCode(typeScriptModuleName = "typescript") {
                     printParamText(writer, param);
                 }
             });
-            writer.write(`+ "${newlineText});";`);
+            if (params.length > 0)
+                writer.write(`+ "${newlineText}" `);
+            writer.write(`+ ");";`);
         }
 
         function printParamText(writer: CodeBlockWriter, param: Parameter) {
@@ -118,9 +122,12 @@ export function generateCode(typeScriptModuleName = "typescript") {
             const propAccess = `node.${prop.getName()}`;
 
             if (prop.getType().isNullable())
-                writer.write(`${propAccess} == null ? undefined : `);
+                writer.write(`(${propAccess} == null ? undefined : `);
 
             writeTypeText();
+
+            if (prop.getType().isNullable())
+                writer.write(")");
 
             if (param.getType().isNullable() && !prop.getType().isNullable()) {
                 if (param.isArray())
@@ -177,7 +184,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
             name: "createSyntaxKindToNameMap",
             statements: writer => {
                 writer.writeLine("const map: { [kind: number]: string } = {};");
-                writer.write("for (const name of Object.keys(ts.SyntaxKind).filter(k => isNaN(parseInt(k, 10)))").block(() => {
+                writer.write("for (const name of Object.keys(ts.SyntaxKind).filter(k => isNaN(parseInt(k, 10))))").block(() => {
 
                     writer.writeLine(`const value = (ts.SyntaxKind as any)[name] as number;`);
                     writer.writeLine(`if (map[value] == null)`);
@@ -194,7 +201,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
             name: "getFlagValues",
             parameters: [
                 { name: "enumObj", type: "any" },
-                { name: "enumName", type: "text" },
+                { name: "enumName", type: "string" },
                 { name: "value", type: "number" }
             ],
             statements: writer => {
@@ -202,24 +209,35 @@ export function generateCode(typeScriptModuleName = "typescript") {
                 writer.write("for (const prop in enumObj)").block(() => {
                     writer.writeLine(`if (typeof enumObj[prop] === "string")`);
                     writer.indent().write("continue;").newLine();
-                    writer.write("if (enumObj[prop] & enumObj !== 0)")
+                    writer.writeLine("if ((enumObj[prop] & value) !== 0)")
                     writer.indent().write(`members.push(enumName + "." + prop);`).newLine();
                 });
                 writer.writeLine("return members;");
             }
         }
     }
+
+    function getTsTypeText(typeText: string) {
+        return `import("${typeScriptModuleName}").${typeText}`;
+    }
 }
 
 function getCustomParamText(func: FactoryFunction, param: Parameter) {
-    if (func.getName() === "createNumericLiteral" && param.getName() === "numericLiteralFlags")
-        return handleNumericLiteralFlags();
+    const funcName = func.getName();
+    const paramName = param.getName();
+
+    if (funcName === nameof(ts.createNumericLiteral) && paramName === "numericLiteralFlags")
+        return `getFlagValues(ts.TokenFlags, "TokenFlags", (node as any).numericLiteralFlags || 0)`;
+    if (funcName === nameof(ts.createProperty) && paramName === "questionOrExclamationToken")
+        return "node.questionToken || node.exclamationToken";
+    if (funcName === nameof(ts.createArrayLiteral) && paramName === "multiLine")
+        return "(node as any).multiLine";
+    if (funcName === nameof(ts.createObjectLiteral) && paramName === "multiLine")
+        return "(node as any).multiLine";
+    if (funcName === nameof(ts.createBlock) && paramName === "multiLine")
+        return "(node as any).multiLine";
 
     return undefined;
-
-    function handleNumericLiteralFlags() {
-        return `getFlagValues(TokenFlags, "TokenFlags", (node as any).numericLiteralFlags || 0)`;
-    }
 }
 
 function isAllowedFactoryFunction(func: FactoryFunction) {
@@ -266,6 +284,8 @@ function isAllowedFactoryFunction(func: FactoryFunction) {
         case nameof(ts.createInputFiles):
         case nameof(ts.createBundle):
         case nameof(ts.createUnparsedSourceFile):
+        case nameof(ts.createNotEmittedStatement):
+        case nameof(ts.createPartiallyEmittedExpression):
         // custom handled
         case nameof(ts.createToken):
         case nameof(ts.createModifier):

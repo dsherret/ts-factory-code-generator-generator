@@ -30,18 +30,52 @@ export class Node {
     }
 
     getPropertyForParam(param: Parameter) {
-        let highestScore = 0;
-        let foundProp: Symbol | undefined;
-        for (const prop of this.type.getProperties()) {
-            // todo: if score is below say 0.9 then this should throw or have some custom behaviour
-            const score = compareTwoStrings(prop.getName(), param.getName());
-            if (score > highestScore) {
-                highestScore = score;
-                foundProp = prop;
-            }
+        return this.factory.getNodeProperty(getExplicitProperty.call(this) || getPropertyByEstimate.call(this));
+
+        function getExplicitProperty(this: Node) {
+            const propertyName = getExplicitPropertyName.call(this);
+            return propertyName == null ? undefined : this.type.getProperty(propertyName);
         }
 
-        return this.factory.getNodeProperty(foundProp!);
+        function getExplicitPropertyName(this: Node) {
+            const nodeName = this.getName();
+            const paramName = param.getName();
+
+            if (nodeName === nameof<ts.NumericLiteral>() && paramName === "value")
+                return nameof<ts.NumericLiteral>(n => n.text);
+            if (nodeName === nameof<ts.BigIntLiteral>() && paramName === "value")
+                return nameof<ts.BigIntLiteral>(n => n.text);
+            if (nodeName === nameof<ts.TypeParameterDeclaration>() && paramName === "defaultType")
+                return nameof<ts.TypeParameterDeclaration>(n => n.default);
+            if (nodeName === nameof<ts.ElementAccessExpression>() && paramName === "index")
+                return nameof<ts.ElementAccessExpression>(n => n.argumentExpression);
+            if (nodeName === nameof<ts.CallExpression>() && paramName === "argumentsArray")
+                return nameof<ts.CallExpression>(n => n.arguments);
+            if (nodeName === nameof<ts.NewExpression>() && paramName === "argumentsArray")
+                return nameof<ts.NewExpression>(n => n.arguments);
+            if (nodeName === nameof<ts.BinaryExpression>() && paramName === "operator")
+                return nameof<ts.BinaryExpression>(n => n.operatorToken);
+
+            return undefined;
+        }
+
+        function getPropertyByEstimate(this: Node) {
+            // this is good enough
+            let highestScore = 0;
+            let foundProp: Symbol | undefined;
+            for (const prop of this.type.getProperties()) {
+                const score = compareTwoStrings(prop.getName(), param.getName());
+                if (score > highestScore) {
+                    highestScore = score;
+                    foundProp = prop;
+                }
+            }
+
+            if (highestScore < 0.9)
+                throw new Error(`Could not find property for parameter: ${param.getName()} (${this.getName()})`);
+
+            return foundProp!;
+        }
     }
 
     getKindNames() {
