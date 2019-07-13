@@ -1,0 +1,7 @@
+.vscode
+./src
+./dist/tests
+.gitignore
+mocha.opts
+tsconfig.json
+yarn-error.log

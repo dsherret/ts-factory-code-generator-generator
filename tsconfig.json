@@ -7,6 +7,7 @@
     "downlevelIteration": true,
     "rootDir": "./src",
     "outDir": "./dist",
+    "declaration": true,
     "plugins": [{ "transform": "ts-nameof", "type": "raw" }]
   }
 }
