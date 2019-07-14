@@ -48,6 +48,8 @@ export function generateCode(typeScriptModuleName = "typescript") {
             writeNodeTextFunction(),
             ...factoryFunctions.map(getFunctionStructure),
             getSyntaxKindToNameFunction(),
+            getNodeFlagValuesFunction(),
+            getFlagValuesAsStringFunction(),
             getFlagValuesFunction()
         ]
     }]);
@@ -166,7 +168,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                 else if (type.isString() || type.isStringLiteral() || type.isBoolean() || type.isBooleanLiteral())
                     writer.write(`writer.quote(${text}.toString())`);
                 else if (type.getText().endsWith(".NodeFlags"))
-                    writer.write(`writer.write(getFlagValues(ts.NodeFlags, "ts.NodeFlags", ${text} || 0, "None"));`);
+                    writer.write(`writer.write(getNodeFlagValues(${text} || 0));`);
                 else {
                     console.error(`Could not find text for param ${func.getName()}::${param.getName()}`);
                     writer.write(`writer.write("/* unknown */")`);
@@ -207,27 +209,59 @@ export function generateCode(typeScriptModuleName = "typescript") {
         }
     }
 
+    function getNodeFlagValuesFunction(): FunctionDeclarationStructure {
+        return {
+            kind: StructureKind.Function,
+            name: "getNodeFlagValues",
+            parameters: [{ name: "value", type: "number" }],
+            statements: writer => {
+                writer.writeLine("// ignore the BlockScoped node flag")
+                writer.writeLine(`return getFlagValuesAsString(ts.NodeFlags, "ts.NodeFlags", ` +
+                    `value || 0, "None", getFlagValues(ts.NodeFlags, value).filter(v => v !== ts.NodeFlags.BlockScoped));`)
+            }
+        };
+    }
+
+    function getFlagValuesAsStringFunction(): FunctionDeclarationStructure {
+        return {
+            kind: StructureKind.Function,
+            name: "getFlagValuesAsString",
+            parameters: [
+                { name: "enumObj", type: "any" },
+                { name: "enumName", type: "string" },
+                { name: "value", type: "number" },
+                { name: "defaultName", type: "string" },
+                { name: "flagValues", hasQuestionToken: true, type: "number[]" }
+            ],
+            statements: writer => {
+                writer.writeLine("flagValues = flagValues || getFlagValues(enumObj, value);")
+                writer.writeLine("const members: string[] = [];");
+                writer.writeLine("for (const flagValue of flagValues)");
+                writer.indent().write(`members.push(enumName + "." + enumObj[flagValue]);`).newLine();
+                writer.writeLine("if (members.length === 0)")
+                writer.indent().write(`members.push(enumName + "." + defaultName);`).newLine();
+                writer.writeLine(`return members.join(" | ");`);
+            }
+        }
+    }
+
     function getFlagValuesFunction(): FunctionDeclarationStructure {
         return {
             kind: StructureKind.Function,
             name: "getFlagValues",
             parameters: [
                 { name: "enumObj", type: "any" },
-                { name: "enumName", type: "string" },
-                { name: "value", type: "number" },
-                { name: "defaultName", type: "string" }
+                { name: "value", type: "number" }
             ],
             statements: writer => {
-                writer.writeLine("const members: string[] = [];");
+                writer.writeLine("const members: number[] = [];");
                 writer.write("for (const prop in enumObj)").block(() => {
                     writer.writeLine(`if (typeof enumObj[prop] === "string")`);
                     writer.indent().write("continue;").newLine();
                     writer.writeLine("if ((enumObj[prop] & value) !== 0)")
-                    writer.indent().write(`members.push(enumName + "." + prop);`).newLine();
+                    writer.indent().write(`members.push(enumObj[prop]);`).newLine();
                 });
-                writer.writeLine("if (members.length === 0)")
-                writer.indent().write(`members.push(enumName + "." + defaultName);`).newLine();
-                writer.writeLine(`return members.join(" | ");`);
+                writer.writeLine(`return members;`);
             }
         }
     }

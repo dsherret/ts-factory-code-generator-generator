@@ -167,7 +167,7 @@ import * as ts from "typescript-3.5.3";
         undefined,
         ts.createNumericLiteral("6")
       )],
-      ts.NodeFlags.Const | ts.NodeFlags.BlockScoped
+      ts.NodeFlags.Const
     )
   ),
   ts.createVariableStatement(
@@ -188,7 +188,7 @@ import * as ts from "typescript-3.5.3";
           undefined
         )
       ],
-      ts.NodeFlags.Let | ts.NodeFlags.BlockScoped
+      ts.NodeFlags.Let
     )
   ),
   ts.createVariableStatement(
