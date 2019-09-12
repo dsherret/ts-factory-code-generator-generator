@@ -28,7 +28,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                 writer.write("if (ts.isSourceFile(initialNode))").block(() => {
                     writer.writeLine(`writer.write("[");`);
                     writer.write("if (initialNode.statements.length > 0)").block(() => {
-                        writer.write("writer.indentBlock(() => ").inlineBlock(() => {
+                        writer.write("writer.indent(() => ").inlineBlock(() => {
                             writer.write("for (let i = 0; i < initialNode.statements.length; i++)").block(() => {
                                 writer.writeLine("const statement = initialNode.statements[i];")
                                 writer.writeLine("if (i > 0)");
@@ -100,7 +100,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                         writer.indent().write("return;").newLine();
                     }
                     writer.writeLine(`default:`);
-                    writer.indentBlock(() => {
+                    writer.indent(() => {
                         writer.write("if (node.kind >= ts.SyntaxKind.FirstToken && node.kind <= ts.SyntaxKind.LastToken)").block(() => {
                             writer.writeLine(`writer.write("ts.createToken(ts.SyntaxKind.").write(syntaxKindToName[node.kind]).write(")");`)
                             writer.writeLine("return;")
@@ -128,7 +128,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
             }
             else if (params.length > 1) {
                 writer.writeLine(`writer.newLine();`);
-                writer.write("writer.indentBlock(() => ").inlineBlock(() => {
+                writer.write("writer.indent(() => ").inlineBlock(() => {
                     for (let i = 0; i < params.length; i++) {
                         const param = params[i];
                         if (i > 0)
@@ -306,7 +306,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
             writeItemText();
         });
         writer.write(`else if (${propAccess}.length > 1)`).block(() => {
-            writer.write("writer.indentBlock(() => ").inlineBlock(() => {
+            writer.write("writer.indent(() => ").inlineBlock(() => {
                 writer.write(`for (let i = 0; i < ${propAccess}!.length; i++)`).block(() => {
                     writer.write(`const item = ${propAccess}![i];`)
                     writer.writeLine("if (i > 0)");
