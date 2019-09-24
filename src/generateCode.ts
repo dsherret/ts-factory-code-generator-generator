@@ -382,7 +382,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
             // only use this if the new createTypePredicateNodeWithModifier function doesn't exist
             case nameof(ts.createTypePredicateNode):
                 // todo: nameof
-                return factoryFunctions.find(f => f.getName() === "createTypePredicateNodeWithModifier") != null;
+                return tsSymbol.getExport("createTypePredicateNodeWithModifier") == null;
         }
 
         return true;
