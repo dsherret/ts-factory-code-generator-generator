@@ -330,59 +330,63 @@ export function generateCode(typeScriptModuleName = "typescript") {
             writeTypeText();
         }
     }
-}
 
-function isAllowedFactoryFunction(func: FactoryFunction) {
-    // some of these could probably be figured out by inspecting
-    // the code, but this is the lazy way to do it... I'll just
-    // manually maintain this list.
-    switch (func.getName()) {
-        // handled by createTrue, createFalse, createBigIntLiteral, createNumericLiteral
-        case nameof(ts.createLiteral):
-        // handled by createVoid
-        case nameof(ts.createVoidZero):
-        // handled by createBinary
-        case nameof(ts.createAssignment):
-        case nameof(ts.createLogicalAnd):
-        case nameof(ts.createLogicalOr):
-        case nameof(ts.createLogicalNot):
-        case nameof(ts.createAdd):
-        case nameof(ts.createSubtract):
-        case nameof(ts.createStrictEquality):
-        case nameof(ts.createStrictInequality):
-        case nameof(ts.createLessThan):
-        case nameof(ts.createComma):
-        // handled by createCall
-        case nameof(ts.createImmediatelyInvokedFunctionExpression):
-        case nameof(ts.createImmediatelyInvokedArrowFunction):
-        // handled by createUnionTypeNode and createIntersectionTypeNode
-        case nameof(ts.createUnionOrIntersectionTypeNode):
-        // handled by createPostfix
-        case nameof(ts.createPostfixIncrement):
-        // handled by createExportDeclaration
-        case nameof(ts.createExternalModuleExport):
-        // handled by createExportAssignment
-        case nameof(ts.createExportDefault):
-        // not used
-        case nameof(ts.createNode):
-        case nameof(ts.createSourceFile):
-        case nameof(ts.createLanguageServiceSourceFile):
-        case nameof(ts.createTempVariable):
-        case nameof(ts.createLoopVariable):
-        case nameof(ts.createUniqueName):
-        case nameof(ts.createOptimisticUniqueName):
-        case nameof(ts.createFileLevelUniqueName):
-        case nameof(ts.createModifiersFromModifierFlags):
-        case nameof(ts.createInputFiles):
-        case nameof(ts.createBundle):
-        case nameof(ts.createUnparsedSourceFile):
-        case nameof(ts.createNotEmittedStatement):
-        case nameof(ts.createPartiallyEmittedExpression):
-        // custom handled
-        case nameof(ts.createToken):
-        case nameof(ts.createModifier):
-            return false;
+    function isAllowedFactoryFunction(func: FactoryFunction) {
+        // some of these could probably be figured out by inspecting
+        // the code, but this is the lazy way to do it... I'll just
+        // manually maintain this list.
+        switch (func.getName()) {
+            // handled by createTrue, createFalse, createBigIntLiteral, createNumericLiteral
+            case nameof(ts.createLiteral):
+            // handled by createVoid
+            case nameof(ts.createVoidZero):
+            // handled by createBinary
+            case nameof(ts.createAssignment):
+            case nameof(ts.createLogicalAnd):
+            case nameof(ts.createLogicalOr):
+            case nameof(ts.createLogicalNot):
+            case nameof(ts.createAdd):
+            case nameof(ts.createSubtract):
+            case nameof(ts.createStrictEquality):
+            case nameof(ts.createStrictInequality):
+            case nameof(ts.createLessThan):
+            case nameof(ts.createComma):
+            // handled by createCall
+            case nameof(ts.createImmediatelyInvokedFunctionExpression):
+            case nameof(ts.createImmediatelyInvokedArrowFunction):
+            // handled by createUnionTypeNode and createIntersectionTypeNode
+            case nameof(ts.createUnionOrIntersectionTypeNode):
+            // handled by createPostfix
+            case nameof(ts.createPostfixIncrement):
+            // handled by createExportDeclaration
+            case nameof(ts.createExternalModuleExport):
+            // handled by createExportAssignment
+            case nameof(ts.createExportDefault):
+            // not used
+            case nameof(ts.createNode):
+            case nameof(ts.createSourceFile):
+            case nameof(ts.createLanguageServiceSourceFile):
+            case nameof(ts.createTempVariable):
+            case nameof(ts.createLoopVariable):
+            case nameof(ts.createUniqueName):
+            case nameof(ts.createOptimisticUniqueName):
+            case nameof(ts.createFileLevelUniqueName):
+            case nameof(ts.createModifiersFromModifierFlags):
+            case nameof(ts.createInputFiles):
+            case nameof(ts.createBundle):
+            case nameof(ts.createUnparsedSourceFile):
+            case nameof(ts.createNotEmittedStatement):
+            case nameof(ts.createPartiallyEmittedExpression):
+            // custom handled
+            case nameof(ts.createToken):
+            case nameof(ts.createModifier):
+                return false;
+            // only use this if the new createTypePredicateNodeWithModifier function doesn't exist
+            case nameof(ts.createTypePredicateNode):
+                // todo: nameof
+                return factoryFunctions.find(f => f.getName() === "createTypePredicateNodeWithModifier") != null;
+        }
+
+        return true;
     }
-
-    return true;
 }
