@@ -11,7 +11,7 @@ export class Node {
         const dec = symbol.getDeclarations()[0]; // this does return more than one for Node, but don't care...
 
         if (!TypeGuards.isInterfaceDeclaration(dec))
-            throw new Error(`Expected the type ${type.getText()} to be of an interface declaration.`)
+            throw new Error(`Expected the type ${type.getText()} to be of an interface declaration.`);
 
         this.declaration = dec;
 
@@ -83,9 +83,8 @@ export class Node {
             return [nameof(SyntaxKind.JsxAttributes)];
 
         const kindType = this.type.getProperty("kind")!.getTypeAtLocation(this.declaration);
-        if (kindType.isUnion()) {
+        if (kindType.isUnion())
             return kindType.getUnionTypes().map(t => sanitizeName(t.getText(this.declaration)));
-        }
         return [sanitizeName(kindType.getText(this.declaration))];
 
         function sanitizeName(name: string) {

@@ -31,7 +31,7 @@ describe(nameof(generateFactoryCode), () => {
         const result = `import * as ts from "typescript-3.5.3";\n\n` + generateFactoryCode(ts, languageFeaturesSourceFile);
 
         // ensure no diagnostics
-        //ensureNoDiagnostics(result);
+        // ensureNoDiagnostics(result);
 
         // compare
         const specFileName = path.join(__dirname, "baselines/factory-code-generation.baseline.ts");
@@ -40,7 +40,6 @@ describe(nameof(generateFactoryCode), () => {
         expect(result).to.equal(specText);
     });
 });
-
 
 function ensureNoDiagnostics(fileText: string) {
     const project = new Project({ compilerOptions: { strictNullChecks: true } });

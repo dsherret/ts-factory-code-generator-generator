@@ -1,5 +1,4 @@
-import { Project, Symbol, Type, TypeGuards, FunctionDeclarationStructure,
-    CodeBlockWriter, StructureKind, ts } from "ts-morph";
+import { Project, Symbol, Type, TypeGuards, FunctionDeclarationStructure, CodeBlockWriter, StructureKind, ts } from "ts-morph";
 import { Factory, FactoryFunction, Parameter, Node, NodeProperty } from "./compilerApi";
 
 export function generateCode(typeScriptModuleName = "typescript") {
@@ -22,7 +21,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
         parameters: [{ name: "ts", type: `typeof import("${typeScriptModuleName}")` }, { name: "initialNode", type: getTsTypeText("Node") }],
         statements: [
             writer => {
-                writer.writeLine(`const writer = new CodeBlockWriter({ newLine: "\\n", indentNumberOfSpaces: 2 });`)
+                writer.writeLine(`const writer = new CodeBlockWriter({ newLine: "\\n", indentNumberOfSpaces: 2 });`);
                 writer.writeLine("const syntaxKindToName = createSyntaxKindToNameMap();");
                 writer.blankLine();
                 writer.write("if (ts.isSourceFile(initialNode))").block(() => {
@@ -30,7 +29,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                     writer.write("if (initialNode.statements.length > 0)").block(() => {
                         writer.write("writer.indent(() => ").inlineBlock(() => {
                             writer.write("for (let i = 0; i < initialNode.statements.length; i++)").block(() => {
-                                writer.writeLine("const statement = initialNode.statements[i];")
+                                writer.writeLine("const statement = initialNode.statements[i];");
                                 writer.writeLine("if (i > 0)");
                                 writer.indent().write(`writer.write(",").newLine();`).newLine();
                                 writer.writeLine(`writeNodeText(statement);`);
@@ -78,7 +77,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                 const returnType = valueDec.getReturnType();
                 if (returnType.getProperty("kind") == null)
                     continue;
-                //console.log(symbol.getName() + ": " + returnType.getText());
+                // console.log(symbol.getName() + ": " + returnType.getText());
                 const factoryFunction = factory.getFactoryFunction(valueDec);
                 if (isAllowedFactoryFunction(factoryFunction))
                     yield factoryFunction;
@@ -102,8 +101,8 @@ export function generateCode(typeScriptModuleName = "typescript") {
                     writer.writeLine(`default:`);
                     writer.indent(() => {
                         writer.write("if (node.kind >= ts.SyntaxKind.FirstToken && node.kind <= ts.SyntaxKind.LastToken)").block(() => {
-                            writer.writeLine(`writer.write("ts.createToken(ts.SyntaxKind.").write(syntaxKindToName[node.kind]).write(")");`)
-                            writer.writeLine("return;")
+                            writer.writeLine(`writer.write("ts.createToken(ts.SyntaxKind.").write(syntaxKindToName[node.kind]).write(")");`);
+                            writer.writeLine("return;");
                         });
                         writer.writeLine(`writer.write("/* Unhandled node kind: ").write(syntaxKindToName[node.kind]).write(" */")`);
                     });
@@ -123,9 +122,8 @@ export function generateCode(typeScriptModuleName = "typescript") {
         function printBody(writer: CodeBlockWriter) {
             const params = func.getParameters();
             writer.writeLine(`writer.write("ts.${func.getName()}(");`);
-            if (params.length === 1) {
+            if (params.length === 1)
                 printParamText(writer, params[0]);
-            }
             else if (params.length > 1) {
                 writer.writeLine(`writer.newLine();`);
                 writer.write("writer.indent(() => ").inlineBlock(() => {
@@ -199,14 +197,13 @@ export function generateCode(typeScriptModuleName = "typescript") {
             statements: writer => {
                 writer.writeLine("const map: { [kind: number]: string } = {};");
                 writer.write("for (const name of Object.keys(ts.SyntaxKind).filter(k => isNaN(parseInt(k, 10))))").block(() => {
-
                     writer.writeLine(`const value = (ts.SyntaxKind as any)[name] as number;`);
                     writer.writeLine(`if (map[value] == null)`);
                     writer.indent().write(`map[value] = name;`).newLine();
                 });
-                writer.write("return map;")
+                writer.write("return map;");
             }
-        }
+        };
     }
 
     function getNodeFlagValuesFunction(): FunctionDeclarationStructure {
@@ -215,9 +212,9 @@ export function generateCode(typeScriptModuleName = "typescript") {
             name: "getNodeFlagValues",
             parameters: [{ name: "value", type: "number" }],
             statements: writer => {
-                writer.writeLine("// ignore the BlockScoped node flag")
-                writer.writeLine(`return getFlagValuesAsString(ts.NodeFlags, "ts.NodeFlags", ` +
-                    `value || 0, "None", getFlagValues(ts.NodeFlags, value).filter(v => v !== ts.NodeFlags.BlockScoped));`)
+                writer.writeLine("// ignore the BlockScoped node flag");
+                writer.writeLine(`return getFlagValuesAsString(ts.NodeFlags, "ts.NodeFlags", `
+                    + `value || 0, "None", getFlagValues(ts.NodeFlags, value).filter(v => v !== ts.NodeFlags.BlockScoped));`);
             }
         };
     }
@@ -234,15 +231,15 @@ export function generateCode(typeScriptModuleName = "typescript") {
                 { name: "flagValues", hasQuestionToken: true, type: "number[]" }
             ],
             statements: writer => {
-                writer.writeLine("flagValues = flagValues || getFlagValues(enumObj, value);")
+                writer.writeLine("flagValues = flagValues || getFlagValues(enumObj, value);");
                 writer.writeLine("const members: string[] = [];");
                 writer.writeLine("for (const flagValue of flagValues)");
                 writer.indent().write(`members.push(enumName + "." + enumObj[flagValue]);`).newLine();
-                writer.writeLine("if (members.length === 0)")
+                writer.writeLine("if (members.length === 0)");
                 writer.indent().write(`members.push(enumName + "." + defaultName);`).newLine();
                 writer.writeLine(`return members.join(" | ");`);
             }
-        }
+        };
     }
 
     function getFlagValuesFunction(): FunctionDeclarationStructure {
@@ -258,12 +255,12 @@ export function generateCode(typeScriptModuleName = "typescript") {
                 writer.write("for (const prop in enumObj)").block(() => {
                     writer.writeLine(`if (typeof enumObj[prop] === "string")`);
                     writer.indent().write("continue;").newLine();
-                    writer.writeLine("if ((enumObj[prop] & value) !== 0)")
+                    writer.writeLine("if ((enumObj[prop] & value) !== 0)");
                     writer.indent().write(`members.push(enumObj[prop]);`).newLine();
                 });
                 writer.writeLine(`return members;`);
             }
-        }
+        };
     }
 
     function getTsTypeText(typeText: string) {
@@ -292,7 +289,8 @@ export function generateCode(typeScriptModuleName = "typescript") {
 
         if (paramName === "modifiers") {
             writeNullableIfNecessary(writer, param.getType(), "node.modifiers", () => {
-                writeArrayText(writer, "node.modifiers", () => writer.writeLine(`writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");`))
+                writeArrayText(writer, "node.modifiers",
+                    () => writer.writeLine(`writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");`));
             });
         }
 
@@ -302,13 +300,13 @@ export function generateCode(typeScriptModuleName = "typescript") {
     function writeArrayText(writer: CodeBlockWriter, propAccess: string, writeItemText: () => void) {
         writer.writeLine(`writer.write("[");`);
         writer.write(`if (${propAccess}.length === 1)`).block(() => {
-            writer.writeLine(`const item = ${propAccess}![0];`)
+            writer.writeLine(`const item = ${propAccess}![0];`);
             writeItemText();
         });
         writer.write(`else if (${propAccess}.length > 1)`).block(() => {
             writer.write("writer.indent(() => ").inlineBlock(() => {
                 writer.write(`for (let i = 0; i < ${propAccess}!.length; i++)`).block(() => {
-                    writer.write(`const item = ${propAccess}![i];`)
+                    writer.write(`const item = ${propAccess}![i];`);
                     writer.writeLine("if (i > 0)");
                     writer.indent().write(`writer.write(",").newLine();`).newLine();
                     writeItemText();
@@ -320,7 +318,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
 
     function writeNullableIfNecessary(writer: CodeBlockWriter, type: Type, propAccess: string, writeTypeText: () => void) {
         if (type.isNullable()) {
-            writer.writeLine(`if (${propAccess} == null)`)
+            writer.writeLine(`if (${propAccess} == null)`);
             writer.indent().write(`writer.write("undefined");`).newLine();
             writer.write("else").block(() => {
                 writeTypeText();
