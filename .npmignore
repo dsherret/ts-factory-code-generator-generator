@@ -1,7 +1,8 @@
 .vscode
-./src
-./dist/tests
+src
+dist/tests
 .gitignore
 mocha.opts
 tsconfig.json
 yarn-error.log
+dprint.config.js
