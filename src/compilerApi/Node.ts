@@ -1,4 +1,5 @@
-import { Type, Symbol, InterfaceDeclaration, TypeGuards, ts, SyntaxKind } from "ts-morph";
+import * as tsNext from "typescript-next";
+import { Type, Symbol, InterfaceDeclaration, TypeGuards, ts, SyntaxKind, TypeNode } from "ts-morph";
 import { compareTwoStrings } from "string-similarity";
 import { Factory } from "./Factory";
 import { Parameter } from "./Parameter";
@@ -47,9 +48,9 @@ export class Node {
                 return nameof<ts.BigIntLiteral>(n => n.text);
             if (nodeName === nameof<ts.TypeParameterDeclaration>() && paramName === "defaultType")
                 return nameof<ts.TypeParameterDeclaration>(n => n.default);
-            if (nodeName === nameof<ts.ElementAccessExpression>() && paramName === "index")
+            if ((nodeName === nameof<ts.ElementAccessExpression>() || nodeName === nameof<tsNext.ElementAccessChain>()) && paramName === "index")
                 return nameof<ts.ElementAccessExpression>(n => n.argumentExpression);
-            if (nodeName === nameof<ts.CallExpression>() && paramName === "argumentsArray")
+            if ((nodeName === nameof<ts.CallExpression>() || nodeName === nameof<tsNext.CallChain>()) && paramName === "argumentsArray")
                 return nameof<ts.CallExpression>(n => n.arguments);
             if (nodeName === nameof<ts.NewExpression>() && paramName === "argumentsArray")
                 return nameof<ts.NewExpression>(n => n.arguments);
@@ -84,11 +85,37 @@ export class Node {
 
         const kindType = this.type.getProperty("kind")!.getTypeAtLocation(this.declaration);
         if (kindType.isUnion())
-            return kindType.getUnionTypes().map(t => sanitizeName(t.getText(this.declaration)));
+            return Array.from(new Set(kindType.getUnionTypes().map(t => sanitizeName(t.getText(this.declaration)))));
         return [sanitizeName(kindType.getText(this.declaration))];
 
         function sanitizeName(name: string) {
             return name.replace(/SyntaxKind\./g, "");
         }
+    }
+
+    getTestFunctionName() {
+        const tsSymbol = this.declaration.getSourceFile().getNamespaceOrThrow("ts").getSymbolOrThrow();
+        for (const symbol of tsSymbol.getExports()) {
+            if (!symbol.getName().startsWith("is"))
+                continue;
+            const valueDec = symbol.getValueDeclaration();
+            if (valueDec == null || !TypeGuards.isFunctionDeclaration(valueDec))
+                continue;
+            // todo: use typeChecker.getTypePredicateOfSignature once wrapped in ts-morph
+            // todo: use TypePedicateNode once wrapped (but prefer using getTypePredicateOfSignature)
+            const returnTypeNode = valueDec.getReturnTypeNode();
+            if (returnTypeNode == null || returnTypeNode.getKind() !== SyntaxKind.TypePredicate)
+                continue;
+            const typePredicateNode = returnTypeNode as any as TypeNode<ts.TypePredicateNode>;
+            const typePredicateType = typePredicateNode.getNodeProperty("type").getType();
+
+            if (this.factory.hasNode(typePredicateType)) {
+                const node = this.factory.getNode(typePredicateType);
+                if (node === this)
+                    return valueDec.getName();
+            }
+        }
+
+        throw new Error("Could not find test function name");
     }
 }

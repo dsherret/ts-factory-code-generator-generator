@@ -1225,6 +1225,10 @@ type-detect@^4.0.0, type-detect@^4.0.5:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.3.tgz#c830f657f93f1ea846819e929092f5fe5983e977"
 
+"typescript-next@npm:typescript@next":
+  version "3.7.0-dev.20191001"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.0-dev.20191001.tgz#edfbcb06fb1846b0bebb71457237e3787b595dbf"
+
 typescript@^3.0.1, typescript@^3.6.3:
   version "3.6.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.3.tgz#fea942fabb20f7e1ca7164ff626f1a9f3f70b4da"

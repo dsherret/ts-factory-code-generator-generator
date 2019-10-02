@@ -32,8 +32,7 @@
   "dependencies": {
     "string-similarity": "^3.0.0",
     "ts-morph": "^4.0.1",
-    "typescript": "^3.6.3",
-    "typescript-3.5.3": "npm:typescript@3.5.3"
+    "typescript": "^3.6.3"
   },
   "devDependencies": {
     "@types/chai": "^4.2.2",
@@ -49,7 +48,9 @@
     "mocha": "^6.2.0",
     "ts-nameof": "^3.2.0",
     "ts-node": "^8.3.0",
-    "ttypescript": "^1.5.7"
+    "ttypescript": "^1.5.7",
+    "typescript-3.5.3": "npm:typescript@3.5.3",
+    "typescript-next": "npm:typescript@next"
   },
   "standard-version": {
     "tagPrefix": ""

@@ -1,5 +1,6 @@
-import { Project, Symbol, Type, TypeGuards, FunctionDeclarationStructure, CodeBlockWriter, StructureKind, ts } from "ts-morph";
-import { Factory, FactoryFunction, Parameter, Node, NodeProperty } from "./compilerApi";
+import * as tsNext from "typescript-next";
+import { Project, Type, TypeGuards, FunctionDeclarationStructure, CodeBlockWriter, StructureKind, ts } from "ts-morph";
+import { Factory, FactoryFunction, Parameter } from "./compilerApi";
 
 export function generateCode(typeScriptModuleName = "typescript") {
     const factory = new Factory();
@@ -8,7 +9,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
     const tsSourceFile = project.addExistingSourceFile(`node_modules/${typeScriptModuleName}/lib/typescript.d.ts`);
     const tsSymbol = tsSourceFile.getNamespaceOrThrow("ts").getSymbolOrThrow();
 
-    const factoryFunctions = Array.from(getFactoryFunctions());
+    const kindToFactoryFunctions = getKindToFactoryFunctions();
 
     newSourceFile.addStatements([{
         kind: StructureKind.ImportDeclaration,
@@ -45,7 +46,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                 writer.blankLine().writeLine("return writer.toString();");
             },
             writeNodeTextFunction(),
-            ...factoryFunctions.map(getFunctionStructure),
+            ...Array.from(new Set(Array.from(kindToFactoryFunctions.values()).reduce((a, b) => [...a, ...b], []))).map(getFunctionStructure),
             getSyntaxKindToNameFunction(),
             getNodeFlagValuesFunction(),
             getFlagValuesAsStringFunction(),
@@ -55,17 +56,28 @@ export function generateCode(typeScriptModuleName = "typescript") {
 
     return newSourceFile.getFullText();
 
-    function* getFactoryFunctions(): IterableIterator<FactoryFunction> {
-        const map = new Map<string, FactoryFunction>();
+    function getKindToFactoryFunctions() {
+        const map = new Map<string, FactoryFunction[]>();
 
         for (const func of getInternal()) {
             for (const name of func.getKindNames()) {
-                if (map.has(name))
-                    throw new Error(`Found duplicate name: ${name} (existing: ${map.get(name)!.getName()}, new: ${func.getName()})`);
-                map.set(name, func);
+                let factoryFunctions: FactoryFunction[];
+                if (map.has(name)) {
+                    if (isAllowedDuplicateFactoryFunction(func))
+                        factoryFunctions = map.get(name)!;
+                    else
+                        throw new Error(`Found duplicate name: ${name} (existing: ${map.get(name)!.map(f => f.getName())}, new: ${func.getName()})`);
+                }
+                else {
+                    factoryFunctions = [];
+                    map.set(name, factoryFunctions);
+                }
+
+                factoryFunctions.push(func);
             }
-            yield func;
         }
+
+        return map;
 
         function* getInternal(): IterableIterator<FactoryFunction> {
             for (const symbol of tsSymbol.getExports()) {
@@ -92,11 +104,31 @@ export function generateCode(typeScriptModuleName = "typescript") {
             parameters: [{ name: "node", type: getTsTypeText("Node") }],
             statements: writer => {
                 writer.write("switch (node.kind)").block(() => {
-                    for (const factoryFunc of factoryFunctions) {
-                        for (const kindName of factoryFunc.getKindNames())
-                            writer.writeLine(`case ts.SyntaxKind.${kindName}:`);
-                        writer.indent().write(`${factoryFunc.getName()}(node as ${getTsTypeText(factoryFunc.getNode().getName())});`).newLine();
-                        writer.indent().write("return;").newLine();
+                    for (const [syntaxKindName, factoryFuncs] of kindToFactoryFunctions.entries()) {
+                        if (factoryFuncs.length === 1) {
+                            const factoryFunc = factoryFuncs[0];
+                            writer.writeLine(`case ts.SyntaxKind.${syntaxKindName}:`);
+                            writer.indent(() => {
+                                writeFunctionCall(writer, factoryFunc);
+                                writer.write("return;").newLine();
+                            });
+                        }
+                        else {
+                            writer.writeLine(`case ts.SyntaxKind.${syntaxKindName}:`);
+                            writer.indent(() => {
+                                for (const factoryFunc of factoryFuncs) {
+                                    if (factoryFunc.getKindNames().length !== 1)
+                                        throw new Error(`Unexpected: Factory function had more than one kind name ${factoryFunc.getName()}`);
+
+                                    writer.write(`if (ts.${factoryFunc.getNode().getTestFunctionName()}(node))`).block(() => {
+                                        writeFunctionCall(writer, factoryFunc);
+                                        writer.write("return;");
+                                    });
+                                }
+
+                                writer.write(`throw new Error("Unhandled node: " + node.getText());`);
+                            });
+                        }
                     }
                     writer.writeLine(`default:`);
                     writer.indent(() => {
@@ -109,6 +141,10 @@ export function generateCode(typeScriptModuleName = "typescript") {
                 });
             }
         };
+
+        function writeFunctionCall(writer: CodeBlockWriter, factoryFunc: FactoryFunction) {
+            writer.write(`${factoryFunc.getName()}(node as ${getTsTypeText(factoryFunc.getNode().getName())});`).newLine();
+        }
     }
 
     function getFunctionStructure(func: FactoryFunction): FunctionDeclarationStructure {
@@ -360,6 +396,8 @@ export function generateCode(typeScriptModuleName = "typescript") {
             case nameof(ts.createExternalModuleExport):
             // handled by createExportAssignment
             case nameof(ts.createExportDefault):
+            // handled by createBinary
+            case nameof(tsNext.createNullishCoalesce):
             // not used
             case nameof(ts.createNode):
             case nameof(ts.createSourceFile):
@@ -382,9 +420,25 @@ export function generateCode(typeScriptModuleName = "typescript") {
             // only use this if the new createTypePredicateNodeWithModifier function doesn't exist
             case nameof(ts.createTypePredicateNode):
                 // todo: nameof
-                return tsSymbol.getExport("createTypePredicateNodeWithModifier") == null;
+                return tsSymbol.getExport(nameof(tsNext.createTypePredicateNodeWithModifier)) == null;
         }
 
         return true;
+    }
+
+    function isAllowedDuplicateFactoryFunction(func: FactoryFunction) {
+        switch (func.getName()) {
+            case nameof(tsNext.createPropertyAccess):
+            case nameof(tsNext.createPropertyAccessChain):
+                return true;
+            case nameof(tsNext.createElementAccess):
+            case nameof(tsNext.createElementAccessChain):
+                return true;
+            case nameof(tsNext.createCall):
+            case nameof(tsNext.createCallChain):
+                return true;
+        }
+
+        return false;
     }
 }

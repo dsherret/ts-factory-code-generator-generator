@@ -26,6 +26,10 @@ export class Factory {
         return node;
     }
 
+    hasNode(type: Type) {
+        return this.nodes.has(type);
+    }
+
     getNodeProperty(symbol: Symbol) {
         let prop = this.nodeProperties.get(symbol);
         if (prop == null) {

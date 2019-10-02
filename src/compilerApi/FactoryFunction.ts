@@ -29,6 +29,7 @@ export class FactoryFunction {
                 switch (kindName) {
                     case nameof(SyntaxKind.NullKeyword): // use createNull
                     case nameof(SyntaxKind.ThisKeyword): // use createThis
+                    case nameof(SyntaxKind.VoidKeyword): // use createVoid
                         return false;
                     default:
                         return true;
