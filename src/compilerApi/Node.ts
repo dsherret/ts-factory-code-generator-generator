@@ -79,6 +79,10 @@ export class Node {
         }
     }
 
+    doesExtendNode(node: Node) {
+        return this.type.getBaseTypes().some(t => t === node.type);
+    }
+
     getKindNames() {
         if (this.getName() === nameof<ts.JsxAttributes>())
             return [nameof(SyntaxKind.JsxAttributes)];

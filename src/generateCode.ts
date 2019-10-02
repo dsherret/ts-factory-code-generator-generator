@@ -113,9 +113,17 @@ export function generateCode(typeScriptModuleName = "typescript") {
                                 writer.write("return;").newLine();
                             });
                         }
-                        else {
+                        else if (factoryFuncs.length === 2) {
                             writer.writeLine(`case ts.SyntaxKind.${syntaxKindName}:`);
                             writer.indent(() => {
+                                factoryFuncs.sort((a, b) => {
+                                    if (a.getNode().doesExtendNode(b.getNode()))
+                                        return -1;
+                                    if (b.getNode().doesExtendNode(a.getNode()))
+                                        return 1;
+                                    else
+                                        throw new Error(`Unhandled scenario where neither ${a.getNode().getName()} or ${b.getNode().getName()} extended each other`);
+                                });
                                 for (const factoryFunc of factoryFuncs) {
                                     if (factoryFunc.getKindNames().length !== 1)
                                         throw new Error(`Unexpected: Factory function had more than one kind name ${factoryFunc.getName()}`);
