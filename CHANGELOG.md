@@ -1,23 +1,19 @@
-# Changelog
+# Change Log
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## 0.4.0 (2019-09-24)
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/dsherret/ts-factory-code-generator-generator/compare/0.2.0...0.5.0) (2019-10-02)
 
 
 ### Bug Fixes
 
-* Add newline at the end of the generated file. ([5b2d0ca](https://github.com/dsherret/ts-factory-code-generator-generator/commit/5b2d0ca))
-* Don't bother printing numeric literal flags. ([6a950a7](https://github.com/dsherret/ts-factory-code-generator-generator/commit/6a950a7))
-* Fix declaration file reference. ([530c0c8](https://github.com/dsherret/ts-factory-code-generator-generator/commit/530c0c8))
-* Fix multiLine throwing an error when undefined. ([c685f0f](https://github.com/dsherret/ts-factory-code-generator-generator/commit/c685f0f))
-* Support tokens. ([4ef5f9c](https://github.com/dsherret/ts-factory-code-generator-generator/commit/4ef5f9c))
 * Use `createTypePredicateNodeWithModifier` if it exists (instead of `createTypePredicateNode`). ([000b931](https://github.com/dsherret/ts-factory-code-generator-generator/commit/000b931))
 
 
 ### Features
 
-* Ignore ts.NodeFlags.BlockScoped. ([7eaaccc](https://github.com/dsherret/ts-factory-code-generator-generator/commit/7eaaccc))
+* [#2](https://github.com/dsherret/ts-factory-code-generator-generator/issues/2) - Support nodes that could have the same syntax kind (ex. CallExpression and CallExpressionChain). ([e5b32b1](https://github.com/dsherret/ts-factory-code-generator-generator/commit/e5b32b1))
 
 
 
