@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.1"></a>
+## [0.5.1](https://github.com/dsherret/ts-factory-code-generator-generator/compare/0.5.0...0.5.1) (2019-10-02)
+
+
+### Bug Fixes
+
+* Fix order of which factory function gets used when there are multiple funcs with the same syntax kind. ([ff496b0](https://github.com/dsherret/ts-factory-code-generator-generator/commit/ff496b0))
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/dsherret/ts-factory-code-generator-generator/compare/0.2.0...0.5.0) (2019-10-02)
 
