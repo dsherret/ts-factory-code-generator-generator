@@ -2,14 +2,14 @@ import * as fs from "fs";
 import * as path from "path";
 import { expect } from "chai";
 import { Project } from "ts-morph";
-import * as ts from "typescript-3.5.3";
+import * as ts from "typescript-3.6.3";
 import { generateCode } from "../generateCode";
 import { generateFactoryCode } from "./baselines/code-generation.baseline";
 
 describe(nameof(generateCode), () => {
     it("should equal the baseline", () => {
         // get generated code
-        const result = generateCode("typescript-3.5.3");
+        const result = generateCode("typescript-3.6.3");
 
         // ensure no diagnostics
         ensureNoDiagnostics(result);
@@ -28,7 +28,7 @@ describe(nameof(generateFactoryCode), () => {
         const languageFeaturesFileName = path.join(__dirname, "baselines/language-features.ts");
         const languageFeaturesText = fs.readFileSync(languageFeaturesFileName, { encoding: "utf8" });
         const languageFeaturesSourceFile = ts.createSourceFile("languageFeatures.ts", languageFeaturesText, ts.ScriptTarget.Latest, false);
-        const result = `import * as ts from "typescript-3.5.3";\n\n` + generateFactoryCode(ts, languageFeaturesSourceFile);
+        const result = `import * as ts from "typescript-3.6.3";\n\n` + generateFactoryCode(ts, languageFeaturesSourceFile);
 
         // ensure no diagnostics
         // ensureNoDiagnostics(result);

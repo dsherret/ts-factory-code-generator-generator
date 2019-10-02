@@ -1,4 +1,4 @@
-import * as ts from "typescript-3.5.3";
+import * as ts from "typescript-3.6.3";
 
 [
   ts.createInterfaceDeclaration(

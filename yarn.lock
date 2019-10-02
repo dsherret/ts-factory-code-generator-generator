@@ -1221,17 +1221,13 @@ type-detect@^4.0.0, type-detect@^4.0.5:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/type-detect/-/type-detect-4.0.8.tgz#7646fb5f18871cfbb7749e69bd39a6388eb7450c"
 
-"typescript-3.5.3@npm:typescript@3.5.3":
-  version "3.5.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.3.tgz#c830f657f93f1ea846819e929092f5fe5983e977"
+"typescript-3.6.3@npm:typescript@3.6.3", typescript@^3.0.1, typescript@^3.6.3:
+  version "3.6.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.3.tgz#fea942fabb20f7e1ca7164ff626f1a9f3f70b4da"
 
 "typescript-next@npm:typescript@next":
   version "3.7.0-dev.20191001"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.0-dev.20191001.tgz#edfbcb06fb1846b0bebb71457237e3787b595dbf"
-
-typescript@^3.0.1, typescript@^3.6.3:
-  version "3.6.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.3.tgz#fea942fabb20f7e1ca7164ff626f1a9f3f70b4da"
 
 unc-path-regex@^0.1.2:
   version "0.1.2"
