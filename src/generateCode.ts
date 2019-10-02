@@ -1,4 +1,3 @@
-import * as tsNext from "typescript-next";
 import { Project, Type, TypeGuards, FunctionDeclarationStructure, CodeBlockWriter, StructureKind, ts } from "ts-morph";
 import { Factory, FactoryFunction, Parameter } from "./compilerApi";
 
@@ -121,8 +120,10 @@ export function generateCode(typeScriptModuleName = "typescript") {
                                         return -1;
                                     if (b.getNode().doesExtendNode(a.getNode()))
                                         return 1;
-                                    else
-                                        throw new Error(`Unhandled scenario where neither ${a.getNode().getName()} or ${b.getNode().getName()} extended each other`);
+                                    else {
+                                        throw new Error(`Unhandled scenario where neither ${a.getNode().getName()} or `
+                                            + `${b.getNode().getName()} extended each other`);
+                                    }
                                 });
                                 for (const factoryFunc of factoryFuncs) {
                                     if (factoryFunc.getKindNames().length !== 1)
@@ -405,7 +406,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
             // handled by createExportAssignment
             case nameof(ts.createExportDefault):
             // handled by createBinary
-            case nameof(tsNext.createNullishCoalesce):
+            case "createNullishCoalesce": // nameof(ts.createNullishCoalesce):
             // not used
             case nameof(ts.createNode):
             case nameof(ts.createSourceFile):
@@ -428,22 +429,23 @@ export function generateCode(typeScriptModuleName = "typescript") {
             // only use this if the new createTypePredicateNodeWithModifier function doesn't exist
             case nameof(ts.createTypePredicateNode):
                 // todo: nameof
-                return tsSymbol.getExport(nameof(tsNext.createTypePredicateNodeWithModifier)) == null;
+                return tsSymbol.getExport("createTypePredicateNodeWithModifier") == null;
         }
 
         return true;
     }
 
     function isAllowedDuplicateFactoryFunction(func: FactoryFunction) {
+        // todo: nameof
         switch (func.getName()) {
-            case nameof(tsNext.createPropertyAccess):
-            case nameof(tsNext.createPropertyAccessChain):
+            case "createPropertyAccess":
+            case "createPropertyAccessChain":
                 return true;
-            case nameof(tsNext.createElementAccess):
-            case nameof(tsNext.createElementAccessChain):
+            case "createElementAccess":
+            case "createElementAccessChain":
                 return true;
-            case nameof(tsNext.createCall):
-            case nameof(tsNext.createCallChain):
+            case "createCall":
+            case "createCallChain":
                 return true;
         }
 

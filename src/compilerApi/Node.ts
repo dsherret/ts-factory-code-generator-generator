@@ -1,4 +1,3 @@
-import * as tsNext from "typescript-next";
 import { Type, Symbol, InterfaceDeclaration, TypeGuards, ts, SyntaxKind, TypeNode } from "ts-morph";
 import { compareTwoStrings } from "string-similarity";
 import { Factory } from "./Factory";
@@ -48,9 +47,9 @@ export class Node {
                 return nameof<ts.BigIntLiteral>(n => n.text);
             if (nodeName === nameof<ts.TypeParameterDeclaration>() && paramName === "defaultType")
                 return nameof<ts.TypeParameterDeclaration>(n => n.default);
-            if ((nodeName === nameof<ts.ElementAccessExpression>() || nodeName === nameof<tsNext.ElementAccessChain>()) && paramName === "index")
+            if ((nodeName === nameof<ts.ElementAccessExpression>() || nodeName === "ElementAccessChain") && paramName === "index")
                 return nameof<ts.ElementAccessExpression>(n => n.argumentExpression);
-            if ((nodeName === nameof<ts.CallExpression>() || nodeName === nameof<tsNext.CallChain>()) && paramName === "argumentsArray")
+            if ((nodeName === nameof<ts.CallExpression>() || nodeName === "CallChain") && paramName === "argumentsArray")
                 return nameof<ts.CallExpression>(n => n.arguments);
             if (nodeName === nameof<ts.NewExpression>() && paramName === "argumentsArray")
                 return nameof<ts.NewExpression>(n => n.arguments);
