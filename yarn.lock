@@ -1221,6 +1221,10 @@ type-detect@^4.0.0, type-detect@^4.0.5:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/type-detect/-/type-detect-4.0.8.tgz#7646fb5f18871cfbb7749e69bd39a6388eb7450c"
 
+"typescript-3.2.1@npm:typescript@3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.2.1.tgz#0b7a04b8cf3868188de914d9568bd030f0c56192"
+
 "typescript-3.6.3@npm:typescript@3.6.3", typescript@^3.0.1, typescript@^3.6.3:
   version "3.6.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.3.tgz#fea942fabb20f7e1ca7164ff626f1a9f3f70b4da"
