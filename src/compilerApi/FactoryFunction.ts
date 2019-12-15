@@ -1,6 +1,6 @@
 import { Factory } from "./Factory";
 import { FunctionDeclaration, ts, SyntaxKind } from "ts-morph";
-import { Parameter } from "./Parameter";
+import { TsParameter } from "./TsParameter";
 
 export class FactoryFunction {
     constructor(private readonly factory: Factory, private readonly declaration: FunctionDeclaration) {
@@ -11,7 +11,7 @@ export class FactoryFunction {
     }
 
     getParameters() {
-        const params = this.declaration.getParameters().map(p => new Parameter(this.factory, this, p));
+        const params = this.declaration.getParameters().map(p => new TsParameter(this.factory, this, p));
         if (this.getName() === nameof(ts.createNumericLiteral))
             return params.filter(p => p.getName() !== "numericLiteralFlags");
         return params;

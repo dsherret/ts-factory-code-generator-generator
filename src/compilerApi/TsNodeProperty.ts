@@ -1,7 +1,7 @@
 import { Type, Symbol } from "ts-morph";
 import { Factory } from "./Factory";
 
-export class NodeProperty {
+export class TsNodeProperty {
     private readonly type: Type;
 
     constructor(private readonly factory: Factory, private readonly symbol: Symbol) {

@@ -1,16 +1,16 @@
-import { Type, Symbol, InterfaceDeclaration, TypeGuards, ts, SyntaxKind, TypeNode } from "ts-morph";
+import { Type, Symbol, InterfaceDeclaration, Node, ts, SyntaxKind, TypeNode } from "ts-morph";
 import { compareTwoStrings } from "string-similarity";
 import { Factory } from "./Factory";
-import { Parameter } from "./Parameter";
+import { TsParameter } from "./TsParameter";
 
-export class Node {
+export class TsNode {
     private readonly declaration: InterfaceDeclaration;
 
     constructor(private readonly factory: Factory, private readonly type: Type) {
         const symbol = getSymbol();
         const dec = symbol.getDeclarations()[0]; // this does return more than one for Node, but don't care...
 
-        if (!TypeGuards.isInterfaceDeclaration(dec))
+        if (!Node.isInterfaceDeclaration(dec))
             throw new Error(`Expected the type ${type.getText()} to be of an interface declaration.`);
 
         this.declaration = dec;
@@ -29,15 +29,15 @@ export class Node {
         return this.declaration.getName();
     }
 
-    getPropertyForParam(param: Parameter) {
+    getPropertyForParam(param: TsParameter) {
         return this.factory.getNodeProperty(getExplicitProperty.call(this) || getPropertyByEstimate.call(this));
 
-        function getExplicitProperty(this: Node) {
+        function getExplicitProperty(this: TsNode) {
             const propertyName = getExplicitPropertyName.call(this);
             return propertyName == null ? undefined : this.type.getProperty(propertyName);
         }
 
-        function getExplicitPropertyName(this: Node) {
+        function getExplicitPropertyName(this: TsNode) {
             const nodeName = this.getName();
             const paramName = param.getName();
 
@@ -59,7 +59,7 @@ export class Node {
             return undefined;
         }
 
-        function getPropertyByEstimate(this: Node) {
+        function getPropertyByEstimate(this: TsNode) {
             // this is good enough
             let highestScore = 0;
             let foundProp: Symbol | undefined;
@@ -78,7 +78,7 @@ export class Node {
         }
     }
 
-    doesExtendNode(node: Node) {
+    doesExtendNode(node: TsNode) {
         return this.type.getBaseTypes().some(t => t === node.type);
     }
 
@@ -102,7 +102,7 @@ export class Node {
             if (!symbol.getName().startsWith("is"))
                 continue;
             const valueDec = symbol.getValueDeclaration();
-            if (valueDec == null || !TypeGuards.isFunctionDeclaration(valueDec))
+            if (valueDec == null || !Node.isFunctionDeclaration(valueDec))
                 continue;
             // todo: use typeChecker.getTypePredicateOfSignature once wrapped in ts-morph
             // todo: use TypePedicateNode once wrapped (but prefer using getTypePredicateOfSignature)
@@ -110,9 +110,9 @@ export class Node {
             if (returnTypeNode == null || returnTypeNode.getKind() !== SyntaxKind.TypePredicate)
                 continue;
             const typePredicateNode = returnTypeNode as any as TypeNode<ts.TypePredicateNode>;
-            const typePredicateType = typePredicateNode.getNodeProperty("type").getType();
+            const typePredicateType = typePredicateNode.getNodeProperty("type")?.getType();
 
-            if (this.factory.hasNode(typePredicateType)) {
+            if (typePredicateType != null && this.factory.hasNode(typePredicateType)) {
                 const node = this.factory.getNode(typePredicateType);
                 if (node === this)
                     return valueDec.getName();

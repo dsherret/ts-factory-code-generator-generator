@@ -2,7 +2,7 @@ import { Type, ParameterDeclaration } from "ts-morph";
 import { Factory } from "./Factory";
 import { FactoryFunction } from "./FactoryFunction";
 
-export class Parameter {
+export class TsParameter {
     private readonly type: Type;
     constructor(
         private readonly factory: Factory,

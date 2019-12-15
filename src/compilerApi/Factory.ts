@@ -1,12 +1,12 @@
 import { FunctionDeclaration, Type, Symbol } from "ts-morph";
 import { FactoryFunction } from "./FactoryFunction";
-import { NodeProperty } from "./NodeProperty";
-import { Node } from "./Node";
+import { TsNodeProperty } from "./TsNodeProperty";
+import { TsNode } from "./TsNode";
 
 export class Factory {
     private readonly factoryFunctions = new Map<FunctionDeclaration, FactoryFunction>();
-    private readonly nodes = new Map<Type, Node>();
-    private readonly nodeProperties = new Map<Symbol, NodeProperty>();
+    private readonly nodes = new Map<Type, TsNode>();
+    private readonly nodeProperties = new Map<Symbol, TsNodeProperty>();
 
     getFactoryFunction(declaration: FunctionDeclaration) {
         let func = this.factoryFunctions.get(declaration);
@@ -20,7 +20,7 @@ export class Factory {
     getNode(type: Type) {
         let node = this.nodes.get(type);
         if (node == null) {
-            node = new Node(this, type);
+            node = new TsNode(this, type);
             this.nodes.set(type, node);
         }
         return node;
@@ -33,7 +33,7 @@ export class Factory {
     getNodeProperty(symbol: Symbol) {
         let prop = this.nodeProperties.get(symbol);
         if (prop == null) {
-            prop = new NodeProperty(this, symbol);
+            prop = new TsNodeProperty(this, symbol);
             this.nodeProperties.set(symbol, prop);
         }
         return prop;

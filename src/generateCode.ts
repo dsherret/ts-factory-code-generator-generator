@@ -1,11 +1,11 @@
 import { Project, Type, TypeGuards, FunctionDeclarationStructure, CodeBlockWriter, StructureKind, ts } from "ts-morph";
-import { Factory, FactoryFunction, Parameter } from "./compilerApi";
+import { Factory, FactoryFunction, TsParameter } from "./compilerApi";
 
 export function generateCode(typeScriptModuleName = "typescript") {
     const factory = new Factory();
     const project = new Project({ compilerOptions: { strictNullChecks: true } });
     const newSourceFile = project.createSourceFile("____temp___.ts");
-    const tsSourceFile = project.addExistingSourceFile(`node_modules/${typeScriptModuleName}/lib/typescript.d.ts`);
+    const tsSourceFile = project.addSourceFileAtPath(`node_modules/${typeScriptModuleName}/lib/typescript.d.ts`);
     const tsSymbol = tsSourceFile.getNamespaceOrThrow("ts").getSymbolOrThrow();
 
     const kindToFactoryFunctions = getKindToFactoryFunctions();
@@ -183,7 +183,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
             writer.writeLine(`writer.write(")");`);
         }
 
-        function printParamText(writer: CodeBlockWriter, param: Parameter) {
+        function printParamText(writer: CodeBlockWriter, param: TsParameter) {
             if (writeCustomParamText(writer, func, param))
                 return;
 
@@ -312,7 +312,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
         return `import("${typeScriptModuleName}").${typeText}`;
     }
 
-    function writeCustomParamText(writer: CodeBlockWriter, func: FactoryFunction, param: Parameter) {
+    function writeCustomParamText(writer: CodeBlockWriter, func: FactoryFunction, param: TsParameter) {
         const funcName = func.getName();
         const paramName = param.getName();
         const initialLength = writer.getLength();
