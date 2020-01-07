@@ -30,14 +30,14 @@
   },
   "homepage": "https://github.com/dsherret/ts-factory-code-generator-generator#readme",
   "dependencies": {
-    "string-similarity": "^3.0.0",
+    "string-similarity": "^4.0.1",
     "ts-morph": "^6.0.2",
-    "typescript": "^3.7.3"
+    "typescript": "^3.7.4"
   },
   "devDependencies": {
     "@types/chai": "^4.2.7",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^12.12.17",
+    "@types/node": "^13.1.4",
     "@types/string-similarity": "^3.0.0",
     "@types/ts-nameof": "^4.2.0",
     "chai": "^4.2.0",
@@ -45,10 +45,10 @@
     "dprint": "^0.7.3",
     "dprint-plugin-jsonc": "^0.2.4",
     "dprint-plugin-typescript": "^0.10.0",
-    "mocha": "^6.2.2",
+    "mocha": "^7.0.0",
     "ts-nameof": "^4.2.2",
     "ts-node": "^8.5.4",
-    "ttypescript": "^1.5.8",
+    "ttypescript": "^1.5.9",
     "typescript-3.2.1": "npm:typescript@3.2.1",
     "typescript-3.6.3": "npm:typescript@3.6.3",
     "typescript-next": "npm:typescript@next"
