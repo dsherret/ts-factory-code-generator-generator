@@ -1,6 +1,14 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+<a name="0.5.3"></a>
+## [0.5.3](https://github.com/dsherret/ts-factory-code-generator-generator/compare/0.5.2...0.5.3) (2020-01-07)
+
+
+### Bug Fixes
+
+* [#3](https://github.com/dsherret/ts-factory-code-generator-generator/issues/3) - Fix booleans to not be written with quotes. ([e401485](https://github.com/dsherret/ts-factory-code-generator-generator/commit/e401485))
 
 <a name="0.5.2"></a>
 ## [0.5.2](https://github.com/dsherret/ts-factory-code-generator-generator/compare/0.5.1...0.5.2) (2019-10-02)
