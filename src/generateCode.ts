@@ -205,8 +205,10 @@ export function generateCode(typeScriptModuleName = "typescript") {
                     writer.write(`writeNodeText(${text})`);
                 else if (isSyntaxKindType())
                     writer.write(`writer.write("ts.SyntaxKind.").write(syntaxKindToName[${text}])`);
-                else if (type.isString() || type.isStringLiteral() || type.isBoolean() || type.isBooleanLiteral())
+                else if (type.isString() || type.isStringLiteral())
                     writer.write(`writer.quote(${text}.toString())`);
+                else if (type.isBoolean() || type.isBooleanLiteral())
+                    writer.write(`writer.write(${text}.toString())`);
                 else if (type.getText().endsWith(".NodeFlags"))
                     writer.write(`writer.write(getNodeFlagValues(${text} || 0));`);
                 else {
