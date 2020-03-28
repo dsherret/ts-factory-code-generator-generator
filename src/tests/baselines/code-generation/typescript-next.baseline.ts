@@ -42,6 +42,9 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
             case ts.SyntaxKind.Identifier:
                 createIdentifier(node as import("typescript-next").Identifier);
                 return;
+            case ts.SyntaxKind.PrivateIdentifier:
+                createPrivateIdentifier(node as import("typescript-next").PrivateIdentifier);
+                return;
             case ts.SyntaxKind.SuperKeyword:
                 createSuper(node as import("typescript-next").SuperExpression);
                 return;
@@ -316,8 +319,15 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
                 createAsExpression(node as import("typescript-next").AsExpression);
                 return;
             case ts.SyntaxKind.NonNullExpression:
-                createNonNullExpression(node as import("typescript-next").NonNullExpression);
-                return;
+                if (ts.isNonNullChain(node)) {
+                    createNonNullChain(node as import("typescript-next").NonNullChain);
+                    return;
+                }
+                if (ts.isNonNullExpression(node)) {
+                    createNonNullExpression(node as import("typescript-next").NonNullExpression);
+                    return;
+                }
+                throw new Error("Unhandled node: " + node.getText());
             case ts.SyntaxKind.MetaProperty:
                 createMetaProperty(node as import("typescript-next").MetaProperty);
                 return;
@@ -428,6 +438,9 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
                 return;
             case ts.SyntaxKind.NamespaceImport:
                 createNamespaceImport(node as import("typescript-next").NamespaceImport);
+                return;
+            case ts.SyntaxKind.NamespaceExport:
+                createNamespaceExport(node as import("typescript-next").NamespaceExport);
                 return;
             case ts.SyntaxKind.NamedImports:
                 createNamedImports(node as import("typescript-next").NamedImports);
@@ -548,6 +561,12 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
 
     function createIdentifier(node: import("typescript-next").Identifier) {
         writer.write("ts.createIdentifier(");
+        writer.quote(node.text.toString())
+        writer.write(")");
+    }
+
+    function createPrivateIdentifier(node: import("typescript-next").PrivateIdentifier) {
+        writer.write("ts.createPrivateIdentifier(");
         writer.quote(node.text.toString())
         writer.write(")");
     }
@@ -2606,6 +2625,12 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write(")");
     }
 
+    function createNonNullChain(node: import("typescript-next").NonNullChain) {
+        writer.write("ts.createNonNullChain(");
+        writeNodeText(node.expression)
+        writer.write(")");
+    }
+
     function createMetaProperty(node: import("typescript-next").MetaProperty) {
         writer.write("ts.createMetaProperty(");
         writer.newLine();
@@ -3653,12 +3678,20 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
             else {
                 writeNodeText(node.namedBindings)
             }
+            writer.write(",").newLine();
+            writer.quote(node.isTypeOnly.toString())
         });
         writer.write(")");
     }
 
     function createNamespaceImport(node: import("typescript-next").NamespaceImport) {
         writer.write("ts.createNamespaceImport(");
+        writeNodeText(node.name)
+        writer.write(")");
+    }
+
+    function createNamespaceExport(node: import("typescript-next").NamespaceExport) {
+        writer.write("ts.createNamespaceExport(");
         writeNodeText(node.name)
         writer.write(")");
     }
@@ -3813,6 +3846,8 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
             else {
                 writeNodeText(node.moduleSpecifier)
             }
+            writer.write(",").newLine();
+            writer.quote(node.isTypeOnly.toString())
         });
         writer.write(")");
     }

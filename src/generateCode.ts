@@ -446,6 +446,9 @@ export function generateCode(typeScriptModuleName = "typescript") {
             case "createCall":
             case "createCallChain":
                 return true;
+            case "createNonNullExpression":
+            case "createNonNullChain":
+                return true;
         }
 
         return false;
