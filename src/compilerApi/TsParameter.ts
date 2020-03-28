@@ -7,7 +7,7 @@ export class TsParameter {
     constructor(
         private readonly factory: Factory,
         private readonly parent: FactoryFunction,
-        private readonly declaration: ParameterDeclaration
+        private readonly declaration: ParameterDeclaration,
     ) {
         this.type = declaration.getType();
     }

@@ -7,8 +7,8 @@
   "scripts": {
     "build": "npx ttsc",
     "dopublish": "yarn build && echo \"Run: npm publish --otp\"",
-    "test": "cross-env TS_NODE_COMPILER=\"ttypescript\" TS_NODE_TRANSPILE_ONLY=\"true\" mocha --opts mocha.opts",
-    "test:debug": "cross-env TS_NODE_COMPILER=\"ttypescript\" TS_NODE_TRANSPILE_ONLY=\"true\" mocha --opts mocha.opts --inspect-brk",
+    "test": "cross-env TS_NODE_COMPILER=\"ttypescript\" TS_NODE_TRANSPILE_ONLY=\"true\" mocha",
+    "test:debug": "yarn run test --inspect-brk",
     "format": "dprint"
   },
   "repository": {
@@ -30,25 +30,25 @@
   },
   "homepage": "https://github.com/dsherret/ts-factory-code-generator-generator#readme",
   "dependencies": {
-    "string-similarity": "^3.0.0",
-    "ts-morph": "^6.0.2",
-    "typescript": "^3.7.3"
+    "string-similarity": "^4.0.1",
+    "ts-morph": "^7.0.0",
+    "typescript": "^3.8.3"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.7",
-    "@types/mocha": "^5.2.7",
-    "@types/node": "^12.12.17",
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.9.5",
     "@types/string-similarity": "^3.0.0",
-    "@types/ts-nameof": "^4.2.0",
+    "@types/ts-nameof": "^4.2.1",
     "chai": "^4.2.0",
-    "cross-env": "^6.0.3",
-    "dprint": "^0.7.3",
-    "dprint-plugin-jsonc": "^0.2.4",
-    "dprint-plugin-typescript": "^0.10.0",
-    "mocha": "^6.2.2",
+    "cross-env": "^7.0.2",
+    "dprint": "^0.9.0",
+    "dprint-plugin-jsonc": "^0.4.0",
+    "dprint-plugin-typescript": "^0.15.3",
+    "mocha": "^7.1.1",
     "ts-nameof": "^4.2.2",
-    "ts-node": "^8.5.4",
-    "ttypescript": "^1.5.8",
+    "ts-node": "^8.8.1",
+    "ttypescript": "^1.5.10",
     "typescript-3.2.1": "npm:typescript@3.2.1",
     "typescript-3.6.3": "npm:typescript@3.6.3",
     "typescript-next": "npm:typescript@next"

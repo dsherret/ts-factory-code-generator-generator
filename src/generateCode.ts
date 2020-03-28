@@ -13,7 +13,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
     newSourceFile.addStatements([{
         kind: StructureKind.ImportDeclaration,
         defaultImport: "CodeBlockWriter",
-        moduleSpecifier: "code-block-writer"
+        moduleSpecifier: "code-block-writer",
     }, {
         kind: StructureKind.Function,
         isExported: true,
@@ -49,8 +49,8 @@ export function generateCode(typeScriptModuleName = "typescript") {
             getSyntaxKindToNameFunction(),
             getNodeFlagValuesFunction(),
             getFlagValuesAsStringFunction(),
-            getFlagValuesFunction()
-        ]
+            getFlagValuesFunction(),
+        ],
     }]);
 
     return newSourceFile.getFullText();
@@ -66,8 +66,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                         factoryFunctions = map.get(name)!;
                     else
                         throw new Error(`Found duplicate name: ${name} (existing: ${map.get(name)!.map(f => f.getName())}, new: ${func.getName()})`);
-                }
-                else {
+                } else {
                     factoryFunctions = [];
                     map.set(name, factoryFunctions);
                 }
@@ -111,8 +110,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                                 writeFunctionCall(writer, factoryFunc);
                                 writer.write("return;").newLine();
                             });
-                        }
-                        else if (factoryFuncs.length === 2) {
+                        } else if (factoryFuncs.length === 2) {
                             writer.writeLine(`case ts.SyntaxKind.${syntaxKindName}:`);
                             writer.indent(() => {
                                 factoryFuncs.sort((a, b) => {
@@ -148,7 +146,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                         writer.writeLine(`writer.write("/* Unhandled node kind: ").write(syntaxKindToName[node.kind]).write(" */")`);
                     });
                 });
-            }
+            },
         };
 
         function writeFunctionCall(writer: CodeBlockWriter, factoryFunc: FactoryFunction) {
@@ -161,7 +159,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
             kind: StructureKind.Function,
             name: func.getName(),
             parameters: [{ name: "node", type: getTsTypeText(func.getNode().getName()) }],
-            statements: writer => printBody(writer)
+            statements: writer => printBody(writer),
         };
 
         function printBody(writer: CodeBlockWriter) {
@@ -196,8 +194,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                 if (param.isArray()) {
                     const arrayElementType = param.getArrayElementType()!;
                     writeArrayText(writer, propAccess, () => writeTextForType("item", arrayElementType));
-                }
-                else {
+                } else {
                     writeTextForType(propAccess, param.getType().getNonNullableType());
                 }
             }
@@ -247,7 +244,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                     writer.indent().write(`map[value] = name;`).newLine();
                 });
                 writer.write("return map;");
-            }
+            },
         };
     }
 
@@ -260,7 +257,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                 writer.writeLine("// ignore the BlockScoped node flag");
                 writer.writeLine(`return getFlagValuesAsString(ts.NodeFlags, "ts.NodeFlags", `
                     + `value || 0, "None", getFlagValues(ts.NodeFlags, value).filter(v => v !== ts.NodeFlags.BlockScoped));`);
-            }
+            },
         };
     }
 
@@ -273,7 +270,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                 { name: "enumName", type: "string" },
                 { name: "value", type: "number" },
                 { name: "defaultName", type: "string" },
-                { name: "flagValues", hasQuestionToken: true, type: "number[]" }
+                { name: "flagValues", hasQuestionToken: true, type: "number[]" },
             ],
             statements: writer => {
                 writer.writeLine("flagValues = flagValues || getFlagValues(enumObj, value);");
@@ -283,7 +280,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                 writer.writeLine("if (members.length === 0)");
                 writer.indent().write(`members.push(enumName + "." + defaultName);`).newLine();
                 writer.writeLine(`return members.join(" | ");`);
-            }
+            },
         };
     }
 
@@ -293,7 +290,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
             name: "getFlagValues",
             parameters: [
                 { name: "enumObj", type: "any" },
-                { name: "value", type: "number" }
+                { name: "value", type: "number" },
             ],
             statements: writer => {
                 writer.writeLine("const members: number[] = [];");
@@ -304,7 +301,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                     writer.indent().write(`members.push(enumObj[prop]);`).newLine();
                 });
                 writer.writeLine(`return members;`);
-            }
+            },
         };
     }
 
@@ -334,8 +331,11 @@ export function generateCode(typeScriptModuleName = "typescript") {
 
         if (paramName === "modifiers") {
             writeNullableIfNecessary(writer, param.getType(), "node.modifiers", () => {
-                writeArrayText(writer, "node.modifiers",
-                    () => writer.writeLine(`writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");`));
+                writeArrayText(
+                    writer,
+                    "node.modifiers",
+                    () => writer.writeLine(`writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");`),
+                );
             });
         }
 
@@ -368,8 +368,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
             writer.write("else").block(() => {
                 writeTypeText();
             });
-        }
-        else {
+        } else {
             writeTypeText();
         }
     }
