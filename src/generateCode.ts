@@ -376,6 +376,10 @@ export function generateCode(typeScriptModuleName = "typescript") {
     }
 
     function isAllowedFactoryFunction(func: FactoryFunction) {
+        const name = func.getName();
+        if (name.startsWith("createJSDoc"))
+            return false;
+
         // some of these could probably be figured out by inspecting
         // the code, but this is the lazy way to do it... I'll just
         // manually maintain this list.
@@ -408,6 +412,8 @@ export function generateCode(typeScriptModuleName = "typescript") {
             case nameof(ts.createExportDefault):
             // handled by createBinary
             case "createNullishCoalesce": // nameof(ts.createNullishCoalesce):
+            // handled by other more specific functions
+            case "createJSDocTag": // todo: nameof
             // not used
             case nameof(ts.createNode):
             case nameof(ts.createSourceFile):
@@ -431,6 +437,10 @@ export function generateCode(typeScriptModuleName = "typescript") {
             case nameof(ts.createTypePredicateNode):
                 // todo: nameof
                 return tsSymbol.getExport("createTypePredicateNodeWithModifier") == null;
+            // deprecated
+            case "createJSDocParamTag":
+                // todo: nameof
+                return tsSymbol.getExport("createJSDocParameterTag") == null;
         }
 
         return true;
