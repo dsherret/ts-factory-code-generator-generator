@@ -119,8 +119,10 @@ export function generateCode(typeScriptModuleName = "typescript") {
                                     if (b.getNode().doesExtendNode(a.getNode()))
                                         return 1;
                                     else {
-                                        throw new Error(`Unhandled scenario where neither ${a.getNode().getName()} or `
-                                            + `${b.getNode().getName()} extended each other`);
+                                        throw new Error(
+                                            `Unhandled scenario where neither ${a.getNode().getName()} or `
+                                                + `${b.getNode().getName()} extended each other`,
+                                        );
                                     }
                                 });
                                 for (const factoryFunc of factoryFuncs) {
@@ -257,8 +259,10 @@ export function generateCode(typeScriptModuleName = "typescript") {
             parameters: [{ name: "value", type: "number" }],
             statements: writer => {
                 writer.writeLine("// ignore the BlockScoped node flag");
-                writer.writeLine(`return getFlagValuesAsString(ts.NodeFlags, "ts.NodeFlags", `
-                    + `value || 0, "None", getFlagValues(ts.NodeFlags, value).filter(v => v !== ts.NodeFlags.BlockScoped));`);
+                writer.writeLine(
+                    `return getFlagValuesAsString(ts.NodeFlags, "ts.NodeFlags", `
+                        + `value || 0, "None", getFlagValues(ts.NodeFlags, value).filter(v => v !== ts.NodeFlags.BlockScoped));`,
+                );
             },
         };
     }
