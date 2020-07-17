@@ -55,6 +55,8 @@ console.log(factoryCode);
 
 Outputs:
 
+<!-- dprint-ignore -->
+
 ```ts
 [
   ts.createExpressionStatement(ts.createBinary(
