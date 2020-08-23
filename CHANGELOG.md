@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.6.0"></a>
+# [0.6.0](https://github.com/dsherret/ts-factory-code-generator-generator/compare/0.5.5...0.6.0) (2020-08-23)
+
+
+### Features
+
+* Support new TS 4.0 `NodeFactory` ([97ba337](https://github.com/dsherret/ts-factory-code-generator-generator/commit/97ba337))
+
+
+
 <a name="0.5.5"></a>
 ## [0.5.5](https://github.com/dsherret/ts-factory-code-generator-generator/compare/0.5.4...0.5.5) (2020-05-08)
 
