@@ -1,4 +1,4 @@
-import { Project, Type, TypeGuards, FunctionDeclarationStructure, CodeBlockWriter, StructureKind, ts } from "ts-morph";
+import { Project, Type, Node, FunctionDeclarationStructure, CodeBlockWriter, StructureKind, ts } from "ts-morph";
 import { Factory, FactoryFunction, TsParameter } from "./compilerApi";
 
 export function generateCode(typeScriptModuleName = "typescript") {
@@ -7,6 +7,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
     const newSourceFile = project.createSourceFile("____temp___.ts");
     const tsSourceFile = project.addSourceFileAtPath(`node_modules/${typeScriptModuleName}/lib/typescript.d.ts`);
     const tsSymbol = tsSourceFile.getNamespaceOrThrow("ts").getSymbolOrThrow();
+    const nodeFactory = tsSymbol.getExport("NodeFactory");
 
     const kindToFactoryFunctions = getKindToFactoryFunctions();
 
@@ -78,11 +79,12 @@ export function generateCode(typeScriptModuleName = "typescript") {
         return map;
 
         function* getInternal(): IterableIterator<FactoryFunction> {
-            for (const symbol of tsSymbol.getExports()) {
+            const searchSymbols = nodeFactory == null ? tsSymbol.getExports() : nodeFactory.getMembers();
+            for (const symbol of searchSymbols) {
                 if (!symbol.getName().startsWith("create"))
                     continue;
                 const valueDec = symbol.getValueDeclaration();
-                if (valueDec == null || !TypeGuards.isFunctionDeclaration(valueDec))
+                if (valueDec == null || !Node.isFunctionDeclaration(valueDec) && !Node.isMethodSignature(valueDec))
                     continue;
                 const returnType = valueDec.getReturnType();
                 if (returnType.getProperty("kind") == null)
@@ -166,7 +168,14 @@ export function generateCode(typeScriptModuleName = "typescript") {
 
         function printBody(writer: CodeBlockWriter) {
             const params = func.getParameters();
-            writer.writeLine(`writer.write("ts.${func.getName()}(");`);
+            writer.write(`writer.write("`);
+
+            if (nodeFactory == null)
+                writer.write("ts"); // ts < 4.0 before API change
+            else
+                writer.write("factory");
+
+            writer.write(`.${func.getName()}(");`).newLine();
             if (params.length === 1)
                 printParamText(writer, params[0]);
             else if (params.length > 1) {
@@ -189,15 +198,16 @@ export function generateCode(typeScriptModuleName = "typescript") {
 
             const prop = func.getNode().getPropertyForParam(param);
             const propAccess = `node.${prop.getName()}`;
+            const propType = prop.getType();
 
-            writeNullableIfNecessary(writer, prop.getType(), propAccess, () => writeTypeText());
+            writeNullableIfNecessary(writer, propType, propAccess, () => writeTypeText());
 
             function writeTypeText() {
                 if (param.isArray()) {
                     const arrayElementType = param.getArrayElementType()!;
                     writeArrayText(writer, propAccess, () => writeTextForType("item", arrayElementType));
                 } else {
-                    writeTextForType(propAccess, param.getType().getNonNullableType());
+                    writeTextForType(propAccess, propType.getNonNullableType());
                 }
             }
 
@@ -214,7 +224,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                 else if (type.getText().endsWith(".NodeFlags"))
                     writer.write(`writer.write(getNodeFlagValues(${text} || 0));`);
                 else {
-                    console.error(`Could not find text for param ${func.getName()}::${param.getName()}`);
+                    console.error(`Could not find text for param ${func.getName()}::${param.getName()} -- ${type.getText()}`);
                     writer.write(`writer.write("/* unknown */")`);
                 }
 
@@ -320,7 +330,8 @@ export function generateCode(typeScriptModuleName = "typescript") {
         const paramName = param.getName();
         const initialLength = writer.getLength();
 
-        if (funcName === nameof(ts.createProperty) && paramName === "questionOrExclamationToken") {
+        const isPropertyDecl = funcName === nameof(ts.createProperty) || funcName === nameof<ts.NodeFactory>(f => f.createPropertyDeclaration);
+        if (isPropertyDecl && paramName === "questionOrExclamationToken") {
             writer.writeLine("if (node.questionToken != null)");
             writer.indent().write(`writer.write("ts.createToken(ts.SyntaxKind.QuestionToken)");`).newLine();
             writer.writeLine("else if (node.exclamationToken != null)");
@@ -331,7 +342,9 @@ export function generateCode(typeScriptModuleName = "typescript") {
 
         const isMultiLineFunc = funcName === nameof(ts.createObjectLiteral)
             || funcName === nameof(ts.createArrayLiteral)
-            || funcName === nameof(ts.createBlock);
+            || funcName === nameof(ts.createBlock)
+            || funcName === nameof<ts.NodeFactory>(f => f.createObjectLiteralExpression)
+            || funcName === nameof<ts.NodeFactory>(f => f.createArrayLiteralExpression);
         if (isMultiLineFunc && paramName === "multiLine")
             writer.write("writer.write(((node as any).multiLine || false).toString())");
 
@@ -394,6 +407,24 @@ export function generateCode(typeScriptModuleName = "typescript") {
             case nameof(ts.createVoidZero):
             // handled by createBinary
             case nameof(ts.createAssignment):
+            case nameof<ts.NodeFactory>(n => n.createBitwiseAnd):
+            case nameof<ts.NodeFactory>(n => n.createBitwiseNot):
+            case nameof<ts.NodeFactory>(n => n.createBitwiseOr):
+            case nameof<ts.NodeFactory>(n => n.createBitwiseXor):
+            case nameof<ts.NodeFactory>(n => n.createDivide):
+            case nameof<ts.NodeFactory>(n => n.createExponent):
+            case nameof<ts.NodeFactory>(n => n.createModulo):
+            case nameof<ts.NodeFactory>(n => n.createEquality):
+            case nameof<ts.NodeFactory>(n => n.createInequality):
+            case nameof<ts.NodeFactory>(n => n.createStrictEquality):
+            case nameof<ts.NodeFactory>(n => n.createLessThan):
+            case nameof<ts.NodeFactory>(n => n.createLessThanEquals):
+            case nameof<ts.NodeFactory>(n => n.createGreaterThan):
+            case nameof<ts.NodeFactory>(n => n.createGreaterThanEquals):
+            case nameof<ts.NodeFactory>(n => n.createLeftShift):
+            case nameof<ts.NodeFactory>(n => n.createRightShift):
+            case nameof<ts.NodeFactory>(n => n.createUnsignedRightShift):
+            case nameof<ts.NodeFactory>(n => n.createMultiply):
             case nameof(ts.createLogicalAnd):
             case nameof(ts.createLogicalOr):
             case nameof(ts.createLogicalNot):
@@ -406,8 +437,16 @@ export function generateCode(typeScriptModuleName = "typescript") {
             // handled by createCall
             case nameof(ts.createImmediatelyInvokedFunctionExpression):
             case nameof(ts.createImmediatelyInvokedArrowFunction):
+            // handled by createPrefixUnaryExpression
+            case nameof<ts.NodeFactory>(n => n.createPrefixDecrement):
+            case nameof<ts.NodeFactory>(n => n.createPrefixIncrement):
+            case nameof<ts.NodeFactory>(n => n.createPrefixMinus):
+            case nameof<ts.NodeFactory>(n => n.createPrefixPlus):
+            // handled by createPostfixUnaryExpression
+            case nameof<ts.NodeFactory>(n => n.createPostfixDecrement):
+            case nameof<ts.NodeFactory>(n => n.createPostfixIncrement):
             // handled by createUnionTypeNode and createIntersectionTypeNode
-            case nameof(ts.createUnionOrIntersectionTypeNode):
+            case "createUnionOrIntersectionTypeNode": // doesn't exist anymore in 4.0?
             // handled by createPostfix
             case nameof(ts.createPostfixIncrement):
             // handled by createExportDeclaration
@@ -418,6 +457,8 @@ export function generateCode(typeScriptModuleName = "typescript") {
             case "createNullishCoalesce": // nameof(ts.createNullishCoalesce):
             // handled by other more specific functions
             case "createJSDocTag": // todo: nameof
+            // handled by createStringLiteral
+            case nameof(ts.createStringLiteralFromNode):
             // not used
             case nameof(ts.createNode):
             case nameof(ts.createSourceFile):

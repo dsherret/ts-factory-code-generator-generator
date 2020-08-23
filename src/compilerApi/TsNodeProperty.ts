@@ -1,12 +1,14 @@
-import { Type, Symbol } from "ts-morph";
+import { Type, Symbol, Node } from "ts-morph";
 import { Factory } from "./Factory";
+import { resolveTypeToTypeParamConstraintIfNecessary } from "./helpers";
 
 export class TsNodeProperty {
     private readonly type: Type;
+    private readonly declaration: Node;
 
     constructor(private readonly factory: Factory, private readonly symbol: Symbol) {
-        const declaration = symbol.getDeclarations()[0];
-        this.type = declaration.getType();
+        this.declaration = symbol.getDeclarations()[0];
+        this.type = this.declaration.getType();
     }
 
     getName() {
@@ -14,6 +16,6 @@ export class TsNodeProperty {
     }
 
     getType() {
-        return this.type;
+        return resolveTypeToTypeParamConstraintIfNecessary(this.type, this.declaration.getParentOrThrow());
     }
 }

@@ -15,6 +15,11 @@ describe(nameof(generateCode), () => {
         runBaseLineForPackage("typescript-3.6.3");
     });
 
+    // uses NodeFactory at this point
+    it("should equal the baseline for 4.0.2", () => {
+        runBaseLineForPackage("typescript-4.0.2");
+    });
+
     it("should equal the baseline for @next", () => {
         runBaseLineForPackage("typescript-next");
     });

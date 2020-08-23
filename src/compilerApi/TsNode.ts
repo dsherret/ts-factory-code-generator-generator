@@ -2,6 +2,7 @@ import { Type, Symbol, InterfaceDeclaration, Node, ts, SyntaxKind, TypeNode } fr
 import { compareTwoStrings } from "string-similarity";
 import { Factory } from "./Factory";
 import { TsParameter } from "./TsParameter";
+import { resolveTypeToTypeParamConstraintIfNecessary } from "./helpers";
 
 export class TsNode {
     private readonly declaration: InterfaceDeclaration;
@@ -86,14 +87,22 @@ export class TsNode {
         if (this.getName() === nameof<ts.JsxAttributes>())
             return [nameof(SyntaxKind.JsxAttributes)];
 
-        const kindType = this.type.getProperty("kind")!.getTypeAtLocation(this.declaration);
+        const kindType = this.getKindType();
+
         if (kindType.isUnion())
             return Array.from(new Set(kindType.getUnionTypes().map(t => sanitizeName(t.getText(this.declaration)))));
+
         return [sanitizeName(kindType.getText(this.declaration))];
 
         function sanitizeName(name: string) {
             return name.replace(/SyntaxKind\./g, "");
         }
+    }
+
+    getKindType() {
+        // Find the type of the "kind" property.
+        const kindType = this.type.getProperty("kind")!.getTypeAtLocation(this.declaration);
+        return resolveTypeToTypeParamConstraintIfNecessary(kindType, this.declaration);
     }
 
     getTestFunctionName() {
