@@ -19,7 +19,7 @@ class Class {
 }
 
 declare class Class2 {
-    readonly other: string;
+    readonly other: string | void;
     method(p: string): string;
 }
 

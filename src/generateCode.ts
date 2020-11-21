@@ -46,6 +46,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                 writer.blankLine().writeLine("return writer.toString();");
             },
             writeNodeTextFunction(),
+            writeNodeTextForTypeNodeFunction(),
             ...Array.from(new Set(Array.from(kindToFactoryFunctions.values()).reduce((a, b) => [...a, ...b], []))).map(getFunctionStructure),
             getSyntaxKindToNameFunction(),
             getNodeFlagValuesFunction(),
@@ -158,6 +159,21 @@ export function generateCode(typeScriptModuleName = "typescript") {
         }
     }
 
+    function writeNodeTextForTypeNodeFunction(): FunctionDeclarationStructure {
+        return {
+            kind: StructureKind.Function,
+            name: "writeNodeTextForTypeNode",
+            parameters: [{ name: "node", type: getTsTypeText("TypeNode") }],
+            statements: writer => {
+                writer.write("if (node.kind >= ts.SyntaxKind.FirstKeyword && node.kind <= ts.SyntaxKind.LastKeyword)").block(() => {
+                    writer.writeLine(`writer.write("${getFactoryName()}.createKeywordTypeNode(ts.SyntaxKind.").write(syntaxKindToName[node.kind]).write(")");`);
+                }).write("else").block(() => {
+                    writer.writeLine("writeNodeText(node);")
+                });
+            }
+        };
+    }
+
     function getFunctionStructure(func: FactoryFunction): FunctionDeclarationStructure {
         return {
             kind: StructureKind.Function,
@@ -213,7 +229,9 @@ export function generateCode(typeScriptModuleName = "typescript") {
 
             // todo: rename
             function writeTextForType(text: string, type: Type) {
-                if (isNodeType())
+                if (isNodeTypeNodeType())
+                    writer.write(`writeNodeTextForTypeNode(${text})`);
+                else if (isNodeType())
                     writer.write(`writeNodeText(${text})`);
                 else if (isSyntaxKindType())
                     writer.write(`writer.write("ts.SyntaxKind.").write(syntaxKindToName[${text}])`);
@@ -235,6 +253,10 @@ export function generateCode(typeScriptModuleName = "typescript") {
                     function isSyntaxKind(t: Type) {
                         return (t.isEnum() || t.isEnumLiteral()) && t.getText().includes(".SyntaxKind");
                     }
+                }
+
+                function isNodeTypeNodeType() {
+                    return isNodeType() && type.getText().endsWith(".TypeNode");
                 }
 
                 function isNodeType() {

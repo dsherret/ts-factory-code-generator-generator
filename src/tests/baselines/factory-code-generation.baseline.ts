@@ -135,7 +135,10 @@ import * as ts from "typescript-3.6.3";
         [ts.createModifier(ts.SyntaxKind.ReadonlyKeyword)],
         ts.createIdentifier("other"),
         undefined,
-        ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+        ts.createUnionTypeNode([
+          ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+          ts.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword)
+        ]),
         undefined
       ),
       ts.createMethod(
