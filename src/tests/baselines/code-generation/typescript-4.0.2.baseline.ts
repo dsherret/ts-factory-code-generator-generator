@@ -528,7 +528,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 return;
             default:
                 if (node.kind >= ts.SyntaxKind.FirstToken && node.kind <= ts.SyntaxKind.LastToken) {
-                    writer.write("ts.createToken(ts.SyntaxKind.").write(syntaxKindToName[node.kind]).write(")");
+                    writer.write("factory.createToken(ts.SyntaxKind.").write(syntaxKindToName[node.kind]).write(")");
                     return;
                 }
                 writer.write("/* Unhandled node kind: ").write(syntaxKindToName[node.kind]).write(" */")
@@ -665,7 +665,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -673,7 +673,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -725,7 +725,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -733,7 +733,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -788,7 +788,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -796,7 +796,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -806,9 +806,9 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
             writeNodeText(node.name)
             writer.write(",").newLine();
             if (node.questionToken != null)
-                writer.write("ts.createToken(ts.SyntaxKind.QuestionToken)");
+                writer.write("factory.createToken(ts.SyntaxKind.QuestionToken)");
             else if (node.exclamationToken != null)
-                writer.write("ts.createToken(ts.SyntaxKind.ExclamationToken)");
+                writer.write("factory.createToken(ts.SyntaxKind.ExclamationToken)");
             else
                 writer.write("undefined");
             writer.write(",").newLine();
@@ -837,7 +837,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -845,7 +845,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -938,7 +938,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -946,7 +946,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -1051,7 +1051,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -1059,7 +1059,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -1123,7 +1123,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -1131,7 +1131,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -1203,7 +1203,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -1211,7 +1211,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -1379,7 +1379,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -1387,7 +1387,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -2189,7 +2189,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -2197,7 +2197,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -2275,7 +2275,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -2283,7 +2283,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -2559,7 +2559,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -2567,7 +2567,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -2763,7 +2763,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -2771,7 +2771,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -3071,7 +3071,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -3079,7 +3079,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -3182,7 +3182,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -3190,7 +3190,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -3296,7 +3296,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -3304,7 +3304,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -3406,7 +3406,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -3414,7 +3414,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -3480,7 +3480,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -3488,7 +3488,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -3548,7 +3548,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -3556,7 +3556,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -3655,7 +3655,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -3663,7 +3663,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -3708,7 +3708,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -3716,7 +3716,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -3834,7 +3834,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -3842,7 +3842,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }
@@ -3891,7 +3891,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                 writer.write("[");
                 if (node.modifiers.length === 1) {
                     const item = node.modifiers![0];
-                    writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                 }
                 else if (node.modifiers.length > 1) {
                     writer.indent(() => {
@@ -3899,7 +3899,7 @@ export function generateFactoryCode(ts: typeof import("typescript-4.0.2"), initi
                             const item = node.modifiers![i];
                             if (i > 0)
                                 writer.write(",").newLine();
-                            writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
                         }
                     });
                 }

@@ -31,7 +31,7 @@
   "homepage": "https://github.com/dsherret/ts-factory-code-generator-generator#readme",
   "dependencies": {
     "string-similarity": "^4.0.2",
-    "ts-morph": "^8.0.0",
+    "ts-morph": "^8.1.0",
     "typescript": "^4.0.2"
   },
   "devDependencies": {

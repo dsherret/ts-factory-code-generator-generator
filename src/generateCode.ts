@@ -144,7 +144,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                     writer.writeLine(`default:`);
                     writer.indent(() => {
                         writer.write("if (node.kind >= ts.SyntaxKind.FirstToken && node.kind <= ts.SyntaxKind.LastToken)").block(() => {
-                            writer.writeLine(`writer.write("ts.createToken(ts.SyntaxKind.").write(syntaxKindToName[node.kind]).write(")");`);
+                            writer.writeLine(`writer.write("${getFactoryName()}.createToken(ts.SyntaxKind.").write(syntaxKindToName[node.kind]).write(")");`);
                             writer.writeLine("return;");
                         });
                         writer.writeLine(`writer.write("/* Unhandled node kind: ").write(syntaxKindToName[node.kind]).write(" */")`);
@@ -333,9 +333,9 @@ export function generateCode(typeScriptModuleName = "typescript") {
         const isPropertyDecl = funcName === nameof(ts.createProperty) || funcName === nameof<ts.NodeFactory>(f => f.createPropertyDeclaration);
         if (isPropertyDecl && paramName === "questionOrExclamationToken") {
             writer.writeLine("if (node.questionToken != null)");
-            writer.indent().write(`writer.write("ts.createToken(ts.SyntaxKind.QuestionToken)");`).newLine();
+            writer.indent().write(`writer.write("${getFactoryName()}.createToken(ts.SyntaxKind.QuestionToken)");`).newLine();
             writer.writeLine("else if (node.exclamationToken != null)");
-            writer.indent().write(`writer.write("ts.createToken(ts.SyntaxKind.ExclamationToken)");`).newLine();
+            writer.indent().write(`writer.write("${getFactoryName()}.createToken(ts.SyntaxKind.ExclamationToken)");`).newLine();
             writer.writeLine("else");
             writer.indent().write(`writer.write("undefined");`).newLine();
         }
@@ -353,7 +353,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
                 writeArrayText(
                     writer,
                     "node.modifiers",
-                    () => writer.writeLine(`writer.write("ts.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");`),
+                    () => writer.writeLine(`writer.write("${getFactoryName()}.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");`),
                 );
             });
         }
@@ -389,6 +389,14 @@ export function generateCode(typeScriptModuleName = "typescript") {
             });
         } else {
             writeTypeText();
+        }
+    }
+
+    function getFactoryName() {
+        if (nodeFactory == null) {
+            return "ts";
+        } else {
+            return "factory";
         }
     }
 
