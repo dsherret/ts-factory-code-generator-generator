@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.6.1"></a>
+## [0.6.1](https://github.com/dsherret/ts-factory-code-generator-generator/compare/0.6.0...0.6.1) (2020-11-21)
+
+
+### Bug Fixes
+
+* [#6](https://github.com/dsherret/ts-factory-code-generator-generator/issues/6) - Generate correct code for keyword type nodes. ([146ad69](https://github.com/dsherret/ts-factory-code-generator-generator/commit/146ad69))
+* Ensure `factory` is always used for ts >= 4 ([99b881d](https://github.com/dsherret/ts-factory-code-generator-generator/commit/99b881d))
+
+
+
 <a name="0.6.0"></a>
 # [0.6.0](https://github.com/dsherret/ts-factory-code-generator-generator/compare/0.5.5...0.6.0) (2020-08-23)
 
