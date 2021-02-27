@@ -1,8 +1,8 @@
-import { Type, Symbol, InterfaceDeclaration, Node, ts, SyntaxKind, TypeNode } from "ts-morph";
 import { compareTwoStrings } from "string-similarity";
+import { InterfaceDeclaration, Node, Symbol, SyntaxKind, ts, Type, TypeNode } from "ts-morph";
 import { Factory } from "./Factory";
-import { TsParameter } from "./TsParameter";
 import { resolveTypeToTypeParamConstraintIfNecessary } from "./helpers";
+import { TsParameter } from "./TsParameter";
 
 export class TsNode {
     private readonly declaration: InterfaceDeclaration;

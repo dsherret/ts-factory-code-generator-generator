@@ -1,4 +1,4 @@
-import { Type, Node } from "ts-morph";
+import { Node, Type } from "ts-morph";
 
 export function resolveTypeToTypeParamConstraintIfNecessary(type: Type, declaration: Node) {
     if (!Node.isTypeParameteredNode(declaration))

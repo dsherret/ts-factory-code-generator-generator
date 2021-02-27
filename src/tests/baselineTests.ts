@@ -1,6 +1,6 @@
+import { expect } from "chai";
 import * as fs from "fs";
 import * as path from "path";
-import { expect } from "chai";
 import { Project } from "ts-morph";
 import * as ts from "typescript-3.6.3";
 import { generateCode } from "../generateCode";

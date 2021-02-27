@@ -1,7 +1,7 @@
-import { FunctionDeclaration, Type, Symbol, MethodSignature } from "ts-morph";
+import { FunctionDeclaration, MethodSignature, Symbol, Type } from "ts-morph";
 import { FactoryFunction } from "./FactoryFunction";
-import { TsNodeProperty } from "./TsNodeProperty";
 import { TsNode } from "./TsNode";
+import { TsNodeProperty } from "./TsNodeProperty";
 
 export class Factory {
     private readonly factoryFunctions = new Map<FunctionDeclaration | MethodSignature, FactoryFunction>();

@@ -1,4 +1,4 @@
-import { Type, ParameterDeclaration } from "ts-morph";
+import { ParameterDeclaration, Type } from "ts-morph";
 import { Factory } from "./Factory";
 import { FactoryFunction } from "./FactoryFunction";
 

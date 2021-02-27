@@ -1,5 +1,5 @@
+import { FunctionDeclaration, MethodSignature, Node, SyntaxKind, ts } from "ts-morph";
 import { Factory } from "./Factory";
-import { FunctionDeclaration, MethodSignature, ts, SyntaxKind, Node } from "ts-morph";
 import { TsParameter } from "./TsParameter";
 
 // It will be a method signature in TS 4.0

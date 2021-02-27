@@ -1,4 +1,4 @@
-import { Project, Type, Node, FunctionDeclarationStructure, CodeBlockWriter, StructureKind, ts } from "ts-morph";
+import { CodeBlockWriter, FunctionDeclarationStructure, Node, Project, StructureKind, ts, Type } from "ts-morph";
 import { Factory, FactoryFunction, TsParameter } from "./compilerApi";
 
 export function generateCode(typeScriptModuleName = "typescript") {

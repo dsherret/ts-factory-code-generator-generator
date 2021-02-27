@@ -1,4 +1,4 @@
-import { Type, Symbol, Node } from "ts-morph";
+import { Node, Symbol, Type } from "ts-morph";
 import { Factory } from "./Factory";
 import { resolveTypeToTypeParamConstraintIfNecessary } from "./helpers";
 
