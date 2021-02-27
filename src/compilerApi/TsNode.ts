@@ -106,7 +106,7 @@ export class TsNode {
     }
 
     getTestFunctionName() {
-        const tsSymbol = this.declaration.getSourceFile().getNamespaceOrThrow("ts").getSymbolOrThrow();
+        const tsSymbol = this.declaration.getSourceFile().getModuleOrThrow("ts").getSymbolOrThrow();
         for (const symbol of tsSymbol.getExports()) {
             if (!symbol.getName().startsWith("is"))
                 continue;

@@ -6,7 +6,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
     const project = new Project({ compilerOptions: { strictNullChecks: true } });
     const newSourceFile = project.createSourceFile("____temp___.ts");
     const tsSourceFile = project.addSourceFileAtPath(`node_modules/${typeScriptModuleName}/lib/typescript.d.ts`);
-    const tsSymbol = tsSourceFile.getNamespaceOrThrow("ts").getSymbolOrThrow();
+    const tsSymbol = tsSourceFile.getModuleOrThrow("ts").getSymbolOrThrow();
     const nodeFactory = tsSymbol.getExport("NodeFactory");
 
     const kindToFactoryFunctions = getKindToFactoryFunctions();
@@ -168,9 +168,9 @@ export function generateCode(typeScriptModuleName = "typescript") {
                 writer.write("if (node.kind >= ts.SyntaxKind.FirstKeyword && node.kind <= ts.SyntaxKind.LastKeyword)").block(() => {
                     writer.writeLine(`writer.write("${getFactoryName()}.createKeywordTypeNode(ts.SyntaxKind.").write(syntaxKindToName[node.kind]).write(")");`);
                 }).write("else").block(() => {
-                    writer.writeLine("writeNodeText(node);")
+                    writer.writeLine("writeNodeText(node);");
                 });
-            }
+            },
         };
     }
 
@@ -415,11 +415,10 @@ export function generateCode(typeScriptModuleName = "typescript") {
     }
 
     function getFactoryName() {
-        if (nodeFactory == null) {
+        if (nodeFactory == null)
             return "ts";
-        } else {
+        else
             return "factory";
-        }
     }
 
     function isAllowedFactoryFunction(func: FactoryFunction) {
