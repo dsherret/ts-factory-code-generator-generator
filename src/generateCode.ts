@@ -64,10 +64,11 @@ export function generateCode(typeScriptModuleName = "typescript") {
             for (const name of func.getKindNames()) {
                 let factoryFunctions: FactoryFunction[];
                 if (map.has(name)) {
-                    if (isAllowedDuplicateFactoryFunction(func))
+                    if (isAllowedDuplicateFactoryFunction(func)) {
                         factoryFunctions = map.get(name)!;
-                    else
+                    } else {
                         throw new Error(`Found duplicate name: ${name} (existing: ${map.get(name)!.map(f => f.getName())}, new: ${func.getName()})`);
+                    }
                 } else {
                     factoryFunctions = [];
                     map.set(name, factoryFunctions);
@@ -82,18 +83,22 @@ export function generateCode(typeScriptModuleName = "typescript") {
         function* getInternal(): IterableIterator<FactoryFunction> {
             const searchSymbols = nodeFactory == null ? tsSymbol.getExports() : nodeFactory.getMembers();
             for (const symbol of searchSymbols) {
-                if (!symbol.getName().startsWith("create"))
+                if (!symbol.getName().startsWith("create")) {
                     continue;
+                }
                 const valueDec = symbol.getValueDeclaration();
-                if (valueDec == null || !Node.isFunctionDeclaration(valueDec) && !Node.isMethodSignature(valueDec))
+                if (valueDec == null || !Node.isFunctionDeclaration(valueDec) && !Node.isMethodSignature(valueDec)) {
                     continue;
+                }
                 const returnType = valueDec.getReturnType();
-                if (returnType.getProperty("kind") == null)
+                if (returnType.getProperty("kind") == null) {
                     continue;
+                }
                 // console.log(symbol.getName() + ": " + returnType.getText());
                 const factoryFunction = factory.getFactoryFunction(valueDec);
-                if (isAllowedFactoryFunction(factoryFunction))
+                if (isAllowedFactoryFunction(factoryFunction)) {
                     yield factoryFunction;
+                }
             }
         }
     }
@@ -117,11 +122,12 @@ export function generateCode(typeScriptModuleName = "typescript") {
                             writer.writeLine(`case ts.SyntaxKind.${syntaxKindName}:`);
                             writer.indent(() => {
                                 factoryFuncs.sort((a, b) => {
-                                    if (a.getNode().doesExtendNode(b.getNode()))
+                                    if (a.getNode().doesExtendNode(b.getNode())) {
                                         return -1;
-                                    if (b.getNode().doesExtendNode(a.getNode()))
+                                    }
+                                    if (b.getNode().doesExtendNode(a.getNode())) {
                                         return 1;
-                                    else {
+                                    } else {
                                         throw new Error(
                                             `Unhandled scenario where neither ${a.getNode().getName()} or `
                                                 + `${b.getNode().getName()} extended each other`,
@@ -129,8 +135,9 @@ export function generateCode(typeScriptModuleName = "typescript") {
                                     }
                                 });
                                 for (const factoryFunc of factoryFuncs) {
-                                    if (factoryFunc.getKindNames().length !== 1)
+                                    if (factoryFunc.getKindNames().length !== 1) {
                                         throw new Error(`Unexpected: Factory function had more than one kind name ${factoryFunc.getName()}`);
+                                    }
 
                                     writer.write(`if (ts.${factoryFunc.getNode().getTestFunctionName()}(node))`).block(() => {
                                         writeFunctionCall(writer, factoryFunc);
@@ -186,21 +193,23 @@ export function generateCode(typeScriptModuleName = "typescript") {
             const params = func.getParameters();
             writer.write(`writer.write("`);
 
-            if (nodeFactory == null)
+            if (nodeFactory == null) {
                 writer.write("ts"); // ts < 4.0 before API change
-            else
+            } else {
                 writer.write("factory");
+            }
 
             writer.write(`.${func.getName()}(");`).newLine();
-            if (params.length === 1)
+            if (params.length === 1) {
                 printParamText(writer, params[0]);
-            else if (params.length > 1) {
+            } else if (params.length > 1) {
                 writer.writeLine(`writer.newLine();`);
                 writer.write("writer.indent(() => ").inlineBlock(() => {
                     for (let i = 0; i < params.length; i++) {
                         const param = params[i];
-                        if (i > 0)
+                        if (i > 0) {
                             writer.writeLine(`writer.write(",").newLine();`);
+                        }
                         printParamText(writer, param);
                     }
                 }).write(");").newLine();
@@ -209,8 +218,9 @@ export function generateCode(typeScriptModuleName = "typescript") {
         }
 
         function printParamText(writer: CodeBlockWriter, param: TsParameter) {
-            if (writeCustomParamText(writer, func, param))
+            if (writeCustomParamText(writer, func, param)) {
                 return;
+            }
 
             const prop = func.getNode().getPropertyForParam(param);
             const propAccess = `node.${prop.getName()}`;
@@ -229,19 +239,19 @@ export function generateCode(typeScriptModuleName = "typescript") {
 
             // todo: rename
             function writeTextForType(text: string, type: Type) {
-                if (isNodeTypeNodeType())
+                if (isNodeTypeNodeType()) {
                     writer.write(`writeNodeTextForTypeNode(${text})`);
-                else if (isNodeType())
+                } else if (isNodeType()) {
                     writer.write(`writeNodeText(${text})`);
-                else if (isSyntaxKindType())
+                } else if (isSyntaxKindType()) {
                     writer.write(`writer.write("ts.SyntaxKind.").write(syntaxKindToName[${text}])`);
-                else if (type.isString() || type.isStringLiteral())
+                } else if (type.isString() || type.isStringLiteral()) {
                     writer.write(`writer.quote(${text}.toString())`);
-                else if (type.isBoolean() || type.isBooleanLiteral())
+                } else if (type.isBoolean() || type.isBooleanLiteral()) {
                     writer.write(`writer.write(${text}.toString())`);
-                else if (type.getText().endsWith(".NodeFlags"))
+                } else if (type.getText().endsWith(".NodeFlags")) {
                     writer.write(`writer.write(getNodeFlagValues(${text} || 0));`);
-                else {
+                } else {
                     console.error(`Could not find text for param ${func.getName()}::${param.getName()} -- ${type.getText()}`);
                     writer.write(`writer.write("/* unknown */")`);
                 }
@@ -367,8 +377,9 @@ export function generateCode(typeScriptModuleName = "typescript") {
             || funcName === nameof(ts.createBlock)
             || funcName === nameof<ts.NodeFactory>(f => f.createObjectLiteralExpression)
             || funcName === nameof<ts.NodeFactory>(f => f.createArrayLiteralExpression);
-        if (isMultiLineFunc && paramName === "multiLine")
+        if (isMultiLineFunc && paramName === "multiLine") {
             writer.write("writer.write(((node as any).multiLine || false).toString())");
+        }
 
         if (paramName === "modifiers") {
             writeNullableIfNecessary(writer, param.getType(), "node.modifiers", () => {
@@ -415,16 +426,18 @@ export function generateCode(typeScriptModuleName = "typescript") {
     }
 
     function getFactoryName() {
-        if (nodeFactory == null)
+        if (nodeFactory == null) {
             return "ts";
-        else
+        } else {
             return "factory";
+        }
     }
 
     function isAllowedFactoryFunction(func: FactoryFunction) {
         const name = func.getName();
-        if (name.startsWith("createJSDoc"))
+        if (name.startsWith("createJSDoc")) {
             return false;
+        }
 
         // some of these could probably be figured out by inspecting
         // the code, but this is the lazy way to do it... I'll just

@@ -31,21 +31,21 @@
   "homepage": "https://github.com/dsherret/ts-factory-code-generator-generator#readme",
   "dependencies": {
     "string-similarity": "^4.0.4",
-    "ts-morph": "^10.0.1"
+    "ts-morph": "^10.0.2"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.15",
-    "@types/mocha": "^8.2.1",
-    "@types/node": "^14.14.31",
+    "@types/chai": "^4.2.16",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^14.14.41",
     "@types/string-similarity": "^4.0.0",
     "@types/ts-nameof": "^4.2.1",
-    "chai": "^4.3.0",
+    "chai": "^4.3.4",
     "cross-env": "^7.0.3",
-    "mocha": "^8.3.0",
+    "mocha": "^8.3.2",
     "ts-nameof": "^5.0.0",
     "ts-node": "^9.1.1",
     "ttypescript": "^1.5.12",
-    "typescript": "^4.2.2",
+    "typescript": "^4.2.4",
     "typescript-3.2.1": "npm:typescript@3.2.1",
     "typescript-3.6.3": "npm:typescript@3.6.3",
     "typescript-4.0.2": "npm:typescript@4.0.2",

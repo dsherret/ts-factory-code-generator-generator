@@ -23,8 +23,9 @@ export class TsParameter {
     getArrayElementType() {
         const type = this.type.getNonNullableType();
         const typeText = type.getText();
-        if (!typeText.endsWith("[]"))
+        if (!typeText.endsWith("[]")) {
             return undefined;
+        }
         return type.getTypeArguments()[0];
     }
 

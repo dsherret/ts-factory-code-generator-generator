@@ -9,17 +9,20 @@ export class FactoryFunction {
     }
 
     getName() {
-        if (Node.isFunctionDeclaration(this.declaration))
+        if (Node.isFunctionDeclaration(this.declaration)) {
             return this.declaration.getNameOrThrow();
+        }
         return this.declaration.getName();
     }
 
     getParameters() {
         const params = this.declaration.getParameters().map(p => new TsParameter(this.factory, this, p));
-        if (this.getName() === nameof(ts.createNumericLiteral))
+        if (this.getName() === nameof(ts.createNumericLiteral)) {
             return params.filter(p => p.getName() !== "numericLiteralFlags");
-        if (this.getName() === nameof(ts.createStringLiteral))
+        }
+        if (this.getName() === nameof(ts.createStringLiteral)) {
             return params.filter(p => p.getName() !== "isSingleQuote");
+        }
         if (
             this.getName() === nameof(ts.createTemplateHead) || this.getName() === nameof(ts.createTemplateMiddle)
             || this.getName() === nameof(ts.createTemplateTail)

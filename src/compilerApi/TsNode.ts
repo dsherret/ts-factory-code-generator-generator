@@ -11,17 +11,20 @@ export class TsNode {
         const symbol = getSymbol();
         const dec = symbol.getDeclarations()[0]; // this does return more than one for Node, but don't care...
 
-        if (!Node.isInterfaceDeclaration(dec))
+        if (!Node.isInterfaceDeclaration(dec)) {
             throw new Error(`Expected the type ${type.getText()} to be of an interface declaration.`);
+        }
 
         this.declaration = dec;
 
         function getSymbol() {
-            if (type.isIntersection())
+            if (type.isIntersection()) {
                 return type.getIntersectionTypes()[0].getSymbolOrThrow();
+            }
             const symbol = type.getSymbol();
-            if (symbol == null)
+            if (symbol == null) {
                 throw new Error(`Could not find symbol for type ${type.getText()}`);
+            }
             return symbol;
         }
     }
@@ -42,20 +45,27 @@ export class TsNode {
             const nodeName = this.getName();
             const paramName = param.getName();
 
-            if (nodeName === nameof<ts.NumericLiteral>() && paramName === "value")
+            if (nodeName === nameof<ts.NumericLiteral>() && paramName === "value") {
                 return nameof<ts.NumericLiteral>(n => n.text);
-            if (nodeName === nameof<ts.BigIntLiteral>() && paramName === "value")
+            }
+            if (nodeName === nameof<ts.BigIntLiteral>() && paramName === "value") {
                 return nameof<ts.BigIntLiteral>(n => n.text);
-            if (nodeName === nameof<ts.TypeParameterDeclaration>() && paramName === "defaultType")
+            }
+            if (nodeName === nameof<ts.TypeParameterDeclaration>() && paramName === "defaultType") {
                 return nameof<ts.TypeParameterDeclaration>(n => n.default);
-            if ((nodeName === nameof<ts.ElementAccessExpression>() || nodeName === "ElementAccessChain") && paramName === "index")
+            }
+            if ((nodeName === nameof<ts.ElementAccessExpression>() || nodeName === "ElementAccessChain") && paramName === "index") {
                 return nameof<ts.ElementAccessExpression>(n => n.argumentExpression);
-            if ((nodeName === nameof<ts.CallExpression>() || nodeName === "CallChain") && paramName === "argumentsArray")
+            }
+            if ((nodeName === nameof<ts.CallExpression>() || nodeName === "CallChain") && paramName === "argumentsArray") {
                 return nameof<ts.CallExpression>(n => n.arguments);
-            if (nodeName === nameof<ts.NewExpression>() && paramName === "argumentsArray")
+            }
+            if (nodeName === nameof<ts.NewExpression>() && paramName === "argumentsArray") {
                 return nameof<ts.NewExpression>(n => n.arguments);
-            if (nodeName === nameof<ts.BinaryExpression>() && paramName === "operator")
+            }
+            if (nodeName === nameof<ts.BinaryExpression>() && paramName === "operator") {
                 return nameof<ts.BinaryExpression>(n => n.operatorToken);
+            }
 
             return undefined;
         }
@@ -72,8 +82,9 @@ export class TsNode {
                 }
             }
 
-            if (highestScore < 0.9)
+            if (highestScore < 0.9) {
                 throw new Error(`Could not find property for parameter: ${param.getName()} (${this.getName()})`);
+            }
 
             return foundProp!;
         }
@@ -84,13 +95,15 @@ export class TsNode {
     }
 
     getKindNames() {
-        if (this.getName() === nameof<ts.JsxAttributes>())
+        if (this.getName() === nameof<ts.JsxAttributes>()) {
             return [nameof(SyntaxKind.JsxAttributes)];
+        }
 
         const kindType = this.getKindType();
 
-        if (kindType.isUnion())
+        if (kindType.isUnion()) {
             return Array.from(new Set(kindType.getUnionTypes().map(t => sanitizeName(t.getText(this.declaration)))));
+        }
 
         return [sanitizeName(kindType.getText(this.declaration))];
 
@@ -108,23 +121,27 @@ export class TsNode {
     getTestFunctionName() {
         const tsSymbol = this.declaration.getSourceFile().getModuleOrThrow("ts").getSymbolOrThrow();
         for (const symbol of tsSymbol.getExports()) {
-            if (!symbol.getName().startsWith("is"))
+            if (!symbol.getName().startsWith("is")) {
                 continue;
+            }
             const valueDec = symbol.getValueDeclaration();
-            if (valueDec == null || !Node.isFunctionDeclaration(valueDec))
+            if (valueDec == null || !Node.isFunctionDeclaration(valueDec)) {
                 continue;
+            }
             // todo: use typeChecker.getTypePredicateOfSignature once wrapped in ts-morph
             // todo: use TypePedicateNode once wrapped (but prefer using getTypePredicateOfSignature)
             const returnTypeNode = valueDec.getReturnTypeNode();
-            if (returnTypeNode == null || returnTypeNode.getKind() !== SyntaxKind.TypePredicate)
+            if (returnTypeNode == null || returnTypeNode.getKind() !== SyntaxKind.TypePredicate) {
                 continue;
+            }
             const typePredicateNode = returnTypeNode as any as TypeNode<ts.TypePredicateNode>;
             const typePredicateType = typePredicateNode.getNodeProperty("type")?.getType();
 
             if (typePredicateType != null && this.factory.hasNode(typePredicateType)) {
                 const node = this.factory.getNode(typePredicateType);
-                if (node === this)
+                if (node === this) {
                     return valueDec.getName();
+                }
             }
         }
 
