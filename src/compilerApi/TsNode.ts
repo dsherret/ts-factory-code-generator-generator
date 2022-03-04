@@ -66,8 +66,8 @@ export class TsNode {
             if (nodeName === nameof<ts.BinaryExpression>() && paramName === "operator") {
                 return nameof<ts.BinaryExpression>(n => n.operatorToken);
             }
-            if (nodeName === nameof<ts.ImportTypeAssertionContainer>() && paramName === "clause") {
-                return nameof<ts.ImportTypeAssertionContainer>(n => n.assertClause);
+            if (nodeName === "ImportTypeAssertionContainer" && paramName === "clause") {
+                return "assertClause"; // nameof<ts.ImportTypeAssertionContainer>(n => n.assertClause);
             }
 
             return undefined;
