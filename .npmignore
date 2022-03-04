@@ -2,7 +2,7 @@
 src
 dist/tests
 .gitignore
-mocha.opts
+.mocharc.yml
 tsconfig.json
 yarn-error.log
-dprint.config.js
+dprint.json
