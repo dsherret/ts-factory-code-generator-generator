@@ -1,7 +1,7 @@
 import { Node, Type } from "ts-morph";
 
 export function resolveTypeToTypeParamConstraintIfNecessary(type: Type, declaration: Node) {
-    if (!Node.isTypeParameteredNode(declaration)) {
+    if (!Node.isTypeParametered(declaration)) {
         return type;
     }
     const typeText = type.getText(declaration);
