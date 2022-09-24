@@ -16,8 +16,8 @@ describe(nameof(generateCode), () => {
   });
 
   // uses NodeFactory at this point
-  it("should equal the baseline for 4.0.2", () => {
-    runBaseLineForPackage("typescript-4.0.2");
+  it("should equal the baseline for 4.8.3", () => {
+    runBaseLineForPackage("typescript-4.8.3");
   });
 
   it("should equal the baseline for @next", () => {

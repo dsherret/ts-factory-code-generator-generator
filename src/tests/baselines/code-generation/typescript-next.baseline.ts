@@ -343,6 +343,9 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
             case ts.SyntaxKind.MetaProperty:
                 createMetaProperty(node as import("typescript-next").MetaProperty);
                 return;
+            case ts.SyntaxKind.SatisfiesExpression:
+                createSatisfiesExpression(node as import("typescript-next").SatisfiesExpression);
+                return;
             case ts.SyntaxKind.TemplateSpan:
                 createTemplateSpan(node as import("typescript-next").TemplateSpan);
                 return;
@@ -647,6 +650,27 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createTypeParameterDeclaration(");
         writer.newLine();
         writer.indent(() => {
+            if (node.modifiers == null)
+                writer.write("undefined");
+            else {
+                writer.write("[");
+                if (node.modifiers.length === 1) {
+                    const item = node.modifiers![0];
+                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                }
+                else if (node.modifiers.length > 1) {
+                    writer.indent(() => {
+                        for (let i = 0; i < node.modifiers!.length; i++) {
+                            const item = node.modifiers![i];
+                            if (i > 0)
+                                writer.write(",").newLine();
+                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
+                        }
+                    });
+                }
+                writer.write("]");
+            }
+            writer.write(",").newLine();
             writeNodeText(node.name)
             writer.write(",").newLine();
             if (node.constraint == null)
@@ -668,27 +692,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createParameterDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {
@@ -791,27 +794,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createPropertyDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {
@@ -941,27 +923,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createMethodDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {
@@ -1054,27 +1015,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createConstructorDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {
@@ -1126,27 +1066,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createGetAccessorDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {
@@ -1206,27 +1125,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createSetAccessorDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {
@@ -1382,27 +1280,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createIndexSignature(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {
@@ -1459,52 +1336,7 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
 
     function createClassStaticBlockDeclaration(node: import("typescript-next").ClassStaticBlockDeclaration) {
         writer.write("factory.createClassStaticBlockDeclaration(");
-        writer.newLine();
-        writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
-            if (node.modifiers == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.modifiers.length === 1) {
-                    const item = node.modifiers![0];
-                    writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                }
-                else if (node.modifiers.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.modifiers!.length; i++) {
-                            const item = node.modifiers![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writer.write("factory.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
-            writeNodeText(node.body)
-        });
+        writeNodeText(node.body)
         writer.write(")");
     }
 
@@ -1840,6 +1672,12 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.newLine();
         writer.indent(() => {
             writeNodeTextForTypeNode(node.argument)
+            writer.write(",").newLine();
+            if (node.assertions == null)
+                writer.write("undefined");
+            else {
+                writeNodeText(node.assertions)
+            }
             writer.write(",").newLine();
             if (node.qualifier == null)
                 writer.write("undefined");
@@ -2707,27 +2545,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createClassExpression(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {
@@ -2882,6 +2699,17 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
             writer.write("ts.SyntaxKind.").write(syntaxKindToName[node.keywordToken])
             writer.write(",").newLine();
             writeNodeText(node.name)
+        });
+        writer.write(")");
+    }
+
+    function createSatisfiesExpression(node: import("typescript-next").SatisfiesExpression) {
+        writer.write("factory.createSatisfiesExpression(");
+        writer.newLine();
+        writer.indent(() => {
+            writeNodeText(node.expression)
+            writer.write(",").newLine();
+            writeNodeTextForTypeNode(node.type)
         });
         writer.write(")");
     }
@@ -3219,27 +3047,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createFunctionDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {
@@ -3330,27 +3137,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createClassDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {
@@ -3444,27 +3230,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createInterfaceDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {
@@ -3554,27 +3319,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createTypeAliasDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {
@@ -3628,27 +3372,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createEnumDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {
@@ -3696,27 +3419,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createModuleDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {
@@ -3803,27 +3505,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createImportEqualsDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {
@@ -3858,27 +3539,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createImportDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {
@@ -4033,27 +3693,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createExportAssignment(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {
@@ -4090,27 +3729,6 @@ export function generateFactoryCode(ts: typeof import("typescript-next"), initia
         writer.write("factory.createExportDeclaration(");
         writer.newLine();
         writer.indent(() => {
-            if (node.decorators == null)
-                writer.write("undefined");
-            else {
-                writer.write("[");
-                if (node.decorators.length === 1) {
-                    const item = node.decorators![0];
-                    writeNodeText(item)
-                }
-                else if (node.decorators.length > 1) {
-                    writer.indent(() => {
-                        for (let i = 0; i < node.decorators!.length; i++) {
-                            const item = node.decorators![i];
-                            if (i > 0)
-                                writer.write(",").newLine();
-                            writeNodeText(item)
-                        }
-                    });
-                }
-                writer.write("]");
-            }
-            writer.write(",").newLine();
             if (node.modifiers == null)
                 writer.write("undefined");
             else {

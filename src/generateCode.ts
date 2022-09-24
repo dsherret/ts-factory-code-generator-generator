@@ -516,6 +516,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
       case nameof(ts.createUnparsedSourceFile):
       case nameof(ts.createNotEmittedStatement):
       case nameof(ts.createPartiallyEmittedExpression):
+      case "createUniquePrivateName": // handled by createPrivateIdentifier
       // custom handled
       case nameof(ts.createToken):
       case nameof(ts.createModifier):
