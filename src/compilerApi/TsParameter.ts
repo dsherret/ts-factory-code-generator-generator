@@ -3,45 +3,45 @@ import { Factory } from "./Factory";
 import { FactoryFunction } from "./FactoryFunction";
 
 export class TsParameter {
-    private readonly type: Type;
-    constructor(
-        private readonly factory: Factory,
-        private readonly parent: FactoryFunction,
-        private readonly declaration: ParameterDeclaration,
-    ) {
-        this.type = declaration.getType();
-    }
+  private readonly type: Type;
+  constructor(
+    private readonly factory: Factory,
+    private readonly parent: FactoryFunction,
+    private readonly declaration: ParameterDeclaration,
+  ) {
+    this.type = declaration.getType();
+  }
 
-    getName() {
-        return this.declaration.getName()!;
-    }
+  getName() {
+    return this.declaration.getName()!;
+  }
 
-    getType() {
-        return this.type;
-    }
+  getType() {
+    return this.type;
+  }
 
-    getArrayElementType() {
-        const type = this.type.getNonNullableType();
-        const typeText = type.getText();
-        if (!typeText.endsWith("[]")) {
-            return undefined;
-        }
-        return type.getTypeArguments()[0];
+  getArrayElementType() {
+    const type = this.type.getNonNullableType();
+    const typeText = type.getText();
+    if (!typeText.endsWith("[]")) {
+      return undefined;
     }
+    return type.getTypeArguments()[0];
+  }
 
-    isArray() {
-        return this.getArrayElementType() != null;
-    }
+  isArray() {
+    return this.getArrayElementType() != null;
+  }
 
-    isLiteral() {
-        return this.type.isLiteral();
-    }
+  isLiteral() {
+    return this.type.isLiteral();
+  }
 
-    isNode() {
-        return this.type.getProperty("kind") != null;
-    }
+  isNode() {
+    return this.type.getProperty("kind") != null;
+  }
 
-    isString() {
-        return false;
-    }
+  isString() {
+    return false;
+  }
 }
