@@ -3,7 +3,7 @@ import * as ts from "typescript-3.6.3";
 [
   ts.createInterfaceDeclaration(
     undefined,
-    [ts.createModifier(ts.SyntaxKind.ExportKeyword)],
+    [ts.createToken(ts.SyntaxKind.ExportKeyword)],
     ts.createIdentifier("Interface"),
     undefined,
     undefined,
@@ -16,7 +16,7 @@ import * as ts from "typescript-3.6.3";
         undefined
       ),
       ts.createPropertySignature(
-        [ts.createModifier(ts.SyntaxKind.ReadonlyKeyword)],
+        [ts.createToken(ts.SyntaxKind.ReadonlyKeyword)],
         ts.createIdentifier("readonlyProp"),
         undefined,
         ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
@@ -125,14 +125,14 @@ import * as ts from "typescript-3.6.3";
   ),
   ts.createClassDeclaration(
     undefined,
-    [ts.createModifier(ts.SyntaxKind.DeclareKeyword)],
+    [ts.createToken(ts.SyntaxKind.DeclareKeyword)],
     ts.createIdentifier("Class2"),
     undefined,
     undefined,
     [
       ts.createProperty(
         undefined,
-        [ts.createModifier(ts.SyntaxKind.ReadonlyKeyword)],
+        [ts.createToken(ts.SyntaxKind.ReadonlyKeyword)],
         ts.createIdentifier("other"),
         undefined,
         ts.createUnionTypeNode([
