@@ -86,7 +86,14 @@ export function generateCode(typeScriptModuleName = "typescript") {
         if (!symbol.getName().startsWith("create")) {
           continue;
         }
-        const valueDec = symbol.getValueDeclaration();
+        const decls = symbol.getDeclarations();
+        const valueDec = decls.find(decl => {
+          if (!Node.isFunctionDeclaration(decl) && !Node.isMethodSignature(decl)) {
+            return false;
+          }
+          const hasDeprecated = decl.getJsDocs().some(s => s.getTags().some(t => t.getTagName() === "deprecated"));
+          return !hasDeprecated;
+        });
         if (valueDec == null || !Node.isFunctionDeclaration(valueDec) && !Node.isMethodSignature(valueDec)) {
           continue;
         }
@@ -381,15 +388,15 @@ export function generateCode(typeScriptModuleName = "typescript") {
       writer.write("writer.write(((node as any).multiLine || false).toString())");
     }
 
-    if (paramName === "modifiers") {
-      writeNullableIfNecessary(writer, param.getType(), "node.modifiers", () => {
-        writeArrayText(
-          writer,
-          "node.modifiers",
-          () => writer.writeLine(`writer.write("${getFactoryName()}.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");`),
-        );
-      });
-    }
+    // if (paramName === "modifiers") {
+    //   writeNullableIfNecessary(writer, param.getType(), "node.modifiers", () => {
+    //     writeArrayText(
+    //       writer,
+    //       "node.modifiers",
+    //       () => writer.writeLine(`writer.write("${getFactoryName()}.createModifier(ts.SyntaxKind." + syntaxKindToName[item.kind] + ")");`),
+    //     );
+    //   });
+    // }
 
     return writer.getLength() !== initialLength;
   }
