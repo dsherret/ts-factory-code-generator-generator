@@ -20,6 +20,10 @@ describe(nameof(generateCode), () => {
     runBaseLineForPackage("typescript-4.8.3");
   });
 
+  it("should equal the baseline for 4.9.4", () => {
+    runBaseLineForPackage("typescript-4.9.4");
+  });
+
   it("should equal the baseline for @next", () => {
     runBaseLineForPackage("typescript-next");
   });
@@ -33,6 +37,7 @@ describe(nameof(generateCode), () => {
 
     // compare
     const specFileName = path.join(__dirname, `baselines/code-generation/${packageName}.baseline.ts`);
+    fs.writeFileSync(specFileName, result, { encoding: "utf8" }); // overwrite
     const specText = fs.readFileSync(specFileName, { encoding: "utf8" });
     fs.writeFileSync(specFileName, result, { encoding: "utf8" }); // overwrite
     expect(result).to.equal(specText);
