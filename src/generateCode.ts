@@ -310,7 +310,7 @@ export function generateCode(typeScriptModuleName = "typescript") {
         writer.writeLine("// ignore the BlockScoped node flag");
         writer.writeLine(
           `return getFlagValuesAsString(ts.NodeFlags, "ts.NodeFlags", `
-            + `value || 0, "None", getFlagValues(ts.NodeFlags, value).filter(v => v !== ts.NodeFlags.BlockScoped));`,
+            + `value || 0, "None", getFlagValues(ts.NodeFlags, value).filter(v => v !== ts.NodeFlags.BlockScoped${typeScriptModuleName === "typescript-next" ? ' && v !== ts.NodeFlags.Constant' : ''}));`,
         );
       },
     };
